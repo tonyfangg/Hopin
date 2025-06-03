@@ -10,7 +10,7 @@ export default async function LoginPage() {
     if (session) {
       redirect('/dashboard')
     }
-  } catch { 
+  } catch {
     // Continue to show login form if there's an error
   }
 

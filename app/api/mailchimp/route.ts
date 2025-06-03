@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createApiClient } from '@/lib/supabase-server'
+import { createApiSupabaseClient } from '@/lib/supabase-server'
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Store in Supabase
-    const supabase = createApiClient()
+    const supabase = createApiSupabaseClient()
     const { error: dbError } = await supabase
       .from('email_signups')
       .insert([{ email, source: 'landing_page_notify' }])
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
       console.error('Database error:', dbError)
     }
 
-    // Mailchimp integration
+    // Mailchimp integration (your existing code)
     const MAILCHIMP_API_KEY = process.env.MAILCHIMP_API_KEY
     const MAILCHIMP_AUDIENCE_ID = process.env.MAILCHIMP_AUDIENCE_ID
     const MAILCHIMP_SERVER_PREFIX = process.env.MAILCHIMP_SERVER_PREFIX

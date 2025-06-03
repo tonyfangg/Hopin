@@ -20,10 +20,7 @@ export default async function DashboardLayout({
     return (
       <div className="min-h-screen bg-slate-50">
         <div className="flex">
-          {/* Sidebar */}
           <DashboardSidebar />
-          
-          {/* Main Content */}
           <div className="flex-1 ml-64">
             <DashboardHeader user={session.user} />
             <main className="p-6">

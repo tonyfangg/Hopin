@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/lib/supabase'
 import { useRouter } from 'next/navigation'
 
 interface DashboardHeaderProps {
@@ -16,7 +16,7 @@ interface DashboardHeaderProps {
 export function DashboardHeader({ user }: DashboardHeaderProps) {
   const [showUserMenu, setShowUserMenu] = useState(false)
   const router = useRouter()
-  const supabase = createClient()
+  const supabase = createServerSupabaseClient()
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()

@@ -7,3 +7,6 @@ export const createServerClient = () =>
 
 export const createApiClient = () => 
   createRouteHandlerClient<Database>({ cookies })
+
+export { createApiClient as createApiSupabaseClient }
+

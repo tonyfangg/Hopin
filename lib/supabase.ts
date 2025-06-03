@@ -1,57 +1,62 @@
-import { createClientComponentClient } from '@supabase/auth-helpers-nextjs'
+import { createServerClient, createBrowserClient } from '@supabase/ssr'
+import { cookies } from 'next/headers'
 
-export type Database = {
-  public: {
-    Tables: {
-      profiles: {
-        Row: {
-          id: string
-          email: string | null
-          company_name: string | null
-          subscription_plan: string
-          created_at: string
-          updated_at: string
-        }
-        Insert: {
-          id: string
-          email?: string | null
-          company_name?: string | null
-          subscription_plan?: string
-          created_at?: string
-          updated_at?: string
-        }
-        Update: {
-          id?: string
-          email?: string | null
-          company_name?: string | null
-          subscription_plan?: string
-          created_at?: string
-          updated_at?: string
-        }
-      }
-      email_signups: {
-        Row: {
-          id: string
-          email: string
-          source: string
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          email: string
-          source?: string
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          email?: string
-          source?: string
-          created_at?: string
-        }
-      }
+export const createServerSupabaseClient = async () => {
+  const cookieStore = await cookies()
+
+  return createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            // The `setAll` method was called from a Server Component.
+            // This can be ignored if you have middleware refreshing
+            // user sessions.
+          }
+        },
+      },
     }
-  }
+  )
 }
 
-// Client-side Supabase client
-export const createClient = () => createClientComponentClient<Database>()
+export const createApiSupabaseClient = async () => {
+  const cookieStore = await cookies()
+
+  return createServerClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return cookieStore.getAll()
+        },
+        setAll(cookiesToSet) {
+          try {
+            cookiesToSet.forEach(({ name, value, options }) =>
+              cookieStore.set(name, value, options)
+            )
+          } catch {
+            // The `setAll` method was called from a Server Component.
+          }
+        },
+      },
+    }
+  )
+}
+
+export const createClient = () =>
+  createBrowserClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+  )
+
+export type Database = Record<string, unknown>;
