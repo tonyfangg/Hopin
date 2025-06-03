@@ -1,7 +1,5 @@
 import { Header } from '@/components/marketing/header'
 
-export const runtime = 'nodejs'
-
 export default function MarketingLayout({
   children,
 }: {
