@@ -7,6 +7,7 @@ interface NotifyModalProps {
   onClose: () => void
 }
 
+// NotifyModal component for collecting user emails
 export function NotifyModal({ isOpen, onClose }: NotifyModalProps) {
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
