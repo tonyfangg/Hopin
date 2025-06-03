@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createServerSupabaseClient } from '@/lib/supabase'
+import { createServerSupabaseClient } from '@/app/lib/supabase'
 import { useRouter } from 'next/navigation'
 
 interface DashboardHeaderProps {
