@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Store in Supabase
-    const supabase = createServerSupabaseClient()
+    const supabase = await createServerSupabaseClient()
     const { error: dbError } = await supabase
       .from('email_signups')
       .insert([{ email, source: 'landing_page_notify' }])

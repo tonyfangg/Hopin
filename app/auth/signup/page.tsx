@@ -3,7 +3,7 @@ import { createServerSupabaseClient } from '@/app/lib/supabase-server'
 import { redirect } from 'next/navigation'
 
 export default async function SignupPage() {
-  const supabase = createServerSupabaseClient()
+  const supabase = await createServerSupabaseClient()
   
   try {
     const { data: { session } } = await supabase.auth.getSession()
