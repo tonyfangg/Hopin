@@ -21,8 +21,6 @@ const nextConfig = {
     // your project has ESLint errors.
     ignoreDuringBuilds: true,
   },
-  // Disable edge runtime for marketing pages
-  runtime: 'nodejs',
 };
 
 module.exports = nextConfig; 
