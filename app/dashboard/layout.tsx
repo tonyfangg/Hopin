@@ -1,6 +1,6 @@
 import { DashboardSidebar } from '@/app/components/dashboard/sidebar'
 import { DashboardHeader } from '@/app/components/dashboard/header'
-import { createServerClient } from '@/lib/supabase-server'
+import { createServerSupabaseClient } from '@/app/lib/supabase-server'
 import { redirect } from 'next/navigation'
 
 export default async function DashboardLayout({
@@ -8,7 +8,7 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode
 }) {
-  const supabase = createServerClient()
+  const supabase = await createServerSupabaseClient()
   
   try {
     const { data: { session } } = await supabase.auth.getSession()

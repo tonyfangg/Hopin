@@ -1,11 +1,11 @@
-import { createServerClient } from '@/lib/supabase-server'
+import { createServerSupabaseClient } from '@/app/lib/supabase-server'
 import { redirect } from 'next/navigation'
 import { StatsCards } from '@/components/dashboard/stats-cards'
 import { PerformanceChart } from '@/app/components/dashboard/performance-chart'
 import { ServiceStatus } from '@/app/components/dashboard/service-status'
 
 export default async function DashboardPage() {
-  const supabase = createServerClient()
+  const supabase = await createServerSupabaseClient()
   
   try {
     const { data: { session } } = await supabase.auth.getSession()
