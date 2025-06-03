@@ -1,7 +1,7 @@
 'use client'
 
 import { User } from '@supabase/supabase-js'
-import { createClient } from '@/app/lib/supabase'
+import { createClient } from '@/app/lib/supabase-client'
 import { useRouter } from 'next/navigation'
 
 interface DashboardHeaderProps {

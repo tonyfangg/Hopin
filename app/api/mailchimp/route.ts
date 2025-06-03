@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createApiSupabaseClient } from '@/lib/supabase-server'
+import { createServerSupabaseClient } from '@/app/lib/supabase-server'
 
 export async function POST(request: NextRequest) {
   try {
@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Store in Supabase
-    const supabase = createApiSupabaseClient()
+    const supabase = createServerSupabaseClient()
     const { error: dbError } = await supabase
       .from('email_signups')
       .insert([{ email, source: 'landing_page_notify' }])

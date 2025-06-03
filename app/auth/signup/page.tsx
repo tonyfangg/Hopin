@@ -1,9 +1,9 @@
 import { SignupForm } from '@/components/auth/signup-form'
-import { createServerClient } from '@/lib/supabase-server'
+import { createServerSupabaseClient } from '@/app/lib/supabase-server'
 import { redirect } from 'next/navigation'
 
 export default async function SignupPage() {
-  const supabase = createServerClient()
+  const supabase = createServerSupabaseClient()
   
   try {
     const { data: { session } } = await supabase.auth.getSession()
