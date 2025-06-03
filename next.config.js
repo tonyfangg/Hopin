@@ -8,7 +8,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    serverActions: true,
+    serverActions: {
+      allowedOrigins: ['localhost:3000', 'hoops-store-operations.vercel.app'],
+    },
   },
   webpack: (config) => {
     config.resolve.fallback = { fs: false };
