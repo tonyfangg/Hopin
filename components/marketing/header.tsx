@@ -10,8 +10,8 @@ export function Header() {
       <nav className="container mx-auto px-6 flex items-center justify-between h-16">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2 font-bold text-xl text-slate-900">
-          <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
-            <span className="text-white text-sm">★</span>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden bg-transparent">
+            <img src="/images/hoops-logo.png" alt="Hoops Logo" className="object-contain w-8 h-8" />
           </div>
           Hoops Store Operations
         </Link>

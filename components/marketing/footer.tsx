@@ -5,8 +5,8 @@ export function Footer() {
           <div className="grid md:grid-cols-4 gap-8 mb-8">
             <div>
               <div className="flex items-center gap-2 font-bold text-xl mb-4">
-                <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
-                  <span className="text-white text-sm">★</span>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden bg-transparent">
+                  <img src="/images/hoops-logo.png" alt="Hoops Logo" className="object-contain w-8 h-8" />
                 </div>
                 Hoops Store Operations
               </div>
