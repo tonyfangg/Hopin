@@ -11,12 +11,12 @@ export function NotifyModal({ isOpen, onClose }: NotifyModalProps) {
   const [email, setEmail] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [isSuccess, setIsSuccess] = useState(false)
-  const [error, setError] = useState('')
+  const [errorMessage, setErrorMessage] = useState('')
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
-    setError('')
+    setErrorMessage('')
 
     try {
       const response = await fetch('/api/mailchimp', {
@@ -32,10 +32,10 @@ export function NotifyModal({ isOpen, onClose }: NotifyModalProps) {
         setEmail('')
       } else {
         const data = await response.json()
-        setError(data.error || 'Something went wrong. Please try again.')
+        setErrorMessage(data.error || 'Something went wrong. Please try again.')
       }
-    } catch (error) {
-      setError('Network error. Please try again.')
+    } catch {
+      setErrorMessage('Network error. Please try again.')
     } finally {
       setIsLoading(false)
     }
@@ -43,7 +43,7 @@ export function NotifyModal({ isOpen, onClose }: NotifyModalProps) {
 
   const resetModal = () => {
     setIsSuccess(false)
-    setError('')
+    setErrorMessage('')
     setEmail('')
     onClose()
   }
@@ -79,8 +79,8 @@ export function NotifyModal({ isOpen, onClose }: NotifyModalProps) {
                 disabled={isLoading}
               />
               
-              {error && (
-                <p className="text-red-600 text-sm">{error}</p>
+              {errorMessage && (
+                <p className="text-red-600 text-sm">{errorMessage}</p>
               )}
 
               <Button 
@@ -93,7 +93,7 @@ export function NotifyModal({ isOpen, onClose }: NotifyModalProps) {
             </form>
 
             <p className="text-xs text-slate-500 mt-4 text-center">
-              We'll only send you launch updates. No spam, unsubscribe anytime.
+              We&apos;ll only send you launch updates. No spam, unsubscribe anytime.
             </p>
           </>
         ) : (
