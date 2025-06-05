@@ -70,8 +70,11 @@ export default function Home() {
           
           {/* Savings Highlight */}
           <div className="bg-white rounded-2xl p-8 max-w-md mx-auto mb-10 shadow-lg border border-slate-200">
-            <div className="text-3xl font-bold text-slate-900 mb-2">2</div>
-            <div className="text-slate-600 font-medium">Active Properties</div>
+            <div className="text-5xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent mb-2">
+              25-35%
+            </div>
+            <div className="text-slate-600 font-medium">Average insurance premium reduction</div>
+            <p className="text-xs text-slate-500 mt-2">*Actual savings may vary based on individual risk profiles and insurer policies.</p>
           </div>
           
           {/* CTA Buttons */}
