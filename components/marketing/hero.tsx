@@ -1,8 +1,11 @@
 'use client'
 
 import Button from '@/components/ui/button'
+import { cookies } from 'next/headers'
 
-export default function Hero() {
+export default async function Hero() {
+  const cookieStore = await cookies()
+
   return (
     <section className="pt-32 pb-16 bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="container mx-auto px-6 text-center">

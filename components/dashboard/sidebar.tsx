@@ -12,16 +12,10 @@ const navigationItems = [
     color: 'text-blue-600'
   },
   {
-    name: 'Properties',
-    href: '/dashboard/properties',
-    icon: '🏢',
-    color: 'text-orange-600'
-  },
-  {
-    name: 'Drainage',
-    href: '/dashboard/drainage',
-    icon: '💧',
-    color: 'text-blue-500'
+    name: 'Safety Scores',
+    href: '/dashboard/safety-scores',
+    icon: '🛡️',
+    color: 'text-green-600'
   },
   {
     name: 'Electrical',
@@ -30,40 +24,45 @@ const navigationItems = [
     color: 'text-yellow-600'
   },
   {
-    name: 'Staff',
-    href: '/dashboard/staff',
-    icon: '👥',
-    color: 'text-cyan-600'
+    name: 'Plumbing',
+    href: '/dashboard/plumbing',
+    icon: '💧',
+    color: 'text-blue-500'
   },
   {
-    name: 'Insurance',
-    href: '/dashboard/insurance',
-    icon: '📄',
-    color: 'text-gray-600'
-  },
-  {
-    name: 'Refrigeration',
-    href: '/dashboard/refrigeration',
-    icon: '❄️',
-    color: 'text-blue-400'
-  },
-  {
-    name: 'Building',
-    href: '/dashboard/building',
-    icon: '🏗️',
-    color: 'text-gray-600'
-  },
-  {
-    name: 'Reports',
-    href: '/dashboard/reports',
-    icon: '📋',
-    color: 'text-gray-600'
+    name: 'Fire Safety',
+    href: '/dashboard/fire-safety',
+    icon: '🔥',
+    color: 'text-red-600'
   },
   {
     name: 'Settings',
     href: '/dashboard/settings',
     icon: '⚙️',
     color: 'text-gray-600'
+  }
+]
+
+const comingSoonItems = [
+  {
+    name: 'Property',
+    icon: '🏠',
+    description: 'Property condition risk'
+  },
+  {
+    name: 'Facilities',
+    icon: '🏢',
+    description: 'Including refrigeration, HVAC'
+  },
+  {
+    name: 'Staff',
+    icon: '👥',
+    description: 'Comp, health and safety'
+  },
+  {
+    name: 'Insurance',
+    icon: '📄',
+    description: ''
   }
 ]
 
@@ -115,6 +114,16 @@ export function DashboardSidebar() {
             </Link>
           )
         })}
+        <div className="mt-8">
+          <div className="text-xs text-slate-500 uppercase mb-2">Coming Soon</div>
+          {comingSoonItems.map((item) => (
+            <div key={item.name} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 cursor-not-allowed opacity-60">
+              <span className="text-lg">{item.icon}</span>
+              {item.name}
+              <span className="ml-2 px-2 py-0.5 text-xs bg-yellow-200 text-yellow-800 rounded-full font-semibold">Coming Soon</span>
+            </div>
+          ))}
+        </div>
       </nav>
     </div>
   )
