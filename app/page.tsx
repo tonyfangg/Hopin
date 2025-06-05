@@ -59,8 +59,8 @@ export default function Home() {
       <section className="pt-32 pb-16 bg-gradient-to-br from-slate-50 to-slate-100">
         <div className="container mx-auto px-6 text-center">
           <h1 className="text-6xl font-bold text-slate-900 mb-6 leading-tight">
-            Smart Risk Management<br />
-            <span className="text-blue-600">for Modern Retailers</span>
+            Shop Risk Management<br />
+            <span className="text-blue-600">for Smart Retailers</span>
           </h1>
           
           <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
@@ -70,10 +70,8 @@ export default function Home() {
           
           {/* Savings Highlight */}
           <div className="bg-white rounded-2xl p-8 max-w-md mx-auto mb-10 shadow-lg border border-slate-200">
-            <div className="text-5xl font-bold bg-gradient-to-r from-green-600 to-green-500 bg-clip-text text-transparent mb-2">
-              25-35%
-            </div>
-            <div className="text-slate-600 font-medium">Average insurance premium reduction</div>
+            <div className="text-3xl font-bold text-slate-900 mb-2">2</div>
+            <div className="text-slate-600 font-medium">Active Properties</div>
           </div>
           
           {/* CTA Buttons */}

@@ -9,7 +9,7 @@ export function Pricing() {
       description: "Perfect for small retailers getting started",
       features: [
         "Basic risk tracking",
-        "1-2 properties", 
+        "1 property",
         "Monthly reports",
         "Mobile app access",
         "Email support"
@@ -28,7 +28,7 @@ export function Pricing() {
       description: "Ideal for growing retail chains",
       features: [
         "Complete risk management",
-        "3+ properties",
+        "from 2 properties",
         "Real-time analytics", 
         "Insurance insights",
         "Premium optimization",

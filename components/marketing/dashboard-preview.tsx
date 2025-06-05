@@ -31,8 +31,8 @@ export function DashboardPreview() {
             {/* Stats Grid */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div className="bg-slate-50 p-6 rounded-xl text-center">
-                <div className="text-3xl font-bold text-slate-900 mb-2">12</div>
-                <div className="text-slate-600 font-medium">Active Properties</div>
+                <div className="text-3xl font-bold text-slate-900 mb-2">1</div>
+                <div className="text-slate-600 font-medium">Active Property</div>
               </div>
               <div className="bg-slate-50 p-6 rounded-xl text-center">
                 <div className="text-3xl font-bold text-green-600 mb-2">92%</div>

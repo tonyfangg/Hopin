@@ -8,9 +8,9 @@ export function RiskFactors() {
         type: "excellent"
       },
       {
-        icon: "🔒",
-        title: "Security & Access Control", 
-        subtitle: "CCTV, alarms, locks",
+        icon: "💧",
+        title: "Plumbing and Drainage",
+        subtitle: "Pipes, drainage, water systems",
         score: 88,
         type: "good"
       },
@@ -26,7 +26,8 @@ export function RiskFactors() {
         title: "Staff Safety & Training",
         subtitle: "Training records, compliance",
         score: 90,
-        type: "excellent"
+        type: "excellent",
+        comingSoon: true
       }
     ]
   
@@ -58,7 +59,12 @@ export function RiskFactors() {
               >
                 <div className="text-3xl">{area.icon}</div>
                 <div className="flex-1">
-                  <h3 className="text-lg font-semibold text-slate-900 mb-1">{area.title}</h3>
+                  <h3 className="text-lg font-semibold text-slate-900 mb-1 flex items-center gap-2">
+                    {area.title}
+                    {area.comingSoon && (
+                      <span className="ml-2 px-2 py-0.5 text-xs bg-yellow-200 text-yellow-800 rounded-full font-semibold">Coming Soon</span>
+                    )}
+                  </h3>
                   <p className="text-slate-600 text-sm">{area.subtitle}</p>
                 </div>
                 <div className={`px-4 py-2 rounded-lg font-bold text-lg ${getScoreColor(area.type)}`}>
