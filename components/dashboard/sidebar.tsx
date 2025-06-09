@@ -12,28 +12,22 @@ const navigationItems = [
     color: 'text-blue-600'
   },
   {
-    name: 'Safety Scores',
-    href: '/dashboard/safety-scores',
+    name: 'Risk Score',
+    href: '/dashboard/risk-score',
     icon: '🛡️',
     color: 'text-green-600'
+  },
+  {
+    name: 'Drainage',
+    href: '/dashboard/drainage',
+    icon: '💧',
+    color: 'text-blue-500'
   },
   {
     name: 'Electrical',
     href: '/dashboard/electrical',
     icon: '⚡',
     color: 'text-yellow-600'
-  },
-  {
-    name: 'Plumbing',
-    href: '/dashboard/plumbing',
-    icon: '💧',
-    color: 'text-blue-500'
-  },
-  {
-    name: 'Fire Safety',
-    href: '/dashboard/fire-safety',
-    icon: '🔥',
-    color: 'text-red-600'
   },
   {
     name: 'Settings',
@@ -45,23 +39,23 @@ const navigationItems = [
 
 const comingSoonItems = [
   {
-    name: 'Property',
-    icon: '🏠',
-    description: 'Property condition risk'
-  },
-  {
-    name: 'Facilities',
-    icon: '🏢',
-    description: 'Including refrigeration, HVAC'
-  },
-  {
     name: 'Staff',
     icon: '👥',
-    description: 'Comp, health and safety'
+    description: ''
   },
   {
     name: 'Insurance',
     icon: '📄',
+    description: ''
+  },
+  {
+    name: 'Facility',
+    icon: '🏢',
+    description: ''
+  },
+  {
+    name: 'Building',
+    icon: '🏗️',
     description: ''
   }
 ]

@@ -27,27 +27,37 @@ export function DashboardSidebar() {
                 : 'text-slate-600 hover:bg-slate-50'
             }`}
           >
-            Dashboard
+            <span className="text-lg">📊</span> Dashboard
           </Link>
           <Link
-            href="/dashboard/properties"
+            href="/dashboard/risk-score"
             className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
-              isActive('/dashboard/properties')
+              isActive('/dashboard/risk-score')
                 ? 'bg-blue-50 text-blue-600'
                 : 'text-slate-600 hover:bg-slate-50'
             }`}
           >
-            Properties
+            <span className="text-lg">🛡️</span> Risk Score
           </Link>
           <Link
-            href="/dashboard/assessments"
+            href="/dashboard/drainage"
             className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
-              isActive('/dashboard/assessments')
+              isActive('/dashboard/drainage')
                 ? 'bg-blue-50 text-blue-600'
                 : 'text-slate-600 hover:bg-slate-50'
             }`}
           >
-            Risk Assessments
+            <span className="text-lg">💧</span> Drainage
+          </Link>
+          <Link
+            href="/dashboard/electrical"
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
+              isActive('/dashboard/electrical')
+                ? 'bg-blue-50 text-blue-600'
+                : 'text-slate-600 hover:bg-slate-50'
+            }`}
+          >
+            <span className="text-lg">⚡</span> Electrical
           </Link>
           <Link
             href="/dashboard/settings"
@@ -57,9 +67,24 @@ export function DashboardSidebar() {
                 : 'text-slate-600 hover:bg-slate-50'
             }`}
           >
-            Settings
+            <span className="text-lg">⚙️</span> Settings
           </Link>
         </nav>
+        <div className="mt-8">
+          <div className="text-xs text-slate-500 uppercase mb-2">Coming Soon</div>
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 cursor-not-allowed opacity-60">
+            <span className="text-lg">👥</span> Staff
+          </div>
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 cursor-not-allowed opacity-60">
+            <span className="text-lg">📄</span> Insurance
+          </div>
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 cursor-not-allowed opacity-60">
+            <span className="text-lg">🏢</span> Facility
+          </div>
+          <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 cursor-not-allowed opacity-60">
+            <span className="text-lg">🏗️</span> Building
+          </div>
+        </div>
       </div>
     </aside>
   )
