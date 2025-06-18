@@ -60,7 +60,9 @@ export function DashboardSidebar() {
       {/* Navigation */}
       <nav className="p-4 space-y-1">
         {navigationItems.map((item) => {
-          const isActive = pathname === item.href
+          const isActive = item.href === '/dashboard'
+            ? pathname === item.href
+            : pathname.startsWith(item.href)
           
           return (
             <Link
