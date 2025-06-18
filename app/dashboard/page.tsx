@@ -1,4 +1,4 @@
-import { StatsCards } from '@/components/dashboard/stats-cards'
+import { StatsCards } from './stats-cards'
 import { RiskScoreCard } from '@/components/dashboard/risk-score-card'
 import { PerformanceChart } from '@/components/dashboard/performance-chart'
 import { ServiceStatus } from '@/components/dashboard/service-status'

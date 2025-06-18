@@ -6,6 +6,7 @@ import { ElectricalOverview } from '@/components/dashboard/electrical/overview'
 import { ElectricalInspections } from '@/components/dashboard/electrical/inspections'
 import { ElectricalSafety } from '@/components/dashboard/electrical/safety'
 import { ElectricalMaintenance } from '@/components/dashboard/electrical/maintenance'
+import { StatsCards } from '@/app/dashboard/stats-cards'
 
 export function DashboardSidebar() {
   const pathname = usePathname()
