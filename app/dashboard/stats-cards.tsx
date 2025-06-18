@@ -1,76 +1,65 @@
-interface StatCardProps {
-    title: string
-    value: string | number
-    change?: string
-    changeType?: 'positive' | 'negative' | 'neutral'
-    subtitle?: string
+// @ts-expect-error: lucide-react types are missing
+import { ArrowUpRight } from 'lucide-react'
+
+function StatCard({ title, value, change, changeType = 'positive', subtitle }: { title?: string, value: string | number, change?: string, changeType?: 'positive' | 'negative' | 'neutral', subtitle: string }) {
+  const changeColors = {
+    positive: 'text-green-600',
+    negative: 'text-red-600',
+    neutral: 'text-slate-600',
   }
-  
-  function StatCard({ title, value, change, changeType = 'neutral', subtitle }: StatCardProps) {
-    const changeColors = {
-      positive: 'text-green-600',
-      negative: 'text-red-600',
-      neutral: 'text-slate-600'
-    }
-  
-    return (
-      <div className="bg-white rounded-xl p-6 border border-slate-200">
-        <div className="flex items-start justify-between">
-          <div>
-            <h3 className="text-sm font-medium text-slate-600 mb-2">{title}</h3>
-            <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-slate-900">{value}</span>
-              {change && (
-                <span className={`text-sm font-medium ${changeColors[changeType]}`}>
-                  {changeType === 'positive' ? '↗' : changeType === 'negative' ? '↘' : ''} {change}
-                </span>
-              )}
-            </div>
-            {subtitle && (
-              <p className="text-sm text-slate-500 mt-1">{subtitle}</p>
-            )}
-          </div>
+  return (
+    <div className="bg-white rounded-2xl p-8 border border-slate-100 flex flex-col items-center justify-center min-h-[160px]">
+      {title && <h3 className="text-base font-medium text-slate-700 mb-2 text-center">{title}</h3>}
+      <div className="flex items-baseline gap-2 mb-1">
+        <span className="text-4xl font-bold text-slate-900">{value}</span>
+        {change && (
+          <span className={`text-base font-semibold flex items-center gap-1 ${changeColors[changeType]}`}>
+            <ArrowUpRight className="w-4 h-4" /> {change}
+          </span>
+        )}
+      </div>
+      <div className="text-slate-500 text-base font-medium text-center">{subtitle}</div>
+    </div>
+  )
+}
+
+export function StatsCards() {
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* Credit Score Card */}
+      <div className="bg-white rounded-2xl p-8 border border-slate-100 flex flex-col justify-center min-h-[160px] col-span-1 lg:col-span-2">
+        <h3 className="text-lg font-semibold text-slate-700 mb-2">Credit Score</h3>
+        <div className="flex items-end gap-4 mb-2">
+          <span className="text-6xl font-extrabold text-slate-900 leading-none">750</span>
+          <span className="text-xl font-bold text-green-600 flex items-center">+5pts</span>
+        </div>
+        <div className="flex items-center gap-2 mt-1">
+          <span className="text-green-600 font-medium text-lg">↑ Excellent</span>
         </div>
       </div>
-    )
-  }
-  
-  export function StatsCards() {
-    return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div className="bg-white rounded-xl p-6 border border-slate-200">
-          <h3 className="text-sm font-medium text-slate-600 mb-2">Credit Score</h3>
-          <div className="flex items-baseline gap-2 mb-2">
-            <span className="text-4xl font-bold text-slate-900">750</span>
-            <span className="text-sm font-medium text-green-600">+5pts</span>
-          </div>
-          <p className="text-sm text-green-600 font-medium">↗ Excellent</p>
-        </div>
-  
-        <StatCard
-          title="Performance Metrics"
-          value="93"
-          change="15%"
-          changeType="positive"
-          subtitle="Completion Rate"
-        />
-  
-        <StatCard
-          title=""
-          value="12"
-          change="2"
-          changeType="positive"
-          subtitle="Total Reports"
-        />
-  
-        <StatCard
-          title=""
-          value="8"
-          change="30%"
-          changeType="positive"
-          subtitle="Active Services"
-        />
-      </div>
-    )
-  }
+      {/* Performance Metrics */}
+      <StatCard
+        title="Performance Metrics"
+        value="93"
+        change="15%"
+        changeType="positive"
+        subtitle="Completion Rate"
+      />
+      {/* Total Reports */}
+      <StatCard
+        value="12"
+        change="2"
+        changeType="positive"
+        subtitle="Total Reports"
+      />
+      {/* Active Services */}
+      <StatCard
+        value="8"
+        change="30%"
+        changeType="positive"
+        subtitle="Active Services"
+      />
+    </div>
+  )
+}
   
