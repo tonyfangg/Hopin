@@ -2,6 +2,10 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { ElectricalOverview } from '@/components/dashboard/electrical/overview'
+import { ElectricalInspections } from '@/components/dashboard/electrical/inspections'
+import { ElectricalSafety } from '@/components/dashboard/electrical/safety'
+import { ElectricalMaintenance } from '@/components/dashboard/electrical/maintenance'
 
 export function DashboardSidebar() {
   const pathname = usePathname()
