@@ -15,7 +15,7 @@ const navigationItems = [
     name: 'Risk Score',
     href: '/dashboard/risk-score',
     icon: '🛡️',
-    color: 'text-green-600'
+    color: 'text-red-600'
   },
   {
     name: 'Drainage',
@@ -38,83 +38,63 @@ const navigationItems = [
 ]
 
 const comingSoonItems = [
-  {
-    name: 'Staff',
-    icon: '👥',
-    description: ''
-  },
-  {
-    name: 'Insurance',
-    icon: '📄',
-    description: ''
-  },
-  {
-    name: 'Facility',
-    icon: '🏢',
-    description: ''
-  },
-  {
-    name: 'Building',
-    icon: '🏗️',
-    description: ''
-  }
+  { name: 'Staff', icon: '👥', color: 'text-cyan-600' },
+  { name: 'Insurance', icon: '📄', color: 'text-gray-600' },
+  { name: 'Facility', icon: '🏗️', color: 'text-gray-600' },
+  { name: 'Building', icon: '🏢', color: 'text-gray-600' }
 ]
 
 export function DashboardSidebar() {
   const pathname = usePathname()
 
   return (
-    <div className="fixed left-0 top-0 h-full w-64 bg-slate-900 text-white">
+    <div className="fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200">
       {/* Logo */}
-      <div className="flex items-center gap-3 p-6 border-b border-slate-700">
-        <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
-          <span className="text-slate-900 font-bold text-sm">H</span>
+      <div className="flex items-center gap-3 p-6 border-b border-slate-200">
+        <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+          <span className="text-white font-bold">⭐</span>
         </div>
-        <span className="text-xl font-semibold">Hoops</span>
-      </div>
-
-      {/* Search */}
-      <div className="p-4">
-        <div className="relative">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-sm text-white placeholder-slate-400 focus:outline-none focus:border-blue-500"
-          />
-          <div className="absolute right-3 top-2.5 text-slate-400">
-            🔍
-          </div>
-        </div>
+        <span className="text-xl font-bold text-slate-900">Hoops Store</span>
       </div>
 
       {/* Navigation */}
-      <nav className="px-4 space-y-2">
+      <nav className="p-4 space-y-1">
         {navigationItems.map((item) => {
-          const isActive = pathname === item.href || (item.href !== '/dashboard' && pathname.startsWith(item.href))
+          const isActive = pathname === item.href
           
           return (
             <Link
               key={item.name}
               href={item.href}
               className={cn(
-                'flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors',
+                'flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all',
                 isActive
-                  ? 'bg-blue-600 text-white'
-                  : 'text-slate-300 hover:text-white hover:bg-slate-800'
+                  ? 'bg-blue-50 text-blue-600 border border-blue-100'
+                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
               )}
             >
-              <span className="text-lg">{item.icon}</span>
+              <span className={cn("text-lg", isActive ? item.color : 'text-slate-400')}>
+                {item.icon}
+              </span>
               {item.name}
             </Link>
           )
         })}
-        <div className="mt-8">
-          <div className="text-xs text-slate-500 uppercase mb-2">Coming Soon</div>
+
+        {/* Coming Soon Section */}
+        <div className="pt-6">
+          <div className="px-3 py-2">
+            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              COMING SOON
+            </span>
+          </div>
           {comingSoonItems.map((item) => (
-            <div key={item.name} className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-slate-400 cursor-not-allowed opacity-60">
-              <span className="text-lg">{item.icon}</span>
+            <div
+              key={item.name}
+              className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-slate-400 cursor-not-allowed"
+            >
+              <span className="text-lg opacity-50">{item.icon}</span>
               {item.name}
-              <span className="ml-2 px-2 py-0.5 text-xs bg-yellow-200 text-yellow-800 rounded-full font-semibold">Coming Soon</span>
             </div>
           ))}
         </div>
