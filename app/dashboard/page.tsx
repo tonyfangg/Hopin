@@ -1,5 +1,4 @@
-import { StatsCards } from './stats-cards'
-import { RiskScoreCard } from '@/components/dashboard/risk-score-card'
+import { StatsCards } from '@/app/dashboard/stats-cards'
 import { PerformanceChart } from '@/components/dashboard/performance-chart'
 import { ServiceStatus } from '@/components/dashboard/service-status'
 
@@ -8,9 +7,6 @@ export default function DashboardPage() {
     <div className="space-y-6">
       {/* Main Stats */}
       <StatsCards />
-      
-      {/* Risk Score Highlight */}
-      <RiskScoreCard />
       
       {/* Performance Chart */}
       <PerformanceChart />
