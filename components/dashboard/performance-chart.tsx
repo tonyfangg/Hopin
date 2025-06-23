@@ -67,7 +67,7 @@ export function PerformanceChart() {
         </div>
       </div>
       <div className="flex justify-between text-xs text-slate-500 mt-4">
-        <span>Credit Score Trend (Monthly)</span>
+        <span>Risk Score Trend (Monthly)</span>
         <span>Higher is better</span>
       </div>
     </div>

@@ -1,12 +1,12 @@
 'use client'
 import { TrendingUp } from 'lucide-react'
 
-export function CreditScoreHero() {
+export function RiskScoreHero() {
   return (
     <div className="bg-gradient-to-r from-indigo-900 via-blue-800 to-blue-900 rounded-xl p-8 text-white mb-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-medium mb-2">Credit Score</h2>
+          <h2 className="text-lg font-medium mb-2">Risk Score</h2>
           <div className="flex items-baseline gap-4">
             <span className="text-5xl font-bold">750</span>
             <span className="text-green-400 font-medium">↗ +5pts</span>
