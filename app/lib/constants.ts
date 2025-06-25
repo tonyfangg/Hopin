@@ -168,6 +168,21 @@ export const INSPECTION_OPTIONS = {
 // =====================================================
 
 export const DOCUMENT_OPTIONS = {
+  // Organisation-level categories
+  ORGANISATION_CATEGORIES: [
+    { value: 'electrical_certificates', label: 'Electrical Certificates' },
+    { value: 'insurance_policies', label: 'Insurance Policies' },
+    { value: 'compliance_documents', label: 'Compliance Documents' }
+  ],
+  
+  // Property-level categories
+  PROPERTY_CATEGORIES: [
+    { value: 'electrical_certificates', label: 'Electrical Certificates' },
+    { value: 'drainage_reports', label: 'Drainage Reports' },
+    { value: 'safety_assessments', label: 'Safety Assessments' }
+  ],
+  
+  // Legacy categories (for backward compatibility)
   CATEGORIES: [
     { value: 'certificates', label: 'Certificates' },
     { value: 'reports', label: 'Reports' },
@@ -176,6 +191,7 @@ export const DOCUMENT_OPTIONS = {
     { value: 'contracts', label: 'Contracts' },
     { value: 'general', label: 'General Documents' }
   ],
+  
   TYPES: [
     { value: 'electrical_certificate', label: 'Electrical Certificate' },
     { value: 'drainage_report', label: 'Drainage Report' },

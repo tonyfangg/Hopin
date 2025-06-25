@@ -1,6 +1,7 @@
 -- =====================================================
 -- SUPABASE STORAGE SETUP - DOCUMENTS BUCKET
 -- Run these commands in Supabase Dashboard → SQL Editor
+-- Updated for new document structure: {org-id}/organisation/{category}/{filename}
 -- =====================================================
 
 -- Create the documents storage bucket
@@ -33,12 +34,14 @@ VALUES (
 
 -- =====================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
+-- Updated for new path structure: {org-id}/organisation/{category}/{filename}
 -- =====================================================
 
 -- Enable RLS on the storage.objects table
 ALTER TABLE storage.objects ENABLE ROW LEVEL SECURITY;
 
 -- Policy 1: Users can view documents for organisations they have access to
+-- Updated path structure: {org-id}/organisation/{category}/{filename}
 CREATE POLICY "Users can view documents for their organisations" ON storage.objects
   FOR SELECT USING (
     bucket_id = 'documents' AND (
@@ -48,14 +51,15 @@ CREATE POLICY "Users can view documents for their organisations" ON storage.obje
         WHERE up.user_id = auth.uid()
         AND up.is_active = true
         AND up.organisation_id::text = (
-          -- Extract organisation ID from file path: organisations/{org_id}/...
-          (string_to_array(name, '/'))[2]
+          -- Extract organisation ID from file path: {org-id}/...
+          (string_to_array(name, '/'))[1]
         )
       )
     )
   );
 
 -- Policy 2: Users can upload documents to organisations they have upload permissions for
+-- Updated path structure: {org-id}/organisation/{category}/{filename}
 CREATE POLICY "Users can upload documents to authorised organisations" ON storage.objects
   FOR INSERT WITH CHECK (
     bucket_id = 'documents' AND (
@@ -66,14 +70,15 @@ CREATE POLICY "Users can upload documents to authorised organisations" ON storag
         AND up.is_active = true
         AND up.can_upload_documents = true
         AND up.organisation_id::text = (
-          -- Extract organisation ID from file path: organisations/{org_id}/...
-          (string_to_array(name, '/'))[2]
+          -- Extract organisation ID from file path: {org-id}/...
+          (string_to_array(name, '/'))[1]
         )
       )
     )
   );
 
 -- Policy 3: Users can update documents they have permission to manage
+-- Updated path structure: {org-id}/organisation/{category}/{filename}
 CREATE POLICY "Users can update documents they have permission for" ON storage.objects
   FOR UPDATE USING (
     bucket_id = 'documents' AND (
@@ -84,14 +89,15 @@ CREATE POLICY "Users can update documents they have permission for" ON storage.o
         AND up.is_active = true
         AND up.can_upload_documents = true
         AND up.organisation_id::text = (
-          -- Extract organisation ID from file path: organisations/{org_id}/...
-          (string_to_array(name, '/'))[2]
+          -- Extract organisation ID from file path: {org-id}/...
+          (string_to_array(name, '/'))[1]
         )
       )
     )
   );
 
 -- Policy 4: Users can delete documents they have permission to manage
+-- Updated path structure: {org-id}/organisation/{category}/{filename}
 CREATE POLICY "Users can delete documents they have permission for" ON storage.objects
   FOR DELETE USING (
     bucket_id = 'documents' AND (
@@ -102,8 +108,8 @@ CREATE POLICY "Users can delete documents they have permission for" ON storage.o
         AND up.is_active = true
         AND up.can_upload_documents = true
         AND up.organisation_id::text = (
-          -- Extract organisation ID from file path: organisations/{org_id}/...
-          (string_to_array(name, '/'))[2]
+          -- Extract organisation ID from file path: {org-id}/...
+          (string_to_array(name, '/'))[1]
         )
       )
     )
@@ -170,14 +176,16 @@ ORDER BY policyname;
 /*
 IMPORTANT NOTES:
 
-1. File Path Structure:
-   - organisations/{organisation_id}/properties/{property_id}/{category}/{filename}
-   - organisations/{organisation_id}/general/{category}/{filename}
+1. Updated File Path Structure:
+   - NEW: {organisation_id}/organisation/{category}/{filename}
+   - NEW: {organisation_id}/properties/{property_id}/{category}/{filename}
+   - OLD: organisations/{organisation_id}/general/{category}/{filename}
+   - OLD: organisations/{organisation_id}/properties/{property_id}/{category}/{filename}
 
-2. RLS Policies Work By:
-   - Extracting organisation_id from the file path
-   - Checking user_permissions table for access rights
-   - Ensuring user has appropriate permissions for the organisation
+2. RLS Policies Updated:
+   - Changed from (string_to_array(name, '/'))[2] to (string_to_array(name, '/'))[1]
+   - This extracts organisation_id from the first part of the path instead of second
+   - Aligns with new structure without "organisations" prefix
 
 3. Security Features:
    - Files are only accessible to users with proper permissions
@@ -190,9 +198,16 @@ IMPORTANT NOTES:
    - Try uploading a file through your API
    - Verify only authorised users can access files
    - Check that file paths follow the expected structure
+   - Test both organisation and property document uploads
 
-5. Troubleshooting:
+5. Migration Notes:
+   - If you have existing files with old structure, you'll need to migrate them
+   - Update any existing file references in your application
+   - Test thoroughly after applying these changes
+
+6. Troubleshooting:
    - If policies don't work, check that user_permissions table exists
    - Verify that auth.uid() returns the correct user ID
-   - Ensure file paths follow the expected structure
+   - Ensure file paths follow the new expected structure
+   - Check that organisation_id in user_permissions matches the path structure
 */ 

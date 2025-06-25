@@ -5,6 +5,8 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createServerSupabaseClient } from '@/app/lib/supabase-server'
+import { generateStoragePath, generateUniqueFilename, STORAGE_CONFIG, isAllowedFileType } from '@/app/lib/storage-utils'
+import { DOCUMENT_OPTIONS } from '@/app/lib/constants'
 
 export async function POST(request: NextRequest) {
   try {
@@ -22,9 +24,26 @@ export async function POST(request: NextRequest) {
     const propertyId = formData.get('property_id') as string | null
     const category = formData.get('category') as string
 
+    // Validate required fields
     if (!file || !organisationId || !category) {
       return NextResponse.json(
         { error: 'File, organisation ID, and category are required' }, 
+        { status: 400 }
+      )
+    }
+
+    // Validate file size
+    if (file.size > STORAGE_CONFIG.MAX_FILE_SIZE) {
+      return NextResponse.json(
+        { error: `File size must be less than ${STORAGE_CONFIG.MAX_FILE_SIZE / (1024 * 1024)}MB` },
+        { status: 400 }
+      )
+    }
+
+    // Validate file type
+    if (!isAllowedFileType(file.name, STORAGE_CONFIG.ALLOWED_EXTENSIONS)) {
+      return NextResponse.json(
+        { error: `File type not allowed. Allowed types: ${STORAGE_CONFIG.ALLOWED_EXTENSIONS.join(', ')}` },
         { status: 400 }
       )
     }
@@ -45,18 +64,23 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Generate unique file name
-    const fileExtension = file.name.split('.').pop()
-    const uniqueFileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExtension}`
+    // Generate unique filename
+    const uniqueFileName = generateUniqueFilename(file.name)
     
-    // Create storage path using British naming convention
-    const storagePath = propertyId 
-      ? `organisations/${organisationId}/properties/${propertyId}/${category}/${uniqueFileName}`
-      : `organisations/${organisationId}/general/${category}/${uniqueFileName}`
+    // Generate storage path using new utilities
+    let storagePath: string
+    try {
+      storagePath = generateStoragePath(organisationId, category, uniqueFileName, propertyId || undefined)
+    } catch (error) {
+      return NextResponse.json(
+        { error: `Invalid storage path: ${error}` },
+        { status: 400 }
+      )
+    }
 
     // Upload file to Supabase Storage
     const { data: uploadData, error: uploadError } = await supabase.storage
-      .from('documents')
+      .from(STORAGE_CONFIG.BUCKET_NAME)
       .upload(storagePath, file, {
         cacheControl: '3600',
         upsert: false
@@ -69,15 +93,47 @@ export async function POST(request: NextRequest) {
 
     // Get public URL
     const { data: { publicUrl } } = supabase.storage
-      .from('documents')
+      .from(STORAGE_CONFIG.BUCKET_NAME)
       .getPublicUrl(storagePath)
 
-    return NextResponse.json({
+    // Create document record in database
+    const documentData = {
+      organisation_id: organisationId,
+      property_id: propertyId || null,
       file_path: storagePath,
       file_name: file.name,
       file_size_bytes: file.size,
       mime_type: file.type,
+      category: category,
+      uploaded_by: session.user.id,
       public_url: publicUrl
+    }
+
+    const { data: documentRecord, error: dbError } = await supabase
+      .from('documents')
+      .insert(documentData)
+      .select()
+      .single()
+
+    if (dbError) {
+      console.error('Error creating document record:', dbError)
+      // Try to delete the uploaded file if database insert fails
+      await supabase.storage
+        .from(STORAGE_CONFIG.BUCKET_NAME)
+        .remove([storagePath])
+      
+      return NextResponse.json({ error: 'Failed to create document record' }, { status: 500 })
+    }
+
+    return NextResponse.json({
+      id: documentRecord.id,
+      file_path: storagePath,
+      file_name: file.name,
+      file_size_bytes: file.size,
+      mime_type: file.type,
+      category: category,
+      public_url: publicUrl,
+      uploaded_at: documentRecord.created_at
     }, { status: 201 })
 
   } catch (error) {
