@@ -7,33 +7,45 @@ import { createServerSupabaseClient } from '@/app/lib/supabase-server'
 
 export async function GET(request: NextRequest) {
   try {
+    console.log('🔍 Properties API: Starting...')
     const supabase = await createServerSupabaseClient()
     
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    console.log('🔍 User exists:', !!user)
+    console.log('🔍 User ID:', user?.id)
+    console.log('🔍 User error:', userError)
+    
+    if (!user || userError) {
+      console.log('❌ No user found or user error')
       return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
     const organisationId = searchParams.get('organisation_id')
+    console.log('🔍 Requested organisation_id:', organisationId)
 
     // Get user's accessible organisations
     const { data: userPermissions, error: permError } = await supabase
       .from('user_permissions')
       .select('organisation_id')
-      .eq('user_id', session.user.id)
+      .eq('user_id', user.id)
       .eq('is_active', true)
 
+    console.log('🔍 User permissions query result:', userPermissions)
+    console.log('🔍 Permission error:', permError)
+
     if (permError) {
-      console.error('Error fetching user permissions:', permError)
+      console.error('❌ Error fetching user permissions:', permError)
       return NextResponse.json({ properties: [] })
     }
 
     if (!userPermissions || userPermissions.length === 0) {
+      console.log('❌ No user permissions found')
       return NextResponse.json({ properties: [] })
     }
 
     const orgIds = userPermissions.map(perm => perm.organisation_id)
+    console.log('🔍 Organisation IDs from permissions:', orgIds)
 
     // Build query for properties with safe column selection
     let query = supabase
@@ -56,7 +68,7 @@ export async function GET(request: NextRequest) {
         conservation_area,
         created_at,
         updated_at,
-        organisation:organisations(name, type)
+        organisations!properties_organisation_id_fkey(name, type)
       `)
       .in('organisation_id', orgIds)
       .eq('is_active', true)
@@ -64,18 +76,24 @@ export async function GET(request: NextRequest) {
     // Filter by specific organisation if requested
     if (organisationId && orgIds.includes(organisationId)) {
       query = query.eq('organisation_id', organisationId)
+      console.log('🔍 Filtering by organisation_id:', organisationId)
     }
 
     const { data: properties, error } = await query.order('name')
+    
+    console.log('🔍 Properties query result:', properties)
+    console.log('🔍 Properties error:', error)
+    console.log('🔍 Properties count:', properties?.length || 0)
 
     if (error) {
-      console.error('Error fetching properties:', error)
+      console.error('❌ Error fetching properties:', error)
       return NextResponse.json({ error: 'Failed to fetch properties' }, { status: 500 })
     }
 
+    console.log('✅ Properties API: Success')
     return NextResponse.json({ properties: properties || [] })
   } catch (error) {
-    console.error('Properties API error:', error)
+    console.error('❌ Properties API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
@@ -84,8 +102,8 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = await createServerSupabaseClient()
     
-    const { data: { session } } = await supabase.auth.getSession()
-    if (!session) {
+    const { data: { user }, error: userError } = await supabase.auth.getUser()
+    if (!user || userError) {
       return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
     }
 
@@ -117,7 +135,7 @@ export async function POST(request: NextRequest) {
     const { data: permission } = await supabase
       .from('user_permissions')
       .select('can_manage_properties, role')
-      .eq('user_id', session.user.id)
+      .eq('user_id', user.id)
       .eq('organisation_id', organisation_id)
       .eq('is_active', true)
       .single()
@@ -142,7 +160,7 @@ export async function POST(request: NextRequest) {
         name,
         address,
         organisation_id,
-        property_manager_id: session.user.id,
+        property_manager_id: user.id,
         property_type,
         floor_area_sqm,
         number_of_floors,
@@ -157,7 +175,7 @@ export async function POST(request: NextRequest) {
       }])
       .select(`
         *,
-        organisation:organisations(name, type)
+        organisations!properties_organisation_id_fkey(name, type)
       `)
       .single()
 
