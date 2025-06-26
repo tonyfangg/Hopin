@@ -28,10 +28,10 @@ export function Pricing() {
       description: "Ideal for growing retail chains",
       features: [
         "Complete risk management",
-        "from 2 properties",
+        "2+ properties",
         "Real-time analytics", 
         "Insurance insights",
-        "Premium optimization",
+        "Premium optimisation",
         "Priority support"
       ],
       limitations: [],
