@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { ElectricalOverview } from '@/components/dashboard/electrical/overview'
 import { ElectricalInspections } from '@/components/dashboard/electrical/inspections'
-import { ElectricalSafety } from '@/components/dashboard/electrical/safety'
+import ElectricalSafety from '@/components/dashboard/electrical/safety'
 import { ElectricalMaintenance } from '@/components/dashboard/electrical/maintenance'
 import { ElectricalInspectionForm } from '@/components/forms/electrical-inspection-form'
 
