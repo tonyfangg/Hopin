@@ -55,6 +55,7 @@ export class RiskCalculationEngine {
         name: 'Business-Specific Factors',
         weight: 0.10,
         description: 'Industry type, business size, revenue, claims history',
+        icon: '📊',
         factors: [
           {
             id: 'industry_risk',
@@ -100,6 +101,7 @@ export class RiskCalculationEngine {
         name: 'Location-Based Factors',
         weight: 0.08,
         description: 'Crime rate, postcode risk, natural hazard exposure',
+        icon: '📍',
         factors: [
           {
             id: 'crime_rate',
@@ -136,6 +138,7 @@ export class RiskCalculationEngine {
         name: 'Property & Asset Factors',
         weight: 0.20,
         description: 'Building age/condition, stock value, PAT testing, drainage maintenance',
+        icon: '🏢',
         factors: [
           {
             id: 'building_condition',

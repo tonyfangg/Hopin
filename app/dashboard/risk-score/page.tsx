@@ -1,29 +1,20 @@
 'use client'
 import { useState } from 'react';
-import { LockClosedIcon } from '@heroicons/react/24/outline';
-import { RiskOverview } from '@/components/dashboard/risk-overview'
+import { UnifiedRiskOverview } from '@/components/dashboard/unified-risk-overview'
 import { RiskFactors } from '@/components/dashboard/risk-factors'
 import { InsuranceSavings } from '@/components/dashboard/insurance-savings'
-
-const TABS = [
-  { name: 'Risk Overview', active: true },
-  { name: 'Claims History', active: false },
-  { name: 'Predictions', active: false, locked: true },
-];
-
-const riskFactors = [
-  { name: 'Fire Safety Compliance', score: 95, desc: 'Major reduction', color: 'bg-green-500' },
-  { name: 'Security Systems', score: 88, desc: 'Moderate reduction', color: 'bg-yellow-400' },
-  { name: 'Maintenance Records', score: 92, desc: 'Major reduction', color: 'bg-green-500' },
-  { name: 'Claims History', score: 98, desc: 'Significant reduction', color: 'bg-green-500' },
-  { name: 'Location Risk', score: 78, desc: 'Minor increase', color: 'bg-red-500' },
-];
 
 export default function RiskScorePage() {
   const [activeTab, setActiveTab] = useState('Risk Overview');
 
   return (
     <div className="space-y-8">
+      {/* Page Header */}
+      <div>
+        <h1 className="text-3xl font-bold text-slate-900 mb-2">Risk Assessment</h1>
+        <p className="text-slate-600">Comprehensive risk analysis and scoring for your properties</p>
+      </div>
+
       {/* Risk Overview Tabs */}
       <div className="flex gap-4">
         <button className="bg-blue-600 text-white px-6 py-3 rounded-full font-medium">
@@ -37,8 +28,8 @@ export default function RiskScorePage() {
         </button>
       </div>
 
-      {/* Main Risk Score */}
-      <RiskOverview />
+      {/* Unified Risk Overview */}
+      <UnifiedRiskOverview />
       
       {/* Risk Factors */}
       <RiskFactors />

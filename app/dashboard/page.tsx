@@ -1,6 +1,6 @@
 import { DashboardStats } from '@/components/dashboard/dashboard-stats'
 import { RecentActivity } from '@/components/dashboard/recent-activity'
-import { RiskScoreCard } from '@/components/dashboard/risk-score-card'
+import { UnifiedRiskOverview } from '@/components/dashboard/unified-risk-overview'
 import { QuickActions } from '@/components/dashboard/quick-actions'
 
 export default function DashboardPage() {
@@ -14,18 +14,18 @@ export default function DashboardPage() {
       {/* Dashboard Statistics */}
       <DashboardStats />
 
-      {/* Risk Score and Quick Actions */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2">
-          <RiskScoreCard />
-        </div>
+      {/* Unified Risk Overview */}
+      <UnifiedRiskOverview />
+
+      {/* Quick Actions */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div>
           <QuickActions />
         </div>
+        <div>
+          <RecentActivity />
+        </div>
       </div>
-
-      {/* Recent Activity */}
-      <RecentActivity />
     </div>
   )
 }
