@@ -15,6 +15,12 @@ export function LoginForm() {
   const router = useRouter()
   const supabase = createClient()
 
+  // Add null check
+  if (!supabase) {
+    console.error('Supabase client not available')
+    return null
+  }
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)

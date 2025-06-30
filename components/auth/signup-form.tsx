@@ -17,6 +17,12 @@ export function SignupForm() {
   const router = useRouter()
   const supabase = createClient()
 
+  // Add null check
+  if (!supabase) {
+    console.error('Supabase client not available')
+    return null
+  }
+
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)

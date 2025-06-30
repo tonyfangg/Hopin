@@ -12,6 +12,12 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
   const router = useRouter()
   const supabase = createClient()
 
+  // Add null check
+  if (!supabase) {
+    console.error('Supabase client not available')
+    return null
+  }
+
   const handleSignOut = async () => {
     await supabase.auth.signOut()
     router.push('/auth/login')

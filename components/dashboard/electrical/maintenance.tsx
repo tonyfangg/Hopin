@@ -9,6 +9,15 @@ export function ElectricalMaintenance() {
 
   useEffect(() => {
     const supabase = createClient()
+
+    // Add null check
+    if (!supabase) {
+      console.error('Supabase client not available')
+      setError('Supabase client not available')
+      setLoading(false)
+      return
+    }
+
     supabase
       .from('electrical_reports')
       .select('*')

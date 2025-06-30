@@ -9,6 +9,13 @@ export default function TestPage() {
   useEffect(() => {
     const runFullTests = async () => {
       const supabase = createClient()
+
+      // Add null check
+      if (!supabase) {
+        console.error('Supabase client not available')
+        return
+      }
+
       const testResults: any = {}
 
       console.log('🧪 Running full component tests...')
