@@ -1,7 +1,5 @@
 'use client'
-import { useElectricalReports } from '@/app/lib/hooks/use-api'
-import { ElectricalReport } from '@/app/lib/types/api'
-import { ErrorState } from '@/components/ui/error-state'
+import { useEffect, useState } from 'react'
 
 interface ElectricalStats {
   total_reports: number
@@ -11,24 +9,60 @@ interface ElectricalStats {
   high_risk_items: number
 }
 
+interface ApiResponse {
+  success: boolean
+  data: any[]
+  stats: ElectricalStats
+  error?: string
+}
+
 export function ElectricalOverview() {
-  const { data, loading, error } = useElectricalReports()
-  
-  // Extract reports and stats from the API response
-  const reports = (data as any)?.data || []
-  const stats: ElectricalStats = (data as any)?.stats || {
+  const [stats, setStats] = useState<ElectricalStats>({
     total_reports: 0,
     pending_inspections: 0,
     overdue_inspections: 0,
     average_safety_score: 0,
     high_risk_items: 0
-  }
+  })
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        console.log('🔄 Fetching electrical data...')
+        
+        const response = await fetch('/api/electrical-reports?limit=50')
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+        }
+        
+        const result: ApiResponse = await response.json()
+        
+        if (!result.success) {
+          throw new Error(result.error || 'API request failed')
+        }
+        
+        console.log('✅ Data fetched successfully:', result.stats)
+        setStats(result.stats)
+        
+      } catch (err) {
+        console.error('❌ Error fetching electrical data:', err)
+        setError(err instanceof Error ? err.message : 'Unknown error')
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchData()
+  }, [])
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 animate-pulse">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         {[...Array(4)].map((_, i) => (
-          <div key={i} className="bg-white rounded-2xl p-6 border border-slate-100">
+          <div key={i} className="bg-white rounded-2xl p-6 border border-slate-100 animate-pulse">
             <div className="h-4 bg-slate-200 rounded mb-2"></div>
             <div className="h-8 bg-slate-200 rounded mb-2"></div>
             <div className="h-3 bg-slate-200 rounded"></div>
@@ -40,12 +74,19 @@ export function ElectricalOverview() {
 
   if (error) {
     return (
-      <ErrorState
-        error={error}
-        title="Error Loading Electrical Data"
-        description="Unable to load electrical system information. Please try again."
-        onRetry={() => window.location.reload()}
-      />
+      <div className="bg-red-50 border border-red-200 rounded-xl p-6">
+        <div className="flex items-center gap-2 text-red-800 mb-2">
+          <span>⚠️</span>
+          <h3 className="font-semibold">Error Loading Electrical Data</h3>
+        </div>
+        <p className="text-red-700 text-sm mb-3">{error}</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm"
+        >
+          Retry
+        </button>
+      </div>
     )
   }
 
@@ -78,7 +119,7 @@ export function ElectricalOverview() {
           </div>
           <div>
             <h3 className="font-semibold text-slate-900">Total Reports</h3>
-            <p className="text-blue-600 text-sm font-medium">This Month</p>
+            <p className="text-blue-600 text-sm font-medium">This Period</p>
           </div>
         </div>
         <div className="text-2xl font-bold text-slate-900">{stats.total_reports}</div>
