@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { ErrorState } from '@/components/ui/error-state'
 
 interface DashboardStatsData {
   organisations: number
@@ -18,25 +19,25 @@ export function DashboardStats() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchStats = async () => {
-      try {
-        const response = await fetch('/api/dashboard/stats')
-        const data = await response.json()
+  const fetchStats = async () => {
+    try {
+      const response = await fetch('/api/dashboard/stats')
+      const data = await response.json()
 
-        if (response.ok) {
-          setStats(data)
-        } else {
-          setError(data.error || 'Failed to fetch statistics')
-        }
-      } catch (err) {
-        setError('Failed to load dashboard statistics')
-        console.error('Dashboard stats error:', err)
-      } finally {
-        setLoading(false)
+      if (response.ok) {
+        setStats(data)
+      } else {
+        setError(data.error || 'Failed to fetch statistics')
       }
+    } catch (err) {
+      setError('Failed to load dashboard statistics')
+      console.error('Dashboard stats error:', err)
+    } finally {
+      setLoading(false)
     }
+  }
 
+  useEffect(() => {
     fetchStats()
   }, [])
 
@@ -60,9 +61,16 @@ export function DashboardStats() {
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-2xl p-6">
-        <p className="text-red-600">Error loading dashboard statistics: {error}</p>
-      </div>
+      <ErrorState
+        error={error}
+        title="Failed to load dashboard statistics"
+        description="Unable to load the dashboard overview. Please try again."
+        onRetry={() => {
+          setError(null)
+          setLoading(true)
+          fetchStats()
+        }}
+      />
     )
   }
 

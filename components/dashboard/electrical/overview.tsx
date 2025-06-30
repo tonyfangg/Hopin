@@ -1,67 +1,35 @@
 'use client'
+import { useElectricalReports } from '@/app/lib/hooks/use-api'
+import { ElectricalReport } from '@/app/lib/types/api'
+import { ErrorState } from '@/components/ui/error-state'
 
-import { useState, useEffect } from 'react'
-
-interface ElectricalReport {
-  id: string
-  property_id: string
-  inspection_type: string
-  overall_condition: string
-  risk_rating: number
-  compliance_status: string
-  inspection_date: string
-  property: {
-    name: string
-  }
+interface ElectricalStats {
+  total_reports: number
+  pending_inspections: number
+  overdue_inspections: number
+  average_safety_score: number
+  high_risk_items: number
 }
 
 export function ElectricalOverview() {
-  const [reports, setReports] = useState<ElectricalReport[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    const fetchReports = async () => {
-      try {
-        const response = await fetch('/api/electrical-reports')
-        const data = await response.json()
-
-        if (response.ok) {
-          setReports(data.reports || [])
-        } else {
-          setError(data.error || 'Failed to fetch electrical reports')
-        }
-      } catch (err) {
-        setError('Failed to load electrical reports')
-        console.error('Electrical reports error:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchReports()
-  }, [])
-
-  // Calculate statistics from real data
-  const totalInspections = reports.length
-  const satisfactoryCount = reports.filter(r => r.overall_condition === 'satisfactory').length
-  const avgSafetyScore = reports.length > 0 
-    ? Math.round((satisfactoryCount / reports.length) * 100)
-    : 0
-  const riskImpact = Math.max(0, 25 - (reports.filter(r => r.risk_rating > 3).length * 5))
+  const { data, loading, error } = useElectricalReports()
+  
+  // Extract reports and stats from the API response
+  const reports = (data as any)?.data || []
+  const stats: ElectricalStats = (data as any)?.stats || {
+    total_reports: 0,
+    pending_inspections: 0,
+    overdue_inspections: 0,
+    average_safety_score: 0,
+    high_risk_items: 0
+  }
 
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {[...Array(3)].map((_, i) => (
-          <div key={i} className="bg-white rounded-2xl p-6 border border-slate-100 animate-pulse">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 bg-slate-200 rounded-xl"></div>
-              <div className="flex-1">
-                <div className="h-4 bg-slate-200 rounded mb-2"></div>
-                <div className="h-3 bg-slate-200 rounded"></div>
-              </div>
-            </div>
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 animate-pulse">
+        {[...Array(4)].map((_, i) => (
+          <div key={i} className="bg-white rounded-2xl p-6 border border-slate-100">
+            <div className="h-4 bg-slate-200 rounded mb-2"></div>
             <div className="h-8 bg-slate-200 rounded mb-2"></div>
             <div className="h-3 bg-slate-200 rounded"></div>
           </div>
@@ -72,32 +40,35 @@ export function ElectricalOverview() {
 
   if (error) {
     return (
-      <div className="bg-red-50 border border-red-200 rounded-2xl p-6">
-        <p className="text-red-600">Error loading electrical overview: {error}</p>
-      </div>
+      <ErrorState
+        error={error}
+        title="Error Loading Electrical Data"
+        description="Unable to load electrical system information. Please try again."
+        onRetry={() => window.location.reload()}
+      />
     )
   }
 
+  const systemStatus = stats.average_safety_score > 90 ? 'All Systems Normal' : 
+                      stats.average_safety_score > 70 ? 'Attention Needed' : 'Critical Issues'
+  
+  const statusColor = stats.average_safety_score > 90 ? 'text-emerald-600' : 
+                      stats.average_safety_score > 70 ? 'text-amber-600' : 'text-red-600'
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
       <div className="bg-white rounded-2xl p-6 border border-slate-100">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 bg-green-100 rounded-xl flex items-center justify-center">
-            <span className="text-xl">✅</span>
+          <div className="w-12 h-12 bg-yellow-100 rounded-xl flex items-center justify-center">
+            <span className="text-xl">⚡</span>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900">Safety Rating</h3>
-            <p className={`text-sm font-medium ${
-              avgSafetyScore >= 80 ? 'text-green-600' : 
-              avgSafetyScore >= 60 ? 'text-yellow-600' : 'text-red-600'
-            }`}>
-              {avgSafetyScore >= 80 ? 'Excellent' : 
-               avgSafetyScore >= 60 ? 'Good' : 'Needs Improvement'}
-            </p>
+            <h3 className="font-semibold text-slate-900">System Status</h3>
+            <p className={`text-sm font-medium ${statusColor}`}>{systemStatus}</p>
           </div>
         </div>
-        <div className="text-2xl font-bold text-green-600">{avgSafetyScore}%</div>
-        <p className="text-slate-500 text-sm">Safety Rating</p>
+        <div className="text-2xl font-bold text-slate-900">{stats.average_safety_score}%</div>
+        <p className="text-slate-500 text-sm">Safety Score</p>
       </div>
 
       <div className="bg-white rounded-2xl p-6 border border-slate-100">
@@ -106,30 +77,40 @@ export function ElectricalOverview() {
             <span className="text-xl">📋</span>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900">Inspections</h3>
-            <p className="text-blue-600 text-sm font-medium">
-              {totalInspections > 0 ? 'Up to Date' : 'None Recorded'}
-            </p>
+            <h3 className="font-semibold text-slate-900">Total Reports</h3>
+            <p className="text-blue-600 text-sm font-medium">This Month</p>
           </div>
         </div>
-        <div className="text-2xl font-bold text-slate-900">{totalInspections}</div>
-        <p className="text-slate-500 text-sm">Total Reports</p>
+        <div className="text-2xl font-bold text-slate-900">{stats.total_reports}</div>
+        <p className="text-slate-500 text-sm">Inspections</p>
       </div>
 
       <div className="bg-white rounded-2xl p-6 border border-slate-100">
         <div className="flex items-center gap-4 mb-4">
-          <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
-            <span className="text-xl">💰</span>
+          <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
+            <span className="text-xl">⏰</span>
           </div>
           <div>
-            <h3 className="font-semibold text-slate-900">Risk Impact</h3>
-            <p className="text-green-600 text-sm font-medium">
-              {riskImpact > 15 ? 'Reduced' : 'Monitor'}
-            </p>
+            <h3 className="font-semibold text-slate-900">Pending</h3>
+            <p className="text-amber-600 text-sm font-medium">Needs Action</p>
           </div>
         </div>
-        <div className="text-2xl font-bold text-green-600">-{riskImpact}%</div>
-        <p className="text-slate-500 text-sm">Insurance Risk</p>
+        <div className="text-2xl font-bold text-slate-900">{stats.pending_inspections}</div>
+        <p className="text-slate-500 text-sm">Inspections</p>
+      </div>
+
+      <div className="bg-white rounded-2xl p-6 border border-slate-100">
+        <div className="flex items-center gap-4 mb-4">
+          <div className="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center">
+            <span className="text-xl">🔴</span>
+          </div>
+          <div>
+            <h3 className="font-semibold text-slate-900">High Risk</h3>
+            <p className="text-red-600 text-sm font-medium">Urgent</p>
+          </div>
+        </div>
+        <div className="text-2xl font-bold text-slate-900">{stats.high_risk_items}</div>
+        <p className="text-slate-500 text-sm">Items</p>
       </div>
     </div>
   )

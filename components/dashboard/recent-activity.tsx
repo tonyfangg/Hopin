@@ -23,67 +23,92 @@ export function RecentActivity() {
     const fetchRecentActivity = async () => {
       try {
         // Fetch recent electrical reports
-        const [electricalResponse, drainageResponse, propertiesResponse] = await Promise.all([
-          fetch('/api/electrical-reports'),
-          fetch('/api/drainage-reports'),
-          fetch('/api/properties')
-        ])
+        let electricalData: any = { error: 'Failed to fetch' }
+        let drainageData: any = { error: 'Failed to fetch' }
+        let propertiesData: any = { error: 'Failed to fetch' }
 
-        const [electricalData, drainageData, propertiesData] = await Promise.all([
-          electricalResponse.json(),
-          drainageResponse.json(),
-          propertiesResponse.json()
-        ])
+        try {
+          const electricalResponse = await fetch('/api/electrical-reports')
+          if (electricalResponse.ok) {
+            electricalData = await electricalResponse.json()
+          }
+        } catch (err) {
+          console.error('Failed to fetch electrical reports:', err)
+        }
+
+        try {
+          const drainageResponse = await fetch('/api/drainage-reports')
+          if (drainageResponse.ok) {
+            drainageData = await drainageResponse.json()
+          }
+        } catch (err) {
+          console.error('Failed to fetch drainage reports:', err)
+        }
+
+        try {
+          const propertiesResponse = await fetch('/api/properties')
+          if (propertiesResponse.ok) {
+            propertiesData = await propertiesResponse.json()
+          }
+        } catch (err) {
+          console.error('Failed to fetch properties:', err)
+        }
 
         const recentActivities: ActivityItem[] = []
 
         // Add electrical reports
-        if (electricalData.reports) {
+        if (electricalData.reports && Array.isArray(electricalData.reports)) {
           electricalData.reports.slice(0, 3).forEach((report: any) => {
-            recentActivities.push({
-              id: `electrical-${report.id}`,
-              type: 'electrical_report',
-              title: `${report.inspection_type?.toUpperCase() || 'Electrical'} Inspection`,
-              description: `${report.property?.name || 'Property'} - ${report.overall_condition}`,
-              date: report.inspection_date || report.created_at,
-              property_name: report.property?.name,
-              status: report.overall_condition,
-              icon: '⚡',
-              color: report.overall_condition === 'satisfactory' ? 'text-green-600' : 'text-yellow-600'
-            })
+            if (report && report.id) {
+              recentActivities.push({
+                id: `electrical-${report.id}`,
+                type: 'electrical_report',
+                title: `${report.inspection_type?.toUpperCase() || 'Electrical'} Inspection`,
+                description: `${report.property?.name || 'Property'} - ${report.overall_condition || 'No condition'}`,
+                date: report.inspection_date || report.created_at || new Date().toISOString(),
+                property_name: report.property?.name,
+                status: report.overall_condition,
+                icon: '⚡',
+                color: report.overall_condition === 'satisfactory' ? 'text-green-600' : 'text-yellow-600'
+              })
+            }
           })
         }
 
         // Add drainage reports
-        if (drainageData.reports) {
+        if (drainageData.reports && Array.isArray(drainageData.reports)) {
           drainageData.reports.slice(0, 3).forEach((report: any) => {
-            recentActivities.push({
-              id: `drainage-${report.id}`,
-              type: 'drainage_report',
-              title: `Drainage ${report.inspection_type?.replace('_', ' ') || 'Inspection'}`,
-              description: `${report.property?.name || 'Property'} - ${report.drainage_condition}`,
-              date: report.inspection_date || report.created_at,
-              property_name: report.property?.name,
-              status: report.drainage_condition,
-              icon: '💧',
-              color: report.drainage_condition === 'good' ? 'text-blue-600' : 'text-yellow-600'
-            })
+            if (report && report.id) {
+              recentActivities.push({
+                id: `drainage-${report.id}`,
+                type: 'drainage_report',
+                title: `Drainage ${report.inspection_type?.replace('_', ' ') || 'Inspection'}`,
+                description: `${report.property?.name || 'Property'} - ${report.drainage_condition || 'No condition'}`,
+                date: report.inspection_date || report.created_at || new Date().toISOString(),
+                property_name: report.property?.name,
+                status: report.drainage_condition,
+                icon: '💧',
+                color: report.drainage_condition === 'good' ? 'text-blue-600' : 'text-yellow-600'
+              })
+            }
           })
         }
 
         // Add recent properties
-        if (propertiesData.properties) {
+        if (propertiesData.properties && Array.isArray(propertiesData.properties)) {
           propertiesData.properties.slice(0, 2).forEach((property: any) => {
-            recentActivities.push({
-              id: `property-${property.id}`,
-              type: 'property_created',
-              title: 'New Property Added',
-              description: `${property.name} - ${property.organisation?.name}`,
-              date: property.created_at,
-              property_name: property.name,
-              icon: '🏪',
-              color: 'text-green-600'
-            })
+            if (property && property.id && property.name) {
+              recentActivities.push({
+                id: `property-${property.id}`,
+                type: 'property_created',
+                title: 'New Property Added',
+                description: `${property.name} - ${property.organisation?.name || 'Unknown Organisation'}`,
+                date: property.created_at || new Date().toISOString(),
+                property_name: property.name,
+                icon: '🏪',
+                color: 'text-green-600'
+              })
+            }
           })
         }
 

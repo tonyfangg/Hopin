@@ -7,6 +7,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { ErrorState } from '@/components/ui/error-state'
 import { DOCUMENT_OPTIONS } from '@/app/lib/constants'
 
 interface Document {
@@ -175,19 +176,13 @@ export function DocumentList({
   if (error) {
     return (
       <div className="bg-white rounded-2xl p-8 border border-slate-200">
-        <div className="text-center py-8">
-          <div className="w-16 h-16 bg-red-100 rounded-xl flex items-center justify-center mx-auto mb-4">
-            <span className="text-2xl">⚠️</span>
-          </div>
-          <h3 className="text-lg font-semibold text-slate-900 mb-2">Error Loading Documents</h3>
-          <p className="text-slate-600">{error}</p>
-          <button
-            onClick={fetchDocuments}
-            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Try Again
-          </button>
-        </div>
+        <ErrorState
+          error={error}
+          title="Error Loading Documents"
+          description="Unable to load the document list. Please try again."
+          onRetry={fetchDocuments}
+          showRetryButton={true}
+        />
       </div>
     )
   }

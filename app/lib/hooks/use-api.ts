@@ -3,11 +3,92 @@
 import { useState, useEffect, useCallback } from 'react'
 import { apiClient } from '../api-client'
 import { Organisation, Property, ElectricalReport, DrainageReport, Document, RiskAssessment } from '../types'
+import { handleApiError, ApiError } from '@/app/lib/utils/error-handling'
 
 // =====================================================
 // REACT HOOKS FOR API CALLS
 // File: app/lib/hooks/use-api.ts
 // =====================================================
+
+interface UseApiOptions {
+  immediate?: boolean
+  retry?: number
+  retryDelay?: number
+}
+
+interface UseApiState<T> {
+  data: T | null
+  loading: boolean
+  error: ApiError | null
+  refetch: () => Promise<void>
+  reset: () => void
+}
+
+export function useApi<T = any>(
+  url: string,
+  options: UseApiOptions = {}
+): UseApiState<T> {
+  const { immediate = true, retry = 1, retryDelay = 1000 } = options
+  
+  const [data, setData] = useState<T | null>(null)
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<ApiError | null>(null)
+
+  const fetchData = useCallback(async (retryCount = 0): Promise<void> => {
+    try {
+      setLoading(true)
+      setError(null)
+
+      const response = await fetch(url)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`)
+      }
+
+      const result = await response.json()
+      
+      if (result.success === false) {
+        throw new Error(result.error || 'API request failed')
+      }
+
+      setData(result.data || result)
+    } catch (err) {
+      const apiError = handleApiError(err)
+      
+      if (retryCount < retry) {
+        setTimeout(() => {
+          fetchData(retryCount + 1)
+        }, retryDelay * (retryCount + 1))
+        return
+      }
+      
+      setError(apiError)
+      setData(null)
+    } finally {
+      setLoading(false)
+    }
+  }, [url, retry, retryDelay])
+
+  const reset = useCallback(() => {
+    setData(null)
+    setError(null)
+    setLoading(false)
+  }, [])
+
+  useEffect(() => {
+    if (immediate) {
+      fetchData()
+    }
+  }, [fetchData, immediate])
+
+  return {
+    data,
+    loading,
+    error,
+    refetch: fetchData,
+    reset
+  }
+}
 
 export function useOrganisations() {
   const [organisations, setOrganisations] = useState<Organisation[]>([])
@@ -35,82 +116,27 @@ export function useOrganisations() {
 }
 
 export function useProperties(organisationId?: string) {
-  const [properties, setProperties] = useState<Property[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetchProperties = useCallback(async () => {
-    setLoading(true)
-    const response = await apiClient.getProperties(organisationId)
-    
-    if (response.error) {
-      setError(response.error)
-    } else if (response.data) {
-      setProperties(response.data.properties)
-    }
-    
-    setLoading(false)
-  }, [organisationId])
-
-  useEffect(() => {
-    fetchProperties()
-  }, [fetchProperties])
-
-  return { properties, loading, error, refetch: fetchProperties }
+  const url = organisationId 
+    ? `/api/properties?organisation_id=${organisationId}` 
+    : '/api/properties'
+  
+  return useApi(url, { retry: 2 })
 }
 
 export function useElectricalReports(propertyId?: string) {
-  const [reports, setReports] = useState<ElectricalReport[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetchReports = useCallback(async () => {
-    setLoading(true)
-    const response = await apiClient.getElectricalReports(
-      propertyId ? { property_id: propertyId } : undefined
-    )
-    
-    if (response.error) {
-      setError(response.error)
-    } else if (response.data) {
-      setReports(response.data.reports)
-    }
-    
-    setLoading(false)
-  }, [propertyId])
-
-  useEffect(() => {
-    fetchReports()
-  }, [fetchReports])
-
-  return { reports, loading, error, refetch: fetchReports }
+  const url = propertyId 
+    ? `/api/electrical-reports?property_id=${propertyId}` 
+    : '/api/electrical-reports'
+  
+  return useApi(url, { retry: 2 })
 }
 
 export function useDrainageReports(propertyId?: string) {
-  const [reports, setReports] = useState<DrainageReport[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetchReports = useCallback(async () => {
-    setLoading(true)
-    const response = await apiClient.getDrainageReports(
-      propertyId ? { property_id: propertyId } : undefined
-    )
-    
-    if (response.error) {
-      setError(response.error)
-    } else if (response.data) {
-      setReports(response.data.reports)
-    }
-    
-    setLoading(false)
-  }, [propertyId])
-
-  useEffect(() => {
-    fetchReports()
-  }, [fetchReports])
-
-  return { reports, loading, error, refetch: fetchReports }
+  const url = propertyId 
+    ? `/api/drainage-reports?property_id=${propertyId}` 
+    : '/api/drainage-reports'
+  
+  return useApi(url, { retry: 2 })
 }
 
 export function useDocuments(params?: {
@@ -143,32 +169,12 @@ export function useDocuments(params?: {
   return { documents, loading, error, refetch: fetchDocuments }
 }
 
-export function useRiskAssessments(params?: {
-  property_id?: string
-  assessment_type?: string
-}) {
-  const [assessments, setAssessments] = useState<RiskAssessment[]>([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  const fetchAssessments = useCallback(async () => {
-    setLoading(true)
-    const response = await apiClient.getRiskAssessments(params)
-    
-    if (response.error) {
-      setError(response.error)
-    } else if (response.data) {
-      setAssessments(response.data.assessments)
-    }
-    
-    setLoading(false)
-  }, [params?.property_id, params?.assessment_type])
-
-  useEffect(() => {
-    fetchAssessments()
-  }, [fetchAssessments])
-
-  return { assessments, loading, error, refetch: fetchAssessments }
+export function useRiskAssessments(propertyId?: string) {
+  const url = propertyId 
+    ? `/api/risk-assessments?property_id=${propertyId}` 
+    : '/api/risk-assessments'
+  
+  return useApi(url, { retry: 2 })
 }
 
 export function useDashboardStats() {
