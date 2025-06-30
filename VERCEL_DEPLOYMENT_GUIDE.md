@@ -8,9 +8,9 @@
 3. Add these variables for ALL environments (Production, Preview, Development):
 
 ```
-NEXT_PUBLIC_SUPABASE_URL = https://bkpidadvdeellvqxqufp.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrcGlkYWR2ZGVlbGx2cXhxdWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY2MzczNDksImV4cCI6MjA2MjIxMzM0OX0.oLynlxCyaQVKNLEKCw9C_ljsLmE3U5LO-jfIIqkqWOw
-SUPABASE_SERVICE_ROLE_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrcGlkYWR2ZGVlbGx2cXhxdWZwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjYzNzM0OSwiZXhwIjoyMDYyMjEzMzQ5fQ.lNzFOPmTu4Ssrkej-JiiJZRCMZqvmgdrz26nsMlPgUw
+NEXT_PUBLIC_SUPABASE_URL = your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY = your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY = your_supabase_service_role_key
 ```
 
 ## 2. Alternative: Set via Vercel CLI
@@ -24,13 +24,13 @@ vercel login
 
 # Set environment variables
 vercel env add NEXT_PUBLIC_SUPABASE_URL production
-# Enter: https://bkpidadvdeellvqxqufp.supabase.co
+# Enter: your_supabase_project_url
 
 vercel env add NEXT_PUBLIC_SUPABASE_ANON_KEY production
-# Enter: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrcGlkYWR2ZGVlbGx2cXhxdWZwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDY2MzczNDksImV4cCI6MjA2MjIxMzM0OX0.oLynlxCyaQVKNLEKCw9C_ljsLmE3U5LO-jfIIqkqWOw
+# Enter: your_supabase_anon_key
 
 vercel env add SUPABASE_SERVICE_ROLE_KEY production
-# Enter: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJrcGlkYWR2ZGVlbGx2cXhxdWZwIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0NjYzNzM0OSwiZXhwIjoyMDYyMjEzMzQ5fQ.lNzFOPmTu4Ssrkej-JiiJZRCMZqvmgdrz26nsMlPgUw
+# Enter: your_supabase_service_role_key
 
 # Do the same for preview and development environments
 vercel env add NEXT_PUBLIC_SUPABASE_URL preview
