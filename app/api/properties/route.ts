@@ -10,15 +10,15 @@ export async function GET(request: NextRequest) {
     console.log('🔍 Properties API: Starting...')
     const supabase = await createServerSupabaseClient()
     
-    const { data: { user }, error: userError } = await supabase.auth.getUser()
-    console.log('🔍 User exists:', !!user)
-    console.log('🔍 User ID:', user?.id)
-    console.log('🔍 User error:', userError)
+    // Use getSession() since getUser() returns undefined
+    const { data: { session }, error: sessionError } = await supabase.auth.getSession()
     
-    if (!user || userError) {
-      console.log('❌ No user found or user error')
+    if (!session?.user || sessionError) {
+      console.log('❌ No session found:', sessionError)
       return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
     }
+
+    console.log('✅ Session user ID:', session.user.id)
 
     const { searchParams } = new URL(request.url)
     const organisationId = searchParams.get('organisation_id')
@@ -28,72 +28,87 @@ export async function GET(request: NextRequest) {
     const { data: userPermissions, error: permError } = await supabase
       .from('user_permissions')
       .select('organisation_id')
-      .eq('user_id', user.id)
+      .eq('user_id', session.user.id)  // Use session.user.id
       .eq('is_active', true)
 
-    console.log('🔍 User permissions query result:', userPermissions)
-    console.log('🔍 Permission error:', permError)
+    console.log('🔍 User permissions:', userPermissions, 'Error:', permError)
 
     if (permError) {
-      console.error('❌ Error fetching user permissions:', permError)
+      console.error('Error fetching user permissions:', permError)
       return NextResponse.json({ properties: [] })
     }
 
     if (!userPermissions || userPermissions.length === 0) {
-      console.log('❌ No user permissions found')
+      console.log('❌ No permissions found for user:', session.user.id)
       return NextResponse.json({ properties: [] })
     }
 
     const orgIds = userPermissions.map(perm => perm.organisation_id)
-    console.log('🔍 Organisation IDs from permissions:', orgIds)
+    console.log('🔍 Organisation IDs:', orgIds)
 
-    // Build query for properties with safe column selection
-    let query = supabase
+    // Add this debug query right before your main properties query
+    const { data: debugProps, error: debugError } = await supabase
+      .from('properties')
+      .select('id, name, organisation_id, is_active')
+
+    console.log('🔍 ALL properties (no filters):', {
+      count: debugProps?.length,
+      error: debugError,
+      properties: debugProps
+    })
+
+    // Check specific organisation
+    const { data: orgProps, error: orgError } = await supabase
+      .from('properties')
+      .select('id, name, organisation_id, is_active')
+      .eq('organisation_id', 'ad4f135d-f141-4738-9471-55fe6a39d9ab')
+
+    console.log('🔍 Properties for specific org:', {
+      count: orgProps?.length,
+      error: orgError,
+      properties: orgProps
+    })
+
+    // Check is_active values
+    const { data: activeProps, error: activeError } = await supabase
+      .from('properties')
+      .select('id, name, is_active')
+      .eq('organisation_id', 'ad4f135d-f141-4738-9471-55fe6a39d9ab')
+
+    console.log('🔍 Properties with is_active check:', {
+      count: activeProps?.length,
+      error: activeError,
+      properties: activeProps
+    })
+
+    // Query properties
+    const { data: properties, error } = await supabase
       .from('properties')
       .select(`
         id,
         name,
         address,
         organisation_id,
-        property_manager_id,
         property_type,
         floor_area_sqm,
-        number_of_floors,
-        building_age_years,
-        lease_type,
-        lease_expiry_date,
-        council_tax_band,
-        business_rates_reference,
-        is_listed_building,
-        conservation_area,
-        created_at,
-        updated_at,
-        organisations!properties_organisation_id_fkey(name, type)
+        risk_score,
+        safety_score,
+        is_active
       `)
       .in('organisation_id', orgIds)
       .eq('is_active', true)
+      .order('name')
 
-    // Filter by specific organisation if requested
-    if (organisationId && orgIds.includes(organisationId)) {
-      query = query.eq('organisation_id', organisationId)
-      console.log('🔍 Filtering by organisation_id:', organisationId)
-    }
-
-    const { data: properties, error } = await query.order('name')
-    
-    console.log('🔍 Properties query result:', properties)
-    console.log('🔍 Properties error:', error)
-    console.log('🔍 Properties count:', properties?.length || 0)
+    console.log('🔍 Properties result:', { count: properties?.length, error })
 
     if (error) {
-      console.error('❌ Error fetching properties:', error)
+      console.error('Error fetching properties:', error)
       return NextResponse.json({ error: 'Failed to fetch properties' }, { status: 500 })
     }
 
-    console.log('✅ Properties API: Success')
     return NextResponse.json({ properties: properties || [] })
   } catch (error) {
-    console.error('❌ Properties API error:', error)
+    console.error('Properties API error:', error)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
