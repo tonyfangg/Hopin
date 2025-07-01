@@ -226,7 +226,6 @@ export function SignupWizard() {
         if (complianceError) throw complianceError
       }
 
-      // FIXED: Properly redirect to dashboard
       // Check if this is email confirmation required
       if (authData.user && !authData.session) {
         // Email confirmation required
