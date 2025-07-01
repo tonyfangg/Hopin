@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect, useState } from 'react';
 import { TrendingUp, TrendingDown, Building2, AlertTriangle, CheckCircle, Calendar, FileText, Users } from 'lucide-react';
 
