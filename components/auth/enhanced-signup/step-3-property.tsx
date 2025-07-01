@@ -95,7 +95,7 @@ export function Step3Property({ data, onUpdate, onNext, onPrev }: Step3Props) {
               value={addressLookup}
               onChange={(e) => setAddressLookup(e.target.value.toUpperCase())}
               placeholder="e.g., SW1A 1AA"
-              className="flex-1 px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
             />
             <Button 
               type="button"
@@ -120,7 +120,7 @@ export function Step3Property({ data, onUpdate, onNext, onPrev }: Step3Props) {
             value={data.propertyAddress}
             onChange={(e) => onUpdate({ propertyAddress: e.target.value })}
             rows={3}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+            className={`w-full px-4 py-3 border rounded-lg text-slate-900 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
               errors.propertyAddress ? 'border-red-300 bg-red-50' : 'border-slate-300'
             }`}
             placeholder="Enter your complete business address"
@@ -140,7 +140,7 @@ export function Step3Property({ data, onUpdate, onNext, onPrev }: Step3Props) {
             type="text"
             value={data.postcode}
             onChange={(e) => onUpdate({ postcode: e.target.value.toUpperCase() })}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+            className={`w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
               errors.postcode ? 'border-red-300 bg-red-50' : 'border-slate-300'
             }`}
             placeholder="SW1A 1AA"

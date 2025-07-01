@@ -262,7 +262,7 @@ export function Step5Experience({ data, onUpdate, onNext, onPrev }: Step5Props) 
                 type="text"
                 value={data.insuranceProvider || ''}
                 onChange={(e) => onUpdate({ insuranceProvider: e.target.value })}
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                 placeholder="e.g., Hiscox, AXA, Simply Business"
               />
             </div>
@@ -277,7 +277,7 @@ export function Step5Experience({ data, onUpdate, onNext, onPrev }: Step5Props) 
                   type="number"
                   value={data.currentPremium || ''}
                   onChange={(e) => onUpdate({ currentPremium: e.target.value ? parseFloat(e.target.value) : undefined })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                   placeholder="e.g., 850"
                 />
               </div>
@@ -291,7 +291,7 @@ export function Step5Experience({ data, onUpdate, onNext, onPrev }: Step5Props) 
                   type="date"
                   value={data.policyExpiry || ''}
                   onChange={(e) => onUpdate({ policyExpiry: e.target.value })}
-                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition"
                 />
               </div>
             </div>

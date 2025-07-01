@@ -72,7 +72,7 @@ export function Step2Business({ data, onUpdate, onNext, onPrev }: Step2Props) {
             <select
               value={data.industry}
               onChange={(e) => onUpdate({ industry: e.target.value })}
-              className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
+              className="w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white"
             >
               <option value="Retail and Shops">Retail and Shops</option>
               <option value="Food Service & Hospitality">Food Service & Hospitality</option>
@@ -138,7 +138,7 @@ export function Step2Business({ data, onUpdate, onNext, onPrev }: Step2Props) {
               type="text"
               value={customActivity}
               onChange={(e) => setCustomActivity(e.target.value)}
-              className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors ${
+              className={`w-full px-4 py-3 border border-slate-300 rounded-lg text-slate-900 placeholder:text-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition ${
                 errors.customActivity ? 'border-red-300 bg-red-50' : 'border-slate-300'
               }`}
               placeholder="e.g., Pet grooming salon"
