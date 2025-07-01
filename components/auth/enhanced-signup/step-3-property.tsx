@@ -79,13 +79,13 @@ export function Step3Property({ data, onUpdate, onNext, onPrev }: Step3Props) {
     <form onSubmit={handleSubmit} className="p-8">
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-slate-900 mb-2">Property details</h2>
-        <p className="text-slate-800">Help us understand your business location for accurate risk assessment</p>
+        <p className="text-slate-700">Help us understand your business location for accurate risk assessment</p>
       </div>
 
       <div className="space-y-6">
         {/* Postcode lookup */}
         <div>
-          <label htmlFor="postcodeLookup" className="block text-sm font-medium text-slate-700 mb-2">
+          <label htmlFor="postcodeLookup" className="block text-sm font-medium text-slate-800 mb-2">
             Search for your business address using postcode
           </label>
           <div className="flex gap-2">
@@ -112,7 +112,7 @@ export function Step3Property({ data, onUpdate, onNext, onPrev }: Step3Props) {
 
         {/* Full address */}
         <div>
-          <label htmlFor="propertyAddress" className="block text-sm font-medium text-slate-700 mb-2">
+          <label htmlFor="propertyAddress" className="block text-sm font-medium text-slate-800 mb-2">
             Full business address *
           </label>
           <textarea
@@ -132,7 +132,7 @@ export function Step3Property({ data, onUpdate, onNext, onPrev }: Step3Props) {
 
         {/* Postcode */}
         <div>
-          <label htmlFor="postcode" className="block text-sm font-medium text-slate-700 mb-2">
+          <label htmlFor="postcode" className="block text-sm font-medium text-slate-800 mb-2">
             Postcode *
           </label>
           <input
@@ -152,7 +152,7 @@ export function Step3Property({ data, onUpdate, onNext, onPrev }: Step3Props) {
 
         {/* Size category */}
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-3">
+          <label className="block text-sm font-medium text-slate-800 mb-3">
             Approximate floor area *
           </label>
           <div className="space-y-2">
@@ -161,7 +161,7 @@ export function Step3Property({ data, onUpdate, onNext, onPrev }: Step3Props) {
                 key={size}
                 className={`flex items-center p-3 rounded-lg border cursor-pointer transition-all hover:bg-slate-50 ${
                   data.sizeCategory === size
-                    ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500'
+                    ? 'border-blue-500 bg-blue-100 ring-2 ring-blue-500'
                     : 'border-slate-200'
                 }`}
               >
@@ -175,14 +175,20 @@ export function Step3Property({ data, onUpdate, onNext, onPrev }: Step3Props) {
                 />
                 <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
                   data.sizeCategory === size
-                    ? 'border-blue-500 bg-blue-500'
-                    : 'border-slate-300'
+                    ? 'border-blue-600 bg-blue-600'
+                    : 'border-slate-400'
                 }`}>
                   {data.sizeCategory === size && (
                     <div className="w-full h-full rounded-full bg-white scale-50"></div>
                   )}
                 </div>
-                <span className="text-sm font-medium text-slate-900">{size}</span>
+                <span className={`text-sm ${
+                  data.sizeCategory === size 
+                    ? 'text-slate-900 font-semibold'
+                    : 'text-slate-800 font-medium'
+                }`}>
+                  {size}
+                </span>
               </label>
             ))}
           </div>

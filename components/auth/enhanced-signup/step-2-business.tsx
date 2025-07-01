@@ -60,12 +60,12 @@ export function Step2Business({ data, onUpdate, onNext, onPrev }: Step2Props) {
     <form onSubmit={handleSubmit} className="p-8">
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-slate-900 mb-2">Tell us about your business</h2>
-        <p className="text-slate-800">This helps us provide the right compliance guidance and risk assessment</p>
+        <p className="text-slate-700">This helps us provide the right compliance guidance and risk assessment</p>
       </div>
 
       <div className="space-y-6">
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-3">
+          <label className="block text-sm font-medium text-slate-800 mb-3">
             Which industry do you work in? *
           </label>
           <div className="relative">
@@ -83,7 +83,7 @@ export function Step2Business({ data, onUpdate, onNext, onPrev }: Step2Props) {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-slate-700 mb-3">
+          <label className="block text-sm font-medium text-slate-800 mb-3">
             Choose your business activity *
           </label>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-80 overflow-y-auto border border-slate-200 rounded-lg p-4">
@@ -92,7 +92,7 @@ export function Step2Business({ data, onUpdate, onNext, onPrev }: Step2Props) {
                 key={activity}
                 className={`flex items-center p-3 rounded-lg border cursor-pointer transition-all hover:bg-slate-50 ${
                   data.businessActivity === activity
-                    ? 'border-blue-500 bg-blue-50 ring-1 ring-blue-500'
+                    ? 'border-blue-500 bg-blue-100 ring-2 ring-blue-500'
                     : 'border-slate-200'
                 }`}
               >
@@ -106,14 +106,20 @@ export function Step2Business({ data, onUpdate, onNext, onPrev }: Step2Props) {
                 />
                 <div className={`w-4 h-4 rounded-full border-2 mr-3 ${
                   data.businessActivity === activity
-                    ? 'border-blue-500 bg-blue-500'
-                    : 'border-slate-300'
+                    ? 'border-blue-600 bg-blue-600'
+                    : 'border-slate-400'
                 }`}>
                   {data.businessActivity === activity && (
                     <div className="w-full h-full rounded-full bg-white scale-50"></div>
                   )}
                 </div>
-                <span className="text-sm font-medium text-slate-900">{activity}</span>
+                <span className={`text-sm ${
+                  data.businessActivity === activity 
+                    ? 'text-slate-900 font-semibold'
+                    : 'text-slate-800 font-medium'
+                }`}>
+                  {activity}
+                </span>
               </label>
             ))}
           </div>

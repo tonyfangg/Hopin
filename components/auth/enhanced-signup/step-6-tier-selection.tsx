@@ -95,7 +95,7 @@ export function Step6TierSelection({ data, onUpdate, onComplete, onPrev, loading
     <form onSubmit={handleSubmit} className="p-8">
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-slate-900 mb-2">Almost done! Let's assess your current status</h2>
-        <p className="text-slate-800">This helps us provide personalized guidance and recommend the right plan for you</p>
+        <p className="text-slate-700">This helps us provide personalized guidance and recommend the right plan for you</p>
       </div>
 
       {/* Risk Assessment Preview */}
@@ -220,76 +220,127 @@ export function Step6TierSelection({ data, onUpdate, onComplete, onPrev, loading
           <h3 className="text-lg font-semibold text-slate-900 mb-4">Choose your plan</h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             {/* Free Plan */}
-            <div className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            <div className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all transform hover:scale-105 ${
               data.selectedTier === 'free'
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-slate-200 hover:border-slate-300'
+                ? 'border-blue-500 bg-blue-50 shadow-lg ring-2 ring-blue-200'
+                : 'border-slate-300 hover:border-slate-400 hover:shadow-md'
             }`} onClick={() => onUpdate({ selectedTier: 'free' })}>
               <div className="text-center">
-                <h4 className="font-semibold text-slate-900 mb-2">Free</h4>
-                <div className="text-2xl font-bold text-slate-900 mb-2">£0</div>
+                <h4 className="font-bold text-slate-900 mb-2 text-lg">Free</h4>
+                <div className="text-3xl font-bold text-slate-900 mb-2">£0</div>
                 <p className="text-sm text-slate-600 mb-4">per month</p>
-                <ul className="text-xs text-slate-600 space-y-1 text-left">
-                  <li>• 1 property</li>
-                  <li>• 1 user</li>
-                  <li>• Basic compliance tracking</li>
-                  <li>• Monthly reports</li>
-                  <li>• Email support</li>
+                <ul className="text-sm text-slate-700 space-y-2 text-left">
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+                    1 property
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+                    1 user
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+                    Basic compliance tracking
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+                    Monthly reports
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+                    Email support
+                  </li>
                 </ul>
               </div>
               {recommendedTier === 'free' && (
-                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">Recommended</span>
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
+                    Recommended
+                  </span>
                 </div>
               )}
             </div>
 
-            {/* Premium Plan */}
-            <div className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            {/* Premium Plan - Enhanced with gradient */}
+            <div className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all transform hover:scale-105 ${
               data.selectedTier === 'premium'
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-slate-200 hover:border-slate-300'
+                ? 'border-blue-500 bg-gradient-to-br from-blue-50 to-blue-100 shadow-lg ring-2 ring-blue-200'
+                : 'border-slate-300 hover:border-slate-400 hover:shadow-md'
             }`} onClick={() => onUpdate({ selectedTier: 'premium' })}>
               <div className="text-center">
-                <h4 className="font-semibold text-slate-900 mb-2">Premium</h4>
-                <div className="text-2xl font-bold text-slate-900 mb-2">£29</div>
+                <h4 className="font-bold text-slate-900 mb-2 text-lg">Premium</h4>
+                <div className="text-3xl font-bold text-blue-600 mb-2">£29</div>
                 <p className="text-sm text-slate-600 mb-4">per month</p>
-                <ul className="text-xs text-slate-600 space-y-1 text-left">
-                  <li>• Up to 5 properties</li>
-                  <li>• Up to 5 users</li>
-                  <li>• Trade management</li>
-                  <li>• Advanced compliance</li>
-                  <li>• Analytics & workflows</li>
+                <ul className="text-sm text-slate-700 space-y-2 text-left">
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+                    Up to 5 properties
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+                    Up to 5 users
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+                    Trade management
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+                    Advanced compliance
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mr-2"></span>
+                    Analytics & workflows
+                  </li>
                 </ul>
               </div>
               {recommendedTier === 'premium' && (
-                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">Recommended</span>
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
+                    Recommended
+                  </span>
                 </div>
               )}
             </div>
 
             {/* Enterprise Plan */}
-            <div className={`relative p-4 rounded-lg border-2 cursor-pointer transition-all ${
+            <div className={`relative p-6 rounded-xl border-2 cursor-pointer transition-all transform hover:scale-105 ${
               data.selectedTier === 'enterprise'
-                ? 'border-blue-500 bg-blue-50'
-                : 'border-slate-200 hover:border-slate-300'
+                ? 'border-purple-500 bg-gradient-to-br from-purple-50 to-purple-100 shadow-lg ring-2 ring-purple-200'
+                : 'border-slate-300 hover:border-slate-400 hover:shadow-md'
             }`} onClick={() => onUpdate({ selectedTier: 'enterprise' })}>
               <div className="text-center">
-                <h4 className="font-semibold text-slate-900 mb-2">Enterprise</h4>
-                <div className="text-2xl font-bold text-slate-900 mb-2">£99</div>
+                <h4 className="font-bold text-slate-900 mb-2 text-lg">Enterprise</h4>
+                <div className="text-3xl font-bold text-purple-600 mb-2">£99</div>
                 <p className="text-sm text-slate-600 mb-4">per month</p>
-                <ul className="text-xs text-slate-600 space-y-1 text-left">
-                  <li>• Unlimited properties</li>
-                  <li>• Unlimited users</li>
-                  <li>• AI insights</li>
-                  <li>• Custom workflows</li>
-                  <li>• API access</li>
+                <ul className="text-sm text-slate-700 space-y-2 text-left">
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2"></span>
+                    Unlimited properties
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2"></span>
+                    Unlimited users
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2"></span>
+                    AI insights
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2"></span>
+                    Custom workflows
+                  </li>
+                  <li className="flex items-center">
+                    <span className="w-1.5 h-1.5 bg-purple-500 rounded-full mr-2"></span>
+                    API access
+                  </li>
                 </ul>
               </div>
               {recommendedTier === 'enterprise' && (
-                <div className="absolute -top-2 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-green-500 text-white text-xs px-2 py-1 rounded-full">Recommended</span>
+                <div className="absolute -top-3 left-1/2 transform -translate-x-1/2">
+                  <span className="bg-green-500 text-white text-xs font-semibold px-3 py-1 rounded-full shadow-lg">
+                    Recommended
+                  </span>
                 </div>
               )}
             </div>
@@ -305,23 +356,28 @@ export function Step6TierSelection({ data, onUpdate, onComplete, onPrev, loading
           type="button"
           onClick={onPrev}
           variant="outline"
-          className="flex-1 py-3 px-6 border border-slate-300 text-slate-700 hover:bg-slate-50"
+          className="flex-1 py-4 px-6 border border-slate-300 text-slate-700 hover:bg-slate-50 font-medium"
           disabled={loading}
         >
           ← Back
         </Button>
         <Button 
           type="submit"
-          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white py-3 px-6 relative"
+          className="flex-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white py-4 px-6 font-semibold rounded-lg shadow-lg transform transition-all hover:scale-105"
           disabled={loading}
         >
           {loading ? (
             <>
-              <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-              Creating Account...
+              <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-3"></div>
+              Creating Your Account...
             </>
           ) : (
-            'Complete Setup →'
+            <>
+              Complete Setup & Go to Dashboard
+              <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+              </svg>
+            </>
           )}
         </Button>
       </div>
