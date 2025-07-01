@@ -95,7 +95,7 @@ export function Step6TierSelection({ data, onUpdate, onComplete, onPrev, loading
     <form onSubmit={handleSubmit} className="p-8">
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-slate-900 mb-2">Almost done! Let's assess your current status</h2>
-        <p className="text-slate-600">This helps us provide personalized guidance and recommend the right plan for you</p>
+        <p className="text-slate-800">This helps us provide personalized guidance and recommend the right plan for you</p>
       </div>
 
       {/* Risk Assessment Preview */}

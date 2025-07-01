@@ -79,7 +79,7 @@ export function Step3Property({ data, onUpdate, onNext, onPrev }: Step3Props) {
     <form onSubmit={handleSubmit} className="p-8">
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-slate-900 mb-2">Property details</h2>
-        <p className="text-slate-600">Help us understand your business location for accurate risk assessment</p>
+        <p className="text-slate-800">Help us understand your business location for accurate risk assessment</p>
       </div>
 
       <div className="space-y-6">
@@ -105,7 +105,7 @@ export function Step3Property({ data, onUpdate, onNext, onPrev }: Step3Props) {
               Find address
             </Button>
           </div>
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-slate-700">
             This is where your business contents are kept and where your portable equipment is stored when it's not on the go.
           </p>
         </div>

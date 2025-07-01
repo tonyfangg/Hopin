@@ -109,7 +109,7 @@ export function SignupWizard() {
     }
     
     // Management experience (key risk factor)
-    const experienceRisk = {
+    const experienceRisk: { [key: string]: number } = {
       "This is my first business (0 years)": 15,
       "1-2 years experience": 10,
       "3-5 years experience": 5,
@@ -226,12 +226,20 @@ export function SignupWizard() {
         if (complianceError) throw complianceError
       }
 
-      // Redirect to dashboard with welcome flow
-      router.push('/dashboard?welcome=true&tier=' + signupData.selectedTier)
+      // FIXED: Properly redirect to dashboard
+      // Check if this is email confirmation required
+      if (authData.user && !authData.session) {
+        // Email confirmation required
+        setError('Please check your email and click the confirmation link to complete signup.')
+        setLoading(false)
+        return
+      }
+
+      // Success - redirect to dashboard
+      window.location.href = '/dashboard?welcome=true&tier=' + signupData.selectedTier
       
     } catch (err: any) {
       setError(err.message || 'An unexpected error occurred')
-    } finally {
       setLoading(false)
     }
   }

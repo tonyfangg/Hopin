@@ -64,7 +64,7 @@ export function Step4Operations({ data, onUpdate, onNext, onPrev }: Step4Props) 
     <form onSubmit={handleSubmit} className="p-8">
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-slate-900 mb-2">Business operations</h2>
-        <p className="text-slate-600">This helps us understand the size of your business and what insurance you might be legally required to have</p>
+        <p className="text-slate-800">This helps us understand the size of your business and what insurance you might be legally required to have</p>
       </div>
 
       <div className="space-y-6">
@@ -168,7 +168,7 @@ export function Step4Operations({ data, onUpdate, onNext, onPrev }: Step4Props) 
           {errors.annualTurnover && (
             <p className="mt-1 text-sm text-red-600">{errors.annualTurnover}</p>
           )}
-          <p className="mt-2 text-sm text-slate-500">
+          <p className="mt-2 text-sm text-slate-700">
             If you're just starting out, please estimate your first year turnover. 
             Turnover helps us understand the size of your business and the potential risks you might face.
           </p>

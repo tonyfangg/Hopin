@@ -60,7 +60,7 @@ export function Step2Business({ data, onUpdate, onNext, onPrev }: Step2Props) {
     <form onSubmit={handleSubmit} className="p-8">
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-slate-900 mb-2">Tell us about your business</h2>
-        <p className="text-slate-600">This helps us provide the right compliance guidance and risk assessment</p>
+        <p className="text-slate-800">This helps us provide the right compliance guidance and risk assessment</p>
       </div>
 
       <div className="space-y-6">

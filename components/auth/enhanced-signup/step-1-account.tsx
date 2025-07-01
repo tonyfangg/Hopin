@@ -51,7 +51,7 @@ export function Step1Account({ data, onUpdate, onNext }: Step1Props) {
           <h1 className="text-2xl font-bold text-slate-900">Hoops Store Operations</h1>
         </div>
         <h2 className="text-xl font-semibold text-slate-700 mb-2">Welcome to your compliance journey</h2>
-        <p className="text-slate-600">Let's start by setting up your account</p>
+        <p className="text-slate-800">Let's start by setting up your account</p>
       </div>
 
       <div className="space-y-6">
@@ -91,7 +91,7 @@ export function Step1Account({ data, onUpdate, onNext }: Step1Props) {
           {errors.password && (
             <p className="mt-1 text-sm text-red-600">{errors.password}</p>
           )}
-          <p className="mt-1 text-sm text-slate-500">
+          <p className="mt-1 text-sm text-slate-700">
             At least 8 characters with a mix of letters and numbers
           </p>
         </div>
@@ -125,7 +125,7 @@ export function Step1Account({ data, onUpdate, onNext }: Step1Props) {
         </Button>
       </div>
 
-      <div className="mt-6 text-center text-sm text-slate-500">
+      <div className="mt-6 text-center text-sm text-slate-700">
         By continuing, you agree to our{' '}
         <a href="/terms" className="text-blue-600 hover:text-blue-700">Terms of Service</a>
         {' '}and{' '}

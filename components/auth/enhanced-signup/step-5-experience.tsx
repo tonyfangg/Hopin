@@ -80,7 +80,7 @@ export function Step5Experience({ data, onUpdate, onNext, onPrev }: Step5Props) 
     <form onSubmit={handleSubmit} className="p-8">
       <div className="mb-8">
         <h2 className="text-xl font-semibold text-slate-900 mb-2">Management experience & insurance</h2>
-        <p className="text-slate-600">This helps us understand the size of your business and what insurance you might be legally required to have</p>
+        <p className="text-slate-800">This helps us understand the size of your business and what insurance you might be legally required to have</p>
       </div>
 
       <div className="space-y-6">
