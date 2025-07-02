@@ -1,8 +1,8 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { createClient } from '@/app/lib/supabase-client'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Button from '@/components/ui/button'
 import Link from 'next/link'
 
@@ -11,15 +11,21 @@ export function LoginForm() {
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [urlError, setUrlError] = useState('')
   
   const router = useRouter()
+  const searchParams = useSearchParams()
   const supabase = createClient()
 
-  // Add null check
-  if (!supabase) {
-    console.error('Supabase client not available')
-    return null
-  }
+  // Handle URL error params safely
+  useEffect(() => {
+    const errorParam = searchParams.get('error')
+    if (errorParam === 'invalid_reset_link') {
+      setUrlError('Invalid or expired reset link. Please try again.')
+    }
+  }, [searchParams])
+
+  const displayError = error || urlError
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -100,9 +106,9 @@ export function LoginForm() {
             />
           </div>
 
-          {error && (
+          {displayError && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-              {error}
+              {displayError}
             </div>
           )}
 
