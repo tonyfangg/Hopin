@@ -40,10 +40,12 @@ export function FragmentAuthHandler({ children }: FragmentAuthHandlerProps) {
           hasAccessToken: !!accessToken,
           hasRefreshToken: !!refreshToken,
           type,
-          expiresAt
+          expiresAt,
+          fullHash: window.location.hash
         })
 
-        if (accessToken && refreshToken && type === 'recovery') {
+        // Handle any type of recovery/password reset fragments
+        if (accessToken && refreshToken && (type === 'recovery' || type === 'signup' || type === 'email')) {
           console.log('Setting session from fragments...')
           
           // Set the session manually using the tokens from URL
@@ -69,10 +71,35 @@ export function FragmentAuthHandler({ children }: FragmentAuthHandlerProps) {
             setError('Failed to create session')
             return
           }
-        } else if (type === 'recovery') {
-          // We have recovery type but missing tokens
-          console.error('Recovery type detected but missing tokens')
-          setError('Invalid recovery link - missing authentication tokens')
+        } else if (accessToken && refreshToken) {
+          // We have tokens but unknown type - try to set session anyway
+          console.log('Setting session from fragments with unknown type...')
+          
+          const { data, error: setSessionError } = await supabase.auth.setSession({
+            access_token: accessToken,
+            refresh_token: refreshToken,
+          })
+
+          if (setSessionError) {
+            console.error('Error setting session:', setSessionError)
+            setError(`Session error: ${setSessionError.message}`)
+            return
+          }
+
+          if (data?.session) {
+            console.log('Session set successfully from unknown type!')
+            window.history.replaceState(null, '', window.location.pathname)
+            setIsHandling(false)
+            return
+          } else {
+            console.error('No session returned after setting')
+            setError('Failed to create session')
+            return
+          }
+        } else if (window.location.hash.includes('access_token') || window.location.hash.includes('refresh_token')) {
+          // We have some tokens but they're not in the expected format
+          console.error('Tokens found but in unexpected format')
+          setError('Invalid token format in reset link')
           return
         } else {
           // No recovery fragments found
