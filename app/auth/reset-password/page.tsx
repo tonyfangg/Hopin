@@ -1,5 +1,6 @@
 import { Suspense } from 'react'
 import { ResetPasswordForm } from '@/components/auth/reset-password-form'
+import { FragmentAuthHandler } from '@/components/auth/fragment-auth-handler'
 
 function LoadingSpinner() {
   return (
@@ -16,7 +17,9 @@ export default function ResetPasswordPage() {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
       <Suspense fallback={<LoadingSpinner />}>
-        <ResetPasswordForm />
+        <FragmentAuthHandler>
+          <ResetPasswordForm />
+        </FragmentAuthHandler>
       </Suspense>
     </div>
   )
