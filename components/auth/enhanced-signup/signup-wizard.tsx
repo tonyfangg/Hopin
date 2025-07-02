@@ -182,6 +182,13 @@ export function SignupWizard() {
 
       if (authError) throw authError
 
+      // Check if this is email confirmation required
+      if (authData.user && !authData.session) {
+        setError('Please check your email and click the confirmation link to complete signup.')
+        setLoading(false)
+        return
+      }
+
       // Step 2: Create property record
       if (authData.user) {
         const { error: propertyError } = await supabase
@@ -194,13 +201,14 @@ export function SignupWizard() {
             size_category: signupData.sizeCategory,
             building_age_range: signupData.buildingAgeRange,
             tenure_type: signupData.tenureType,
+            property_type: signupData.businessActivity,
             risk_score: finalRiskScore
           })
 
         if (propertyError) throw propertyError
 
-        // Step 3: Save insurance information
-        if (signupData.hasInsurance) {
+        // Step 3: Save insurance information (if provided)
+        if (signupData.hasInsurance && signupData.insuranceProvider) {
           const { error: insuranceError } = await supabase
             .from('user_insurance_status')
             .insert({
@@ -211,33 +219,35 @@ export function SignupWizard() {
               insurance_provider: signupData.insuranceProvider
             })
 
-          if (insuranceError) throw insuranceError
+          if (insuranceError) {
+            console.warn('Insurance info save failed:', insuranceError)
+            // Don't fail the signup for this
+          }
         }
 
         // Step 4: Save compliance baseline
-        const { error: complianceError } = await supabase
-          .from('compliance_baseline')
-          .insert({
-            user_id: authData.user.id,
-            compliance_items: signupData.complianceStatus,
-            assessment_score: Math.max(0, 100 - finalRiskScore)
-          })
+        if (signupData.complianceStatus && signupData.complianceStatus.length > 0) {
+          const { error: complianceError } = await supabase
+            .from('compliance_baseline')
+            .insert({
+              user_id: authData.user.id,
+              compliance_items: signupData.complianceStatus,
+              assessment_score: Math.max(0, 100 - finalRiskScore)
+            })
 
-        if (complianceError) throw complianceError
-      }
-
-      // Check if this is email confirmation required
-      if (authData.user && !authData.session) {
-        // Email confirmation required
-        setError('Please check your email and click the confirmation link to complete signup.')
-        setLoading(false)
-        return
+          if (complianceError) {
+            console.warn('Compliance baseline save failed:', complianceError)
+            // Don't fail the signup for this
+          }
+        }
       }
 
       // Success - redirect to dashboard
+      console.log('Enhanced signup completed successfully!')
       window.location.href = '/dashboard?welcome=true&tier=' + signupData.selectedTier
       
     } catch (err: any) {
+      console.error('Enhanced signup error:', err)
       setError(err.message || 'An unexpected error occurred')
       setLoading(false)
     }
