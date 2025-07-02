@@ -19,16 +19,25 @@ export function ForgotPasswordForm() {
     setError('')
 
     try {
+      console.log('Sending password reset email to:', email)
+      
+      // Use the callback URL with clear parameters
+      const redirectUrl = `https://hopin.app/auth/callback?type=recovery&next=${encodeURIComponent('/auth/reset-password')}`
+      console.log('Redirect URL:', redirectUrl)
+      
       const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/callback?type=recovery`,
+        redirectTo: redirectUrl,
       })
 
       if (error) {
+        console.error('Reset password error:', error)
         setError(error.message)
       } else {
+        console.log('Reset password email sent successfully')
         setSuccess(true)
       }
-    } catch {
+    } catch (err) {
+      console.error('Reset password exception:', err)
       setError('An unexpected error occurred')
     } finally {
       setLoading(false)
@@ -49,6 +58,9 @@ export function ForgotPasswordForm() {
             We've sent a password reset link to <strong>{email}</strong>
           </p>
           <div className="space-y-4">
+            <p className="text-sm text-slate-500">
+              The link will take you through our secure authentication process.
+            </p>
             <p className="text-sm text-slate-500">
               Didn't receive the email? Check your spam folder or try again.
             </p>

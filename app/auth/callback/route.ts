@@ -1,71 +1,92 @@
 import { createServerSupabaseClient } from '@/app/lib/supabase-server'
 import { NextRequest, NextResponse } from 'next/server'
 
-export async function GET(request: NextRequest) {
-  const { searchParams } = new URL(request.url)
-  const code = searchParams.get('code')
-  const tokenHash = searchParams.get('token_hash')
-  const type = searchParams.get('type')
-  const next = searchParams.get('next') ?? '/dashboard'
+export const GET = async (request: NextRequest): Promise<NextResponse> => {
+  const requestUrl = new URL(request.url)
+  const code = requestUrl.searchParams.get('code')
+  const type = requestUrl.searchParams.get('type')
+  const next = requestUrl.searchParams.get('next') || '/dashboard'
+  const error = requestUrl.searchParams.get('error')
+  const errorDescription = requestUrl.searchParams.get('error_description')
 
-  // Handle both code-based and token_hash-based authentication
-  if (code || tokenHash) {
-    const supabase = await createServerSupabaseClient()
-    
-    try {
-      let sessionData: any = null
-      let sessionError: any = null
+  // Enhanced logging
+  console.log('=== AUTH CALLBACK DEBUG ===')
+  console.log('Request URL:', requestUrl.toString())
+  console.log('Query params:', {
+    code: code ? `${code.substring(0, 10)}...` : null,
+    type,
+    next,
+    error,
+    errorDescription,
+    allParams: Object.fromEntries(requestUrl.searchParams)
+  })
 
-      if (code) {
-        // Exchange the code for a session (OAuth flows)
-        const { data, error } = await supabase.auth.exchangeCodeForSession(code)
-        sessionData = data
-        sessionError = error
-      } else if (tokenHash) {
-        // Handle token_hash from email templates
-        const { data, error } = await supabase.auth.verifyOtp({
-          token_hash: tokenHash,
-          type: type === 'recovery' ? 'recovery' : 'email'
-        })
-        sessionData = data
-        sessionError = error
-      }
-      
-      if (sessionError) {
-        console.error('Auth callback error:', sessionError)
-        return NextResponse.redirect(
-          new URL(`/auth/login?error=auth_callback_failed`, request.url)
-        )
-      }
-
-      // Handle different callback types
-      if (type === 'recovery') {
-        // Password reset flow - redirect to reset password page
-        return NextResponse.redirect(
-          new URL('/auth/reset-password', request.url)
-        )
-      } else if (type === 'signup' || type === 'email') {
-        // Email confirmation flow - redirect to login with success message
-        return NextResponse.redirect(
-          new URL('/auth/login?message=email_confirmed', request.url)
-        )
-      } else if (type === 'magiclink') {
-        // Magic link flow - redirect to dashboard
-        return NextResponse.redirect(new URL('/dashboard', request.url))
-      } else {
-        // Default authentication flow
-        return NextResponse.redirect(new URL(next, request.url))
-      }
-    } catch (error) {
-      console.error('Auth callback exception:', error)
-      return NextResponse.redirect(
-        new URL(`/auth/login?error=auth_callback_failed`, request.url)
-      )
-    }
+  // Check for OAuth errors first
+  if (error) {
+    console.log('OAuth error detected:', { error, errorDescription })
+    return NextResponse.redirect(requestUrl.origin + `/auth/login?error=oauth_${error}`)
   }
 
-  // No authentication parameters provided, redirect to login
-  return NextResponse.redirect(
-    new URL('/auth/login?error=no_auth_code', request.url)
-  )
+  if (!code) {
+    console.log('No authorization code provided')
+    return NextResponse.redirect(requestUrl.origin + '/auth/login?error=no_code')
+  }
+
+  try {
+    const supabase = await createServerSupabaseClient()
+    
+    console.log('Attempting to exchange code for session...')
+    const { data, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+    
+    if (exchangeError) {
+      console.error('Code exchange error:', {
+        message: exchangeError.message,
+        status: exchangeError.status,
+        details: exchangeError
+      })
+      
+      // More specific error handling
+      if (exchangeError.message?.includes('expired')) {
+        return NextResponse.redirect(requestUrl.origin + '/auth/login?error=expired_code')
+      }
+      if (exchangeError.message?.includes('invalid')) {
+        return NextResponse.redirect(requestUrl.origin + '/auth/login?error=invalid_code')
+      }
+      
+      return NextResponse.redirect(requestUrl.origin + '/auth/login?error=exchange_failed')
+    }
+
+    if (!data.session) {
+      console.error('No session returned after successful code exchange')
+      return NextResponse.redirect(requestUrl.origin + '/auth/login?error=no_session')
+    }
+
+    console.log('Session created successfully:', {
+      userId: data.session.user.id,
+      email: data.session.user.email,
+      type,
+      sessionId: data.session.access_token.substring(0, 10) + '...'
+    })
+
+    // Handle different auth flows
+    if (type === 'recovery') {
+      console.log('Password recovery flow - redirecting to reset password page')
+      const resetUrl = requestUrl.origin + '/auth/reset-password'
+      console.log('Reset URL:', resetUrl)
+      return NextResponse.redirect(resetUrl)
+    }
+
+    // Default flow (signup confirmation, etc.)
+    console.log('Default flow - redirecting to:', next)
+    return NextResponse.redirect(requestUrl.origin + next)
+    
+  } catch (err) {
+    console.error('Auth callback exception:', {
+      message: err instanceof Error ? err.message : 'Unknown error',
+      stack: err instanceof Error ? err.stack : undefined,
+      error: err
+    })
+    
+    return NextResponse.redirect(requestUrl.origin + '/auth/login?error=callback_exception')
+  }
 } 
