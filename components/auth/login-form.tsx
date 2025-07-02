@@ -12,16 +12,27 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [urlError, setUrlError] = useState('')
+  const [successMessage, setSuccessMessage] = useState('')
   
   const router = useRouter()
   const searchParams = useSearchParams()
   const supabase = createClient()
 
-  // Handle URL error params safely
+  // Handle URL params safely
   useEffect(() => {
     const errorParam = searchParams.get('error')
+    const messageParam = searchParams.get('message')
+    
     if (errorParam === 'invalid_reset_link') {
       setUrlError('Invalid or expired reset link. Please try again.')
+    } else if (errorParam === 'auth_callback_failed') {
+      setUrlError('Authentication failed. Please try again.')
+    } else if (errorParam === 'no_auth_code') {
+      setUrlError('Invalid authentication link. Please try again.')
+    }
+    
+    if (messageParam === 'email_confirmed') {
+      setSuccessMessage('Email confirmed successfully! You can now sign in.')
     }
   }, [searchParams])
 
@@ -105,6 +116,12 @@ export function LoginForm() {
               disabled={loading}
             />
           </div>
+
+          {successMessage && (
+            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+              {successMessage}
+            </div>
+          )}
 
           {displayError && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">

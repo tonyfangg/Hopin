@@ -35,7 +35,8 @@ export function SignupForm() {
         options: {
           data: {
             company_name: companyName,
-          }
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback?type=signup`
         }
       })
 

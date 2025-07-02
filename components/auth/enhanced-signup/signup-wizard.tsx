@@ -182,7 +182,8 @@ export function SignupWizard() {
             subscription_tier: signupData.selectedTier,
             onboarding_completed: true,
             initial_risk_score: finalRiskScore
-          }
+          },
+          emailRedirectTo: `${window.location.origin}/auth/callback?type=signup`
         }
       })
 
