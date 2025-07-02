@@ -15,6 +15,9 @@ interface SignupData {
   email: string
   password: string
   companyName: string
+  firstName: string
+  lastName: string
+  position: string
   
   // Step 2: Business
   industry: string
@@ -52,6 +55,9 @@ export function SignupWizard() {
     email: '',
     password: '',
     companyName: '',
+    firstName: '',
+    lastName: '',
+    position: '',
     industry: 'Retail and Shops',
     businessActivity: '',
     propertyAddress: '',
@@ -156,17 +162,17 @@ export function SignupWizard() {
     setError('')
 
     try {
-      // Calculate final risk score and tier
       const finalRiskScore = calculateRiskScore()
-      const recommendedTier = recommendTier()
       
-      // Step 1: Create Supabase auth user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: signupData.email,
         password: signupData.password,
         options: {
           data: {
             company_name: signupData.companyName,
+            first_name: signupData.firstName,
+            last_name: signupData.lastName,
+            position: signupData.position,
             business_activity: signupData.businessActivity,
             employee_count_range: signupData.employeeCount,
             turnover_range: signupData.annualTurnover,
@@ -182,72 +188,78 @@ export function SignupWizard() {
 
       if (authError) throw authError
 
-      // Check if this is email confirmation required
       if (authData.user && !authData.session) {
-        setError('Please check your email and click the confirmation link to complete signup.')
         setLoading(false)
+        setError('')
+        alert(`✅ Account created successfully! \n\n📧 Please check your email (${signupData.email}) and click the confirmation link to activate your account.\n\nAfter confirming your email, you can sign in at: ${window.location.origin}/auth/login`)
+        setTimeout(() => {
+          window.location.href = '/auth/login?message=confirm-email'
+        }, 2000)
         return
       }
 
-      // Step 2: Create property record
-      if (authData.user) {
-        const { error: propertyError } = await supabase
-          .from('properties')
-          .insert({
-            user_id: authData.user.id,
-            name: `${signupData.companyName} - Main Location`,
-            address: signupData.propertyAddress,
-            postcode: signupData.postcode,
-            size_category: signupData.sizeCategory,
-            building_age_range: signupData.buildingAgeRange,
-            tenure_type: signupData.tenureType,
-            property_type: signupData.businessActivity,
-            risk_score: finalRiskScore
-          })
-
-        if (propertyError) throw propertyError
-
-        // Step 3: Save insurance information (if provided)
-        if (signupData.hasInsurance && signupData.insuranceProvider) {
-          const { error: insuranceError } = await supabase
-            .from('user_insurance_status')
+      if (authData.user && authData.session) {
+        console.log('User confirmed, proceeding with data saving...')
+        // Step 2: Create property record
+        if (authData.user) {
+          const { error: propertyError } = await supabase
+            .from('properties')
             .insert({
               user_id: authData.user.id,
-              has_current_insurance: signupData.hasInsurance,
-              current_premium: signupData.currentPremium,
-              policy_expiry: signupData.policyExpiry,
-              insurance_provider: signupData.insuranceProvider
+              name: `${signupData.companyName} - Main Location`,
+              address: signupData.propertyAddress,
+              postcode: signupData.postcode,
+              size_category: signupData.sizeCategory,
+              building_age_range: signupData.buildingAgeRange,
+              tenure_type: signupData.tenureType,
+              property_type: signupData.businessActivity,
+              risk_score: finalRiskScore
             })
 
-          if (insuranceError) {
-            console.warn('Insurance info save failed:', insuranceError)
-            // Don't fail the signup for this
+          if (propertyError) throw propertyError
+
+          // Step 3: Save insurance information (if provided)
+          if (signupData.hasInsurance && signupData.insuranceProvider) {
+            const { error: insuranceError } = await supabase
+              .from('user_insurance_status')
+              .insert({
+                user_id: authData.user.id,
+                has_current_insurance: signupData.hasInsurance,
+                current_premium: signupData.currentPremium,
+                policy_expiry: signupData.policyExpiry,
+                insurance_provider: signupData.insuranceProvider
+              })
+
+            if (insuranceError) {
+              console.warn('Insurance info save failed:', insuranceError)
+              // Don't fail the signup for this
+            }
+          }
+
+          // Step 4: Save compliance baseline
+          if (signupData.complianceStatus && signupData.complianceStatus.length > 0) {
+            const { error: complianceError } = await supabase
+              .from('compliance_baseline')
+              .insert({
+                user_id: authData.user.id,
+                compliance_items: signupData.complianceStatus,
+                assessment_score: Math.max(0, 100 - finalRiskScore)
+              })
+
+            if (complianceError) {
+              console.warn('Compliance baseline save failed:', complianceError)
+              // Don't fail the signup for this
+            }
           }
         }
 
-        // Step 4: Save compliance baseline
-        if (signupData.complianceStatus && signupData.complianceStatus.length > 0) {
-          const { error: complianceError } = await supabase
-            .from('compliance_baseline')
-            .insert({
-              user_id: authData.user.id,
-              compliance_items: signupData.complianceStatus,
-              assessment_score: Math.max(0, 100 - finalRiskScore)
-            })
-
-          if (complianceError) {
-            console.warn('Compliance baseline save failed:', complianceError)
-            // Don't fail the signup for this
-          }
-        }
+        // Success - redirect to dashboard
+        console.log('Enhanced signup completed successfully!')
+        window.location.href = '/dashboard?welcome=true&tier=' + signupData.selectedTier
       }
-
-      // Success - redirect to dashboard
-      console.log('Enhanced signup completed successfully!')
-      window.location.href = '/dashboard?welcome=true&tier=' + signupData.selectedTier
       
     } catch (err: any) {
-      console.error('Enhanced signup error:', err)
+      console.error('Signup error:', err)
       setError(err.message || 'An unexpected error occurred')
       setLoading(false)
     }
@@ -366,11 +378,14 @@ export function SignupWizard() {
 
         {/* Error display */}
         {error && (
-          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-600 flex items-center gap-3">
-            <svg className="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+          <div className="mb-6 p-4 bg-red-50 border-2 border-red-200 rounded-lg text-red-700 flex items-start gap-3 shadow-md">
+            <svg className="w-6 h-6 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
             </svg>
-            {error}
+            <div>
+              <h4 className="font-semibold text-red-800 mb-1">Signup Error</h4>
+              <p className="text-sm">{error}</p>
+            </div>
           </div>
         )}
 
