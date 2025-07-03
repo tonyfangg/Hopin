@@ -1,7 +1,8 @@
-import { Suspense } from 'react'
-import { LoginForm } from '@/components/auth/login-form'
 import { createServerSupabaseClient } from '@/app/lib/supabase-server'
 import { redirect } from 'next/navigation'
+import { Suspense } from 'react'
+import { LoginForm } from '@/components/auth/login-form'
+import { TestRedirectButton } from '@/components/test-redirect-button'
 
 function LoadingSpinner() {
   return (
@@ -16,21 +17,23 @@ function LoadingSpinner() {
 
 export default async function LoginPage() {
   const supabase = await createServerSupabaseClient()
-  
-  try {
-    const { data: { session } } = await supabase.auth.getSession()
-    if (session) {
-      redirect('/dashboard')
-    }
-  } catch {
-    // Continue to show login form if there's an error
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession()
+
+  if (session) {
+    redirect('/dashboard')
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
-      <Suspense fallback={<LoadingSpinner />}>
-        <LoginForm />
-      </Suspense>
+      <div>
+        <Suspense fallback={<LoadingSpinner />}>
+          <LoginForm />
+        </Suspense>
+        <TestRedirectButton />
+      </div>
     </div>
   )
 }

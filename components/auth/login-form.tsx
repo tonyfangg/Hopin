@@ -61,29 +61,11 @@ export function LoginForm() {
 
       console.log('Login successful, redirecting to dashboard')
       
-      // Multiple redirect strategies to ensure it works
-      
-      // Strategy 1: Router push with refresh
-      router.push('/dashboard')
-      router.refresh()
-      
-      // Strategy 2: Delay and force page reload if router doesn't work
+      // IMMEDIATE REDIRECT - Don't wait for auth state
       setTimeout(() => {
-        if (window.location.pathname !== '/dashboard') {
-          console.log('Router redirect failed, using window.location')
-          window.location.href = '/dashboard'
-        }
-      }, 1000)
-      
-      // Strategy 3: Listen for auth state change
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-        console.log('Auth state change:', event, !!session)
-        if (event === 'SIGNED_IN' && session) {
-          console.log('Auth state confirmed, redirecting')
-          subscription.unsubscribe()
-          window.location.href = '/dashboard'
-        }
-      })
+        console.log('Executing immediate redirect')
+        window.location.href = '/dashboard'
+      }, 100) // Very short delay to ensure session is set
       
     } catch (err) {
       console.error('Login error:', err)
@@ -155,7 +137,10 @@ export function LoginForm() {
 
           {loading && (
             <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg">
-              Signing in and redirecting...
+              <div className="flex items-center gap-2">
+                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
+                Signing in and redirecting...
+              </div>
             </div>
           )}
 
