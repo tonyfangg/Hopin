@@ -1,16 +1,155 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { createClient } from '@/app/lib/supabase-client'
+import { useRouter } from 'next/navigation'
 import Button from '@/components/ui/button'
 
+interface UserProfile {
+  id: string
+  email: string
+  first_name: string | null
+  last_name: string | null
+  company_name: string | null
+  phone: string | null
+  position: string | null
+}
+
 export function AccountSettings() {
-  const [profileData, setProfileData] = useState({
-    email: 'tonyfang@gmail.com',
-    companyName: 'Hoops Store Operations',
-    firstName: 'Tony',
-    lastName: 'Fang',
-    phone: '+1 (555) 123-4567'
-  })
+  const [profileData, setProfileData] = useState<UserProfile | null>(null)
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState('')
+  const [success, setSuccess] = useState(false)
+  
+  const supabase = createClient()
+  const router = useRouter()
+
+  useEffect(() => {
+    loadUserProfile()
+  }, [])
+
+  const loadUserProfile = async () => {
+    try {
+      setLoading(true)
+      
+      // Get current user
+      const { data: { user }, error: userError } = await supabase.auth.getUser()
+      
+      if (userError || !user) {
+        console.error('User error:', userError)
+        router.push('/auth/login')
+        return
+      }
+
+      // Get profile data
+      const { data: profile, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single()
+
+      if (profileError && profileError.code !== 'PGRST116') {
+        console.error('Profile error:', profileError)
+        setError('Failed to load profile data')
+        return
+      }
+
+      // Combine user auth data with profile data
+      const combinedProfile: UserProfile = {
+        id: user.id,
+        email: user.email || '',
+        first_name: profile?.first_name || user.user_metadata?.first_name || '',
+        last_name: profile?.last_name || user.user_metadata?.last_name || '',
+        company_name: profile?.company_name || user.user_metadata?.company_name || '',
+        phone: profile?.phone || user.user_metadata?.phone || '',
+        position: profile?.position || ''
+      }
+
+      setProfileData(combinedProfile)
+      
+    } catch (err) {
+      console.error('Load profile error:', err)
+      setError('Failed to load profile')
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const saveProfile = async () => {
+    if (!profileData) return
+
+    try {
+      setSaving(true)
+      setError('')
+      
+      // Update profile table
+      const { error: profileError } = await supabase
+        .from('profiles')
+        .upsert({
+          id: profileData.id,
+          first_name: profileData.first_name,
+          last_name: profileData.last_name,
+          company_name: profileData.company_name,
+          phone: profileData.phone,
+          position: profileData.position,
+          updated_at: new Date().toISOString()
+        })
+
+      if (profileError) {
+        console.error('Profile update error:', profileError)
+        setError('Failed to update profile')
+        return
+      }
+
+      // Update auth metadata
+      const { error: authError } = await supabase.auth.updateUser({
+        data: {
+          first_name: profileData.first_name,
+          last_name: profileData.last_name,
+          company_name: profileData.company_name,
+          phone: profileData.phone
+        }
+      })
+
+      if (authError) {
+        console.error('Auth update error:', authError)
+        // Don't show error for auth metadata update failure
+      }
+
+      setSuccess(true)
+      setTimeout(() => setSuccess(false), 3000)
+      
+    } catch (err) {
+      console.error('Save profile error:', err)
+      setError('Failed to save changes')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="bg-white rounded-2xl p-8 border border-slate-100">
+        <div className="animate-pulse">
+          <div className="h-6 bg-slate-200 rounded w-1/3 mb-4"></div>
+          <div className="space-y-4">
+            <div className="h-10 bg-slate-200 rounded"></div>
+            <div className="h-10 bg-slate-200 rounded"></div>
+            <div className="h-10 bg-slate-200 rounded"></div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (!profileData) {
+    return (
+      <div className="bg-white rounded-2xl p-8 border border-slate-100">
+        <p className="text-red-600">Failed to load profile data</p>
+      </div>
+    )
+  }
 
   return (
     <div className="bg-white rounded-2xl p-8 border border-slate-100">
@@ -32,9 +171,10 @@ export function AccountSettings() {
             </label>
             <input
               type="text"
-              value={profileData.firstName}
-              onChange={(e) => setProfileData({...profileData, firstName: e.target.value})}
+              value={profileData.first_name || ''}
+              onChange={(e) => setProfileData({...profileData, first_name: e.target.value})}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              disabled={saving}
             />
           </div>
           <div>
@@ -43,9 +183,10 @@ export function AccountSettings() {
             </label>
             <input
               type="text"
-              value={profileData.lastName}
-              onChange={(e) => setProfileData({...profileData, lastName: e.target.value})}
+              value={profileData.last_name || ''}
+              onChange={(e) => setProfileData({...profileData, last_name: e.target.value})}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              disabled={saving}
             />
           </div>
         </div>
@@ -57,9 +198,10 @@ export function AccountSettings() {
           <input
             type="email"
             value={profileData.email}
-            onChange={(e) => setProfileData({...profileData, email: e.target.value})}
-            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full px-4 py-3 border border-slate-300 rounded-lg bg-slate-50 text-slate-500"
+            disabled
           />
+          <p className="text-xs text-slate-500 mt-1">Email cannot be changed here</p>
         </div>
 
         <div>
@@ -68,9 +210,24 @@ export function AccountSettings() {
           </label>
           <input
             type="text"
-            value={profileData.companyName}
-            onChange={(e) => setProfileData({...profileData, companyName: e.target.value})}
+            value={profileData.company_name || ''}
+            onChange={(e) => setProfileData({...profileData, company_name: e.target.value})}
             className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            disabled={saving}
+          />
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-700 mb-2">
+            Position
+          </label>
+          <input
+            type="text"
+            value={profileData.position || ''}
+            onChange={(e) => setProfileData({...profileData, position: e.target.value})}
+            className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            placeholder="e.g. Store Manager, Operations Director"
+            disabled={saving}
           />
         </div>
 
@@ -80,17 +237,38 @@ export function AccountSettings() {
           </label>
           <input
             type="tel"
-            value={profileData.phone}
+            value={profileData.phone || ''}
             onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
             className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            disabled={saving}
           />
         </div>
 
+        {error && (
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
+            {error}
+          </div>
+        )}
+
+        {success && (
+          <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
+            Profile updated successfully!
+          </div>
+        )}
+
         <div className="flex gap-4">
-          <Button className="bg-blue-600 hover:bg-blue-700">
-            Save Changes
+          <Button 
+            onClick={saveProfile}
+            className="bg-blue-600 hover:bg-blue-700"
+            disabled={saving}
+          >
+            {saving ? 'Saving...' : 'Save Changes'}
           </Button>
-          <Button variant="outline">
+          <Button 
+            variant="outline"
+            onClick={loadUserProfile}
+            disabled={saving}
+          >
             Cancel
           </Button>
         </div>
