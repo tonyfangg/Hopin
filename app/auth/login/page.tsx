@@ -3,6 +3,8 @@ import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 import { LoginForm } from '@/components/auth/login-form'
 import { TestRedirectButton } from '@/components/test-redirect-button'
+import { ManualDashboardLink } from '@/components/manual-dashboard-link'
+import { SessionChecker } from '@/components/session-checker'
 
 function LoadingSpinner() {
   return (
@@ -28,11 +30,15 @@ export default async function LoginPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 flex items-center justify-center p-4">
-      <div>
+      <div className="w-full max-w-md">
         <Suspense fallback={<LoadingSpinner />}>
           <LoginForm />
         </Suspense>
+        
+        {/* Debug Components */}
         <TestRedirectButton />
+        <ManualDashboardLink />
+        <SessionChecker />
       </div>
     </div>
   )
