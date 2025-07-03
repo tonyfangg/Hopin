@@ -59,13 +59,19 @@ export function LoginForm() {
         return
       }
 
-      console.log('Login successful, redirecting to dashboard')
+      console.log('Login successful, initiating redirect sequence')
       
-      // IMMEDIATE REDIRECT
+      // Add multiple redirect attempts
+      router.push('/dashboard')
+      router.refresh()
+      
+      // Fallback redirect after a delay
       setTimeout(() => {
-        console.log('Executing immediate redirect')
-        window.location.href = '/dashboard'
-      }, 100)
+        if (window.location.pathname !== '/dashboard') {
+          console.log('Router redirect failed, using window.location.href')
+          window.location.href = '/dashboard'
+        }
+      }, 1000)
       
     } catch (err) {
       console.error('Login error:', err)
