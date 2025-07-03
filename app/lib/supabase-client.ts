@@ -1,17 +1,43 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
+import { Database } from './supabase'
 
-// Your actual environment variables
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// Singleton instance
+let supabaseClient: ReturnType<typeof createSupabaseClient<Database>> | null = null
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error('Missing Supabase environment variables')
-}
-
-// Export the configured client
 export const createClient = () => {
-  return createSupabaseClient(supabaseUrl, supabaseAnonKey)
+  // Return existing instance if it exists
+  if (supabaseClient) {
+    return supabaseClient
+  }
+
+  // Create new instance only if none exists
+  supabaseClient = createSupabaseClient<Database>(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      // Add proper configuration to avoid conflicts
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        detectSessionInUrl: true,
+        storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+        storageKey: 'supabase.auth.token', // Use consistent storage key
+      },
+    }
+  )
+
+  return supabaseClient
 }
 
-// Default export for backward compatibility
-export default createClient() 
+// Optional: Method to get existing client without creating new one
+export const getClient = () => {
+  if (!supabaseClient) {
+    throw new Error('Supabase client not initialized. Call createClient() first.')
+  }
+  return supabaseClient
+}
+
+// Optional: Method to reset client (useful for testing or auth changes)
+export const resetClient = () => {
+  supabaseClient = null
+} 

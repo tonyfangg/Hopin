@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { createClient } from '@/app/lib/supabase-client'
+import { useSupabase } from '@/lib/hooks/useSupabase'
 
 export default function TestAuthPage() {
   const [email, setEmail] = useState('')
@@ -9,7 +9,7 @@ export default function TestAuthPage() {
   const [message, setMessage] = useState('')
   const [loading, setLoading] = useState(false)
   
-  const supabase = createClient()
+  const supabase = useSupabase()
 
   const testConnection = async () => {
     setLoading(true)

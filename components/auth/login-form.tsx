@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/app/lib/supabase-client'
+import { useSupabase } from '@/lib/hooks/useSupabase'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Button from '@/components/ui/button'
 import Link from 'next/link'
@@ -16,7 +16,7 @@ export function LoginForm() {
   
   const router = useRouter()
   const searchParams = useSearchParams()
-  const supabase = createClient()
+  const supabase = useSupabase()
 
   // Handle URL params safely
   useEffect(() => {

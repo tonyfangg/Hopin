@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/app/lib/supabase-client'
+import { useSupabase } from '@/lib/hooks/useSupabase'
 import Button from '@/components/ui/button'
 import Link from 'next/link'
 
@@ -17,7 +17,7 @@ export function RealElectricalOverview() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
   
-  const supabase = createClient()
+  const supabase = useSupabase()
 
   useEffect(() => {
     loadElectricalStats()

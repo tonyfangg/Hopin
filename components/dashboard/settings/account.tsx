@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/app/lib/supabase-client'
+import { useSupabase } from '@/lib/hooks/useSupabase'
 import { useRouter } from 'next/navigation'
 import Button from '@/components/ui/button'
 
@@ -22,7 +22,7 @@ export function AccountSettings() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   
-  const supabase = createClient()
+  const supabase = useSupabase()
   const router = useRouter()
 
   useEffect(() => {
