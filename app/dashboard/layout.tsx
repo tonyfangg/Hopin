@@ -19,11 +19,9 @@ export default async function DashboardLayout({
       error 
     })
     
-    // Temporary: Allow access even without server session for testing
-    // TODO: Fix server-side session detection
     if (!session) {
-      console.log('No server session found, but allowing access for testing')
-      // redirect('/auth/login') // Commented out temporarily
+      console.log('No session found, redirecting to login')
+      redirect('/auth/login')
     }
 
     return (
