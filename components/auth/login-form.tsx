@@ -44,18 +44,25 @@ export function LoginForm() {
     setError('')
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      console.log('Attempting login with email:', email)
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
+      console.log('Login response:', { data, error })
+
       if (error) {
+        console.error('Login error:', error)
         setError(error.message)
       } else {
+        console.log('Login successful, redirecting to dashboard')
         router.push('/dashboard')
         router.refresh()
       }
-    } catch {
+    } catch (err) {
+      console.error('Login exception:', err)
       setError('An unexpected error occurred')
     } finally {
       setLoading(false)

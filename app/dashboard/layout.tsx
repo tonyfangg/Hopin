@@ -11,9 +11,16 @@ export default async function DashboardLayout({
   const supabase = await createServerSupabaseClient()
   
   try {
-    const { data: { session } } = await supabase.auth.getSession()
+    const { data: { session }, error } = await supabase.auth.getSession()
+    
+    console.log('Dashboard layout - Session check:', { 
+      hasSession: !!session, 
+      userId: session?.user?.id,
+      error 
+    })
     
     if (!session) {
+      console.log('No session found, redirecting to login')
       redirect('/auth/login')
     }
 
