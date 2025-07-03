@@ -36,20 +36,24 @@ export const createServerSupabaseClient = async () => {
     {
       cookies: {
         get(name: string) {
-          return cookieStore.get(name)?.value
+          const cookie = cookieStore.get(name)
+          console.log(`Getting cookie ${name}:`, cookie?.value ? 'exists' : 'not found')
+          return cookie?.value
         },
         set(name: string, value: string, options: CookieOptions) {
           try {
+            console.log(`Setting cookie ${name}:`, value.substring(0, 20) + '...')
             cookieStore.set(name, value, options)
-          } catch {
-            // Handle cookie errors gracefully
+          } catch (error) {
+            console.error('Cookie set error:', error)
           }
         },
         remove(name: string, options: CookieOptions) {
           try {
+            console.log(`Removing cookie ${name}`)
             cookieStore.set(name, '', { ...options, maxAge: 0 })
-          } catch {
-            // Handle cookie errors gracefully
+          } catch (error) {
+            console.error('Cookie remove error:', error)
           }
         },
       },

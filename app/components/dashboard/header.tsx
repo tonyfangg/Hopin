@@ -1,22 +1,16 @@
 'use client'
 
 import { User } from '@supabase/supabase-js'
-import { createClient } from '@/app/lib/supabase-client'
+import { useSupabase } from '@/lib/hooks/useSupabase'
 import { useRouter } from 'next/navigation'
 
 interface DashboardHeaderProps {
-  user: User
+  user?: User
 }
 
 export function DashboardHeader({ user }: DashboardHeaderProps) {
   const router = useRouter()
-  const supabase = createClient()
-
-  // Add null check
-  if (!supabase) {
-    console.error('Supabase client not available')
-    return null
-  }
+  const supabase = useSupabase()
 
   const handleSignOut = async () => {
     await supabase.auth.signOut()
@@ -29,7 +23,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
         <h1 className="text-lg font-semibold text-slate-900">Dashboard</h1>
         
         <div className="flex items-center gap-4">
-          <span className="text-sm text-slate-600">{user.email}</span>
+          <span className="text-sm text-slate-600">{user?.email || 'Guest'}</span>
           <button
             onClick={handleSignOut}
             className="text-sm text-slate-600 hover:text-slate-900"
