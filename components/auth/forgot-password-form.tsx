@@ -21,7 +21,6 @@ export function ForgotPasswordForm() {
     try {
       console.log('Sending password reset email to:', email)
       
-      // Use the callback URL with clear parameters
       const redirectUrl = `https://hopin.app/auth/callback?type=recovery&next=${encodeURIComponent('/auth/reset-password')}`
       console.log('Redirect URL:', redirectUrl)
       
@@ -100,18 +99,20 @@ export function ForgotPasswordForm() {
           <p className="text-slate-600">Enter your email and we'll send you a reset link</p>
         </div>
 
-        <form onSubmit={handleForgotPassword} className="space-y-6">
+        <form onSubmit={handleForgotPassword} className="space-y-6" autoComplete="on">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
               Email address
             </label>
             <input
               id="email"
+              name="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               placeholder="Enter your email"
+              autoComplete="email"
               required
               disabled={loading}
             />

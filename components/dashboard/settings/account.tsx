@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSupabase } from '@/lib/hooks/useSupabase'
+import { createClient } from '@/app/lib/supabase-client'
 import { useRouter } from 'next/navigation'
 import Button from '@/components/ui/button'
 
@@ -22,7 +22,7 @@ export function AccountSettings() {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState(false)
   
-  const supabase = useSupabase()
+  const supabase = createClient()
   const router = useRouter()
 
   useEffect(() => {
@@ -33,7 +33,6 @@ export function AccountSettings() {
     try {
       setLoading(true)
       
-      // Get current user
       const { data: { user }, error: userError } = await supabase.auth.getUser()
       
       if (userError || !user) {
@@ -42,7 +41,6 @@ export function AccountSettings() {
         return
       }
 
-      // Get profile data
       const { data: profile, error: profileError } = await supabase
         .from('profiles')
         .select('*')
@@ -55,7 +53,6 @@ export function AccountSettings() {
         return
       }
 
-      // Combine user auth data with profile data
       const combinedProfile: UserProfile = {
         id: user.id,
         email: user.email || '',
@@ -83,7 +80,6 @@ export function AccountSettings() {
       setSaving(true)
       setError('')
       
-      // Update profile table
       const { error: profileError } = await supabase
         .from('profiles')
         .upsert({
@@ -102,7 +98,6 @@ export function AccountSettings() {
         return
       }
 
-      // Update auth metadata
       const { error: authError } = await supabase.auth.updateUser({
         data: {
           first_name: profileData.first_name,
@@ -114,7 +109,6 @@ export function AccountSettings() {
 
       if (authError) {
         console.error('Auth update error:', authError)
-        // Don't show error for auth metadata update failure
       }
 
       setSuccess(true)
@@ -163,7 +157,7 @@ export function AccountSettings() {
         </div>
       </div>
 
-      <div className="space-y-6">
+      <form className="space-y-6" autoComplete="on">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-2">
@@ -171,9 +165,11 @@ export function AccountSettings() {
             </label>
             <input
               type="text"
+              name="firstName"
               value={profileData.first_name || ''}
               onChange={(e) => setProfileData({...profileData, first_name: e.target.value})}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              autoComplete="given-name"
               disabled={saving}
             />
           </div>
@@ -183,9 +179,11 @@ export function AccountSettings() {
             </label>
             <input
               type="text"
+              name="lastName"
               value={profileData.last_name || ''}
               onChange={(e) => setProfileData({...profileData, last_name: e.target.value})}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              autoComplete="family-name"
               disabled={saving}
             />
           </div>
@@ -197,8 +195,10 @@ export function AccountSettings() {
           </label>
           <input
             type="email"
+            name="email"
             value={profileData.email}
             className="w-full px-4 py-3 border border-slate-300 rounded-lg bg-slate-50 text-slate-500"
+            autoComplete="email"
             disabled
           />
           <p className="text-xs text-slate-500 mt-1">Email cannot be changed here</p>
@@ -210,9 +210,11 @@ export function AccountSettings() {
           </label>
           <input
             type="text"
+            name="companyName"
             value={profileData.company_name || ''}
             onChange={(e) => setProfileData({...profileData, company_name: e.target.value})}
             className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            autoComplete="organization"
             disabled={saving}
           />
         </div>
@@ -223,10 +225,12 @@ export function AccountSettings() {
           </label>
           <input
             type="text"
+            name="position"
             value={profileData.position || ''}
             onChange={(e) => setProfileData({...profileData, position: e.target.value})}
             className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             placeholder="e.g. Store Manager, Operations Director"
+            autoComplete="organization-title"
             disabled={saving}
           />
         </div>
@@ -237,9 +241,11 @@ export function AccountSettings() {
           </label>
           <input
             type="tel"
+            name="phone"
             value={profileData.phone || ''}
             onChange={(e) => setProfileData({...profileData, phone: e.target.value})}
             className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            autoComplete="tel"
             disabled={saving}
           />
         </div>
@@ -258,6 +264,7 @@ export function AccountSettings() {
 
         <div className="flex gap-4">
           <Button 
+            type="button"
             onClick={saveProfile}
             className="bg-blue-600 hover:bg-blue-700"
             disabled={saving}
@@ -265,6 +272,7 @@ export function AccountSettings() {
             {saving ? 'Saving...' : 'Save Changes'}
           </Button>
           <Button 
+            type="button"
             variant="outline"
             onClick={loadUserProfile}
             disabled={saving}
@@ -272,7 +280,7 @@ export function AccountSettings() {
             Cancel
           </Button>
         </div>
-      </div>
+      </form>
     </div>
   )
 } 

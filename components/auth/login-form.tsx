@@ -61,11 +61,11 @@ export function LoginForm() {
 
       console.log('Login successful, redirecting to dashboard')
       
-      // IMMEDIATE REDIRECT - Don't wait for auth state
+      // IMMEDIATE REDIRECT
       setTimeout(() => {
         console.log('Executing immediate redirect')
         window.location.href = '/dashboard'
-      }, 100) // Very short delay to ensure session is set
+      }, 100)
       
     } catch (err) {
       console.error('Login error:', err)
@@ -88,18 +88,20 @@ export function LoginForm() {
           <p className="text-slate-600">Sign in to your account</p>
         </div>
 
-        <form onSubmit={handleLogin} className="space-y-6">
+        <form onSubmit={handleLogin} className="space-y-6" autoComplete="on">
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-slate-700 mb-2">
               Email address
             </label>
             <input
               id="email"
+              name="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               placeholder="Enter your email"
+              autoComplete="email"
               required
               disabled={loading}
             />
@@ -119,11 +121,13 @@ export function LoginForm() {
             </div>
             <input
               id="password"
+              name="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               placeholder="Enter your password"
+              autoComplete="current-password"
               required
               disabled={loading}
             />

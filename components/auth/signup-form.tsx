@@ -35,8 +35,7 @@ export function SignupForm() {
         options: {
           data: {
             company_name: companyName,
-          },
-          emailRedirectTo: `${window.location.origin}/auth/callback?type=signup`
+          }
         }
       })
 
@@ -58,20 +57,18 @@ export function SignupForm() {
         <div className="bg-white rounded-2xl shadow-xl p-8 border border-slate-200 text-center">
           <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <svg className="w-8 h-8 text-white" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z"/>
+              <path d="M9,20.42L2.79,14.21L5.62,11.38L9,14.77L18.88,4.88L21.71,7.71L9,20.42Z" />
             </svg>
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-2">Check your email</h2>
+          <h2 className="text-xl font-semibold text-slate-900 mb-2">Account created!</h2>
           <p className="text-slate-600 mb-6">
-            We&apos;ve sent a confirmation link to <strong>{email}</strong>
+            We've sent you a confirmation email. Please check your inbox and click the link to verify your account.
           </p>
-          <Button 
-            onClick={() => router.push('/auth/login')}
-            variant="outline" 
-            className="w-full"
-          >
-            Back to Login
-          </Button>
+          <Link href="/auth/login">
+            <Button className="w-full bg-blue-600 hover:bg-blue-700">
+              Go to Login
+            </Button>
+          </Link>
         </div>
       </div>
     )
@@ -88,21 +85,23 @@ export function SignupForm() {
             <h1 className="text-2xl font-bold text-slate-900">Hoops Store</h1>
           </div>
           <h2 className="text-xl font-semibold text-slate-700">Create your account</h2>
-          <p className="text-slate-600">Start optimizing your insurance costs today</p>
+          <p className="text-slate-600">Get started with your property management</p>
         </div>
 
-        <form onSubmit={handleSignup} className="space-y-6">
+        <form onSubmit={handleSignup} className="space-y-6" autoComplete="on">
           <div>
             <label htmlFor="companyName" className="block text-sm font-medium text-slate-700 mb-2">
-              Company name
+              Company Name
             </label>
             <input
               id="companyName"
+              name="companyName"
               type="text"
               value={companyName}
               onChange={(e) => setCompanyName(e.target.value)}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               placeholder="Enter your company name"
+              autoComplete="organization"
               required
               disabled={loading}
             />
@@ -114,11 +113,13 @@ export function SignupForm() {
             </label>
             <input
               id="email"
+              name="email"
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               placeholder="Enter your email"
+              autoComplete="email"
               required
               disabled={loading}
             />
@@ -130,11 +131,13 @@ export function SignupForm() {
             </label>
             <input
               id="password"
+              name="password"
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
               placeholder="Create a password (min. 6 characters)"
+              autoComplete="new-password"
               required
               minLength={6}
               disabled={loading}

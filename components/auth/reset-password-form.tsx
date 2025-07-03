@@ -200,18 +200,20 @@ export function ResetPasswordForm() {
               <p className="text-slate-600">Enter your new password below</p>
             </div>
 
-            <form onSubmit={handleResetPassword} className="space-y-6">
+            <form onSubmit={handleResetPassword} className="space-y-6" autoComplete="on">
               <div>
                 <label htmlFor="password" className="block text-sm font-medium text-slate-700 mb-2">
                   New password
                 </label>
                 <input
                   id="password"
+                  name="password"
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   placeholder="Enter new password (min. 6 characters)"
+                  autoComplete="new-password"
                   required
                   minLength={6}
                   disabled={loading}
@@ -224,11 +226,13 @@ export function ResetPasswordForm() {
                 </label>
                 <input
                   id="confirmPassword"
+                  name="confirmPassword"
                   type="password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors"
                   placeholder="Confirm your new password"
+                  autoComplete="new-password"
                   required
                   minLength={6}
                   disabled={loading}
