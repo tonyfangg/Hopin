@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSupabase } from '@/lib/hooks/useSupabase'
+import { createClient } from '@/app/lib/supabase-client'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Button from '@/components/ui/button'
 import Link from 'next/link'
@@ -12,27 +12,27 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [urlError, setUrlError] = useState('')
-  const [successMessage, setSuccessMessage] = useState('')
   
   const router = useRouter()
   const searchParams = useSearchParams()
-  const supabase = useSupabase()
+  const supabase = createClient()
 
-  // Handle URL params safely
+  // Handle URL error params safely
   useEffect(() => {
     const errorParam = searchParams.get('error')
-    const messageParam = searchParams.get('message')
-    
-    if (errorParam === 'invalid_reset_link') {
-      setUrlError('Invalid or expired reset link. Please try again.')
-    } else if (errorParam === 'auth_callback_failed') {
-      setUrlError('Authentication failed. Please try again.')
-    } else if (errorParam === 'no_auth_code') {
-      setUrlError('Invalid authentication link. Please try again.')
-    }
-    
-    if (messageParam === 'email_confirmed') {
-      setSuccessMessage('Email confirmed successfully! You can now sign in.')
+    if (errorParam) {
+      const errorMessages: { [key: string]: string } = {
+        'invalid_reset_link': 'Invalid or expired reset link. Please try again.',
+        'expired_code': 'Reset link has expired. Please request a new one.',
+        'invalid_code': 'Invalid reset link. Please request a new one.',
+        'exchange_failed': 'Authentication failed. Please try again.',
+        'no_session': 'Session could not be created. Please try again.',
+        'callback_exception': 'An error occurred during authentication. Please try again.',
+        'oauth_error': 'Authentication error. Please try again.',
+        'no_code': 'Invalid authentication link. Please try again.',
+      }
+      
+      setUrlError(errorMessages[errorParam] || 'An authentication error occurred. Please try again.')
     }
   }, [searchParams])
 
@@ -51,20 +51,43 @@ export function LoginForm() {
         password,
       })
 
-      console.log('Login response:', { data, error })
+      console.log('Login response:', { data: !!data, error: error?.message })
 
       if (error) {
-        console.error('Login error:', error)
         setError(error.message)
-      } else {
-        console.log('Login successful, redirecting to dashboard')
-        router.push('/dashboard')
-        router.refresh()
+        setLoading(false)
+        return
       }
+
+      console.log('Login successful, redirecting to dashboard')
+      
+      // Multiple redirect strategies to ensure it works
+      
+      // Strategy 1: Router push with refresh
+      router.push('/dashboard')
+      router.refresh()
+      
+      // Strategy 2: Delay and force page reload if router doesn't work
+      setTimeout(() => {
+        if (window.location.pathname !== '/dashboard') {
+          console.log('Router redirect failed, using window.location')
+          window.location.href = '/dashboard'
+        }
+      }, 1000)
+      
+      // Strategy 3: Listen for auth state change
+      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+        console.log('Auth state change:', event, !!session)
+        if (event === 'SIGNED_IN' && session) {
+          console.log('Auth state confirmed, redirecting')
+          subscription.unsubscribe()
+          window.location.href = '/dashboard'
+        }
+      })
+      
     } catch (err) {
-      console.error('Login exception:', err)
+      console.error('Login error:', err)
       setError('An unexpected error occurred')
-    } finally {
       setLoading(false)
     }
   }
@@ -124,15 +147,15 @@ export function LoginForm() {
             />
           </div>
 
-          {successMessage && (
-            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
-              {successMessage}
-            </div>
-          )}
-
           {displayError && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
               {displayError}
+            </div>
+          )}
+
+          {loading && (
+            <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg">
+              Signing in and redirecting...
             </div>
           )}
 
