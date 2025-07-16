@@ -12,6 +12,7 @@ export function LoginForm() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [urlError, setUrlError] = useState('')
+  const [redirecting, setRedirecting] = useState(false)
   
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -36,12 +37,33 @@ export function LoginForm() {
     }
   }, [searchParams])
 
+  // Listen for auth state changes
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('🔄 Auth state change:', event, !!session)
+      
+      if (event === 'SIGNED_IN' && session && redirecting) {
+        console.log('✅ Auth state confirmed, executing redirect')
+        setRedirecting(false)
+        
+        // Execute redirect after auth state is confirmed
+        setTimeout(() => {
+          console.log('🚀 Executing confirmed redirect')
+          window.location.href = '/dashboard'
+        }, 100)
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [supabase, redirecting])
+
   const displayError = error || urlError
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
     setLoading(true)
     setError('')
+    setRedirecting(false)
 
     try {
       console.log('🔐 Attempting login with email:', email)
@@ -60,25 +82,17 @@ export function LoginForm() {
         return
       }
 
-      console.log('✅ Login successful, initiating aggressive redirect sequence')
+      console.log('✅ Login successful, waiting for auth state change')
+      setRedirecting(true)
       
-      // IMMEDIATE AGGRESSIVE REDIRECT
-      console.log('🚀 Method 1: Immediate window.location.href')
-      window.location.href = '/dashboard'
-      
-      // Backup methods with delays
+      // Set a timeout in case auth state change doesn't fire
       setTimeout(() => {
-        console.log('🚀 Method 2: Router push (backup)')
-        router.push('/dashboard')
-        router.refresh()
-      }, 500)
-      
-      setTimeout(() => {
-        if (window.location.pathname !== '/dashboard') {
-          console.log('🚀 Method 3: window.location.replace (final backup)')
-          window.location.replace('/dashboard')
+        if (redirecting) {
+          console.log('⏰ Timeout reached, forcing redirect')
+          setRedirecting(false)
+          window.location.href = '/dashboard'
         }
-      }, 2000)
+      }, 3000)
       
     } catch (err) {
       console.error('💥 Login exception:', err)
@@ -116,7 +130,7 @@ export function LoginForm() {
               placeholder="Enter your email"
               autoComplete="email"
               required
-              disabled={loading}
+              disabled={loading || redirecting}
             />
           </div>
 
@@ -142,7 +156,7 @@ export function LoginForm() {
               placeholder="Enter your password"
               autoComplete="current-password"
               required
-              disabled={loading}
+              disabled={loading || redirecting}
             />
           </div>
 
@@ -152,11 +166,11 @@ export function LoginForm() {
             </div>
           )}
 
-          {loading && (
+          {(loading || redirecting) && (
             <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded-lg">
               <div className="flex items-center gap-2">
                 <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600"></div>
-                Signing in and redirecting...
+                {loading ? 'Signing in...' : 'Redirecting to dashboard...'}
               </div>
             </div>
           )}
@@ -164,9 +178,9 @@ export function LoginForm() {
           <Button 
             type="submit" 
             className="w-full bg-blue-600 hover:bg-blue-700"
-            disabled={loading}
+            disabled={loading || redirecting}
           >
-            {loading ? 'Signing in...' : 'Sign in'}
+            {loading ? 'Signing in...' : redirecting ? 'Redirecting...' : 'Sign in'}
           </Button>
         </form>
 
