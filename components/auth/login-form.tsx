@@ -44,37 +44,44 @@ export function LoginForm() {
     setError('')
 
     try {
-      console.log('Attempting login with email:', email)
+      console.log('🔐 Attempting login with email:', email)
       
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
       })
 
-      console.log('Login response:', { data: !!data, error: error?.message })
+      console.log('📊 Login response:', { data: !!data, error: error?.message })
 
       if (error) {
+        console.error('❌ Login error:', error.message)
         setError(error.message)
         setLoading(false)
         return
       }
 
-      console.log('Login successful, initiating redirect sequence')
+      console.log('✅ Login successful, initiating aggressive redirect sequence')
       
-      // Add multiple redirect attempts
-      router.push('/dashboard')
-      router.refresh()
+      // IMMEDIATE AGGRESSIVE REDIRECT
+      console.log('🚀 Method 1: Immediate window.location.href')
+      window.location.href = '/dashboard'
       
-      // Fallback redirect after a delay
+      // Backup methods with delays
+      setTimeout(() => {
+        console.log('🚀 Method 2: Router push (backup)')
+        router.push('/dashboard')
+        router.refresh()
+      }, 500)
+      
       setTimeout(() => {
         if (window.location.pathname !== '/dashboard') {
-          console.log('Router redirect failed, using window.location.href')
-          window.location.href = '/dashboard'
+          console.log('🚀 Method 3: window.location.replace (final backup)')
+          window.location.replace('/dashboard')
         }
-      }, 1000)
+      }, 2000)
       
     } catch (err) {
-      console.error('Login error:', err)
+      console.error('💥 Login exception:', err)
       setError('An unexpected error occurred')
       setLoading(false)
     }
