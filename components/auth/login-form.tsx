@@ -18,6 +18,29 @@ export function LoginForm() {
   const searchParams = useSearchParams()
   const supabase = createClient()
 
+  // Listen for auth state changes
+  useEffect(() => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      console.log('Auth state change:', event, !!session)
+      
+      if (event === 'SIGNED_IN' && session && redirecting) {
+        console.log('✅ Auth state confirmed, redirecting to dashboard')
+        window.location.href = '/dashboard'
+      }
+    })
+
+    return () => subscription.unsubscribe()
+  }, [supabase, redirecting])
+
+  // Debug: Check session on mount
+  useEffect(() => {
+    const checkSession = async () => {
+      const { data: { session } } = await supabase.auth.getSession()
+      console.log('Initial session check:', !!session)
+    }
+    checkSession()
+  }, [supabase])
+
   // Handle URL error params safely
   useEffect(() => {
     const errorParam = searchParams.get('error')
@@ -36,26 +59,6 @@ export function LoginForm() {
       setUrlError(errorMessages[errorParam] || 'An authentication error occurred. Please try again.')
     }
   }, [searchParams])
-
-  // Listen for auth state changes
-  useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      console.log('🔄 Auth state change:', event, !!session)
-      
-      if (event === 'SIGNED_IN' && session && redirecting) {
-        console.log('✅ Auth state confirmed, executing redirect')
-        setRedirecting(false)
-        
-        // Execute redirect after auth state is confirmed
-        setTimeout(() => {
-          console.log('🚀 Executing confirmed redirect')
-          window.location.href = '/dashboard'
-        }, 100)
-      }
-    })
-
-    return () => subscription.unsubscribe()
-  }, [supabase, redirecting])
 
   const displayError = error || urlError
 
@@ -85,14 +88,14 @@ export function LoginForm() {
       console.log('✅ Login successful, waiting for auth state change')
       setRedirecting(true)
       
-      // Set a timeout in case auth state change doesn't fire
+      // The auth state change listener will handle the redirect
+      // But also set a fallback timeout
       setTimeout(() => {
         if (redirecting) {
-          console.log('⏰ Timeout reached, forcing redirect')
-          setRedirecting(false)
+          console.log('🚀 Fallback redirect to dashboard...')
           window.location.href = '/dashboard'
         }
-      }, 3000)
+      }, 1500)
       
     } catch (err) {
       console.error('💥 Login exception:', err)
@@ -191,6 +194,32 @@ export function LoginForm() {
               Sign up
             </Link>
           </p>
+        </div>
+
+        {/* Debug section */}
+        <div className="mt-6 p-4 bg-slate-50 rounded-lg">
+          <p className="text-sm text-slate-600 mb-2">Debug Info:</p>
+          <div className="text-xs text-slate-500 space-y-1">
+            <div>Loading: {loading ? 'Yes' : 'No'}</div>
+            <div>Redirecting: {redirecting ? 'Yes' : 'No'}</div>
+            <div>Error: {error || 'None'}</div>
+          </div>
+          <button
+            type="button"
+            onClick={() => {
+              console.log('Manual redirect test')
+              window.location.href = '/dashboard'
+            }}
+            className="mt-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200"
+          >
+            Test Manual Redirect
+          </button>
+          <a
+            href="/test-login"
+            className="mt-2 text-xs bg-green-100 text-green-700 px-2 py-1 rounded hover:bg-green-200 block text-center"
+          >
+            Test Login Page
+          </a>
         </div>
       </div>
     </div>

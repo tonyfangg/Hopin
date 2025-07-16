@@ -3,7 +3,8 @@ import { NextResponse, type NextRequest } from 'next/server'
 export async function middleware(request: NextRequest) {
   console.log('🔍 Middleware: Request to', request.nextUrl.pathname)
   
-  // Just pass through all requests without blocking
+  // For now, just pass through all requests
+  // The session refresh will be handled by the server components
   return NextResponse.next()
 }
 
