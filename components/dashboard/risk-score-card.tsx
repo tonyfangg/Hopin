@@ -190,82 +190,76 @@ export function RiskScoreCard() {
   const insuranceImpact = Math.round(baselineRisk - riskReduction)
 
   return (
-    <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-2xl p-8 text-white">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-12 h-12 bg-white/20 rounded-xl flex items-center justify-center">
-          <span className="text-2xl">🛡️</span>
+    <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-2xl p-4 text-white">
+      <div className="flex items-center gap-2 mb-3">
+        <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
+          <span className="text-base">🛡️</span>
         </div>
         <div>
-          <h3 className="text-lg font-semibold">Risk Management Score</h3>
-          <p className="text-blue-100">{scoreGrade.description}</p>
+          <h3 className="text-base font-semibold">Risk Management Score</h3>
+          <p className="text-blue-100 text-xs">{scoreGrade.description}</p>
         </div>
       </div>
       
-      <div className="mb-6">
-        <div className="flex items-baseline gap-2 mb-2">
-          <span className="text-4xl font-bold">{managementScore}</span>
-          <span className={`text-lg font-semibold px-3 py-1 rounded-full bg-white/20 ${scoreGrade.color}`}>
+      <div className="mb-3">
+        <div className="flex items-baseline gap-2 mb-1">
+          <span className="text-2xl font-bold">{managementScore}</span>
+          <span className={`text-xs font-semibold px-2 py-1 rounded-full bg-white/20 ${scoreGrade.color}`}>
             {scoreGrade.grade}
           </span>
         </div>
-        <p className="text-blue-100">
+        <p className="text-blue-100 text-xs">
           Based on {riskData.electrical_reports + riskData.drainage_reports} inspections across {riskData.properties} properties
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-2 gap-3">
         <div>
-          <h4 className="text-blue-100 text-sm mb-2">Active Properties</h4>
-          <div className="text-3xl font-bold">{riskData.properties}</div>
-          <p className="text-blue-200 text-sm">
+          <h4 className="text-blue-100 text-xs mb-1">Active Properties</h4>
+          <div className="text-lg font-bold">{riskData.properties}</div>
+          <p className="text-blue-200 text-xs">
             {riskData.properties > 0 ? 'Properties managed' : 'Add properties to start'}
           </p>
         </div>
         <div>
-          <h4 className="text-blue-100 text-sm mb-2">Compliance Rate</h4>
-          <div className="text-3xl font-bold">
+          <h4 className="text-blue-100 text-xs mb-1">Compliance Rate</h4>
+          <div className="text-lg font-bold">
             {riskData.electrical_reports + riskData.drainage_reports > 0
               ? Math.round(((riskData.electrical_satisfactory + riskData.drainage_good) / 
                   (riskData.electrical_reports + riskData.drainage_reports)) * 100)
               : 0}%
           </div>
-          <p className="text-blue-200 text-sm">
+          <p className="text-blue-200 text-xs">
             {managementScore >= 650 ? 'Excellent for insurance' : 'Room for improvement'}
           </p>
         </div>
       </div>
 
       {riskData.overdue_inspections > 0 && (
-        <div className="mt-6 p-4 bg-red-500/20 rounded-lg border border-red-400/30">
-          <div className="flex items-center gap-2">
-            <span className="text-red-300">⚠️</span>
-            <span className="text-red-100 font-medium">
+        <div className="mt-3 p-2 bg-red-500/20 rounded-lg border border-red-400/30">
+          <div className="flex items-center gap-1">
+            <span className="text-red-300 text-xs">⚠️</span>
+            <span className="text-red-100 font-medium text-xs">
               {riskData.overdue_inspections} overdue inspection{riskData.overdue_inspections > 1 ? 's' : ''}
             </span>
           </div>
-          <p className="text-red-200 text-sm mt-1">
-            Addressing these could improve your score by {riskData.overdue_inspections * 20} points
-          </p>
         </div>
       )}
 
       {riskData.high_risk_items > 0 && (
-        <div className="mt-4 p-4 bg-orange-500/20 rounded-lg border border-orange-400/30">
-          <div className="flex items-center gap-2">
-            <span className="text-orange-300">🔥</span>
-            <span className="text-orange-100 font-medium">
+        <div className="mt-2 p-2 bg-orange-500/20 rounded-lg border border-orange-400/30">
+          <div className="flex items-center gap-1">
+            <span className="text-orange-300 text-xs">🔥</span>
+            <span className="text-orange-100 font-medium text-xs">
               {riskData.high_risk_items} high-risk item{riskData.high_risk_items > 1 ? 's' : ''} identified
             </span>
           </div>
-          <p className="text-orange-200 text-sm mt-1">
-            Resolving these issues could improve your insurance position
-          </p>
         </div>
       )}
 
-      <div className="mt-6 pt-4 border-t border-blue-400/30">
-        <p className="text-blue-100 text-sm">
-          💡 <strong>Insurance Impact:</strong> Your management practices may reduce insurance risk by up to {Math.round(riskReduction)}%
+      <div className="mt-3 pt-2 border-t border-blue-400/30">
+        <p className="text-blue-100 text-xs">
+          💡 <strong>Insurance Impact:</strong> May reduce risk by up to {Math.round(riskReduction)}%
         </p>
       </div>
     </div>
