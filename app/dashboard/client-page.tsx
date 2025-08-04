@@ -1,8 +1,12 @@
 'use client'
 
 import { RiskScoreCard } from '@/components/dashboard/risk-score-card'
+import { usePerformanceMonitor } from '@/lib/performance'
 
 export default function ClientDashboardPage() {
+  // Performance monitoring in development
+  usePerformanceMonitor('ClientDashboardPage')
+
   return (
     <div className="space-y-8">
       <div>
@@ -13,7 +17,7 @@ export default function ClientDashboardPage() {
       {/* Risk Score - Full Width Feature */}
       <RiskScoreCard />
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
         <div className="bg-white rounded-2xl p-6 border border-slate-100">
           <div className="flex items-center gap-4 mb-4">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
@@ -94,34 +98,34 @@ export default function ClientDashboardPage() {
       {/* Quick Actions */}
       <div className="bg-white rounded-2xl p-6 border border-slate-100">
         <h3 className="text-xl font-semibold text-slate-900 mb-4">Quick Actions</h3>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
-              <span className="text-lg">🏢</span>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+              <span className="text-base sm:text-lg">🏢</span>
             </div>
-            <h4 className="font-medium text-slate-900 mb-1">Add Property</h4>
-            <p className="text-sm text-slate-500">Register a new location</p>
+            <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">Add Property</h4>
+            <p className="text-xs sm:text-sm text-slate-500">Register a new location</p>
           </button>
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3">
-              <span className="text-lg">📊</span>
+          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+              <span className="text-base sm:text-lg">📊</span>
             </div>
-            <h4 className="font-medium text-slate-900 mb-1">Risk Assessment</h4>
-            <p className="text-sm text-slate-500">Run new evaluation</p>
+            <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">Risk Assessment</h4>
+            <p className="text-xs sm:text-sm text-slate-500">Run new evaluation</p>
           </button>
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-            <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mb-3">
-              <span className="text-lg">📋</span>
+          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-yellow-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+              <span className="text-base sm:text-lg">📋</span>
             </div>
-            <h4 className="font-medium text-slate-900 mb-1">New Report</h4>
-            <p className="text-sm text-slate-500">Submit inspection</p>
+            <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">New Report</h4>
+            <p className="text-xs sm:text-sm text-slate-500">Submit inspection</p>
           </button>
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
-              <span className="text-lg">📎</span>
+          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+              <span className="text-base sm:text-lg">📎</span>
             </div>
-            <h4 className="font-medium text-slate-900 mb-1">Upload Document</h4>
-            <p className="text-sm text-slate-500">Add compliance files</p>
+            <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">Upload Document</h4>
+            <p className="text-xs sm:text-sm text-slate-500">Add compliance files</p>
           </button>
         </div>
       </div>

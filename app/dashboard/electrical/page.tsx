@@ -20,14 +20,14 @@ export default function ElectricalPage() {
 
   return (
     <div className="space-y-8">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold text-slate-900 mb-2">Electrical Systems</h1>
-          <p className="text-slate-600">Monitor electrical safety and compliance across all properties</p>
+          <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Electrical Systems</h1>
+          <p className="text-sm sm:text-base text-slate-600">Monitor electrical safety and compliance across all properties</p>
         </div>
         <button
           onClick={() => setShowInspectionForm(true)}
-          className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          className="bg-blue-600 text-white px-4 py-2 text-sm sm:text-base rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] touch-manipulation"
         >
           Add Inspection
         </button>

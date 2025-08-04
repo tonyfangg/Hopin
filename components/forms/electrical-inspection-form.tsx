@@ -240,7 +240,7 @@ export function ElectricalInspectionForm({ onSuccess, onCancel, preselectedPrope
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Basic Information */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="property_id" className="block text-sm font-medium text-slate-700 mb-2">
                 Property *
@@ -287,7 +287,7 @@ export function ElectricalInspectionForm({ onSuccess, onCancel, preselectedPrope
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label htmlFor="certificate_number" className="block text-sm font-medium text-slate-700 mb-2">
                 Certificate Number
@@ -328,7 +328,7 @@ export function ElectricalInspectionForm({ onSuccess, onCancel, preselectedPrope
           <div className="border-t border-slate-200 pt-6">
             <h3 className="text-lg font-semibold text-slate-900 mb-4">Inspector Details</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="inspector_name" className="block text-sm font-medium text-slate-700 mb-2">
                   Inspector Name *
@@ -371,7 +371,7 @@ export function ElectricalInspectionForm({ onSuccess, onCancel, preselectedPrope
           <div className="border-t border-slate-200 pt-6">
             <h3 className="text-lg font-semibold text-slate-900 mb-4">Inspection Dates</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="inspection_date" className="block text-sm font-medium text-slate-700 mb-2">
                   Inspection Date *
@@ -407,7 +407,7 @@ export function ElectricalInspectionForm({ onSuccess, onCancel, preselectedPrope
           <div className="border-t border-slate-200 pt-6">
             <h3 className="text-lg font-semibold text-slate-900 mb-4">Inspection Results</h3>
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label htmlFor="overall_condition" className="block text-sm font-medium text-slate-700 mb-2">
                   Overall Condition *
@@ -448,7 +448,7 @@ export function ElectricalInspectionForm({ onSuccess, onCancel, preselectedPrope
             {/* Test Results */}
             <div className="mt-4">
               <h4 className="text-md font-medium text-slate-900 mb-3">Test Results</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div>
                   <label htmlFor="test_results.earth_fault_loop_impedance" className="block text-sm font-medium text-slate-700 mb-2">
                     Earth Fault Loop Impedance (Ω)

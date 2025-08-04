@@ -13,6 +13,7 @@ export default function DashboardLayout({
 }) {
   const [session, setSession] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
@@ -93,11 +94,22 @@ export default function DashboardLayout({
 
   return (
     <div className="min-h-screen bg-slate-50">
+      {/* Mobile sidebar overlay */}
+      {sidebarOpen && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+          onClick={() => setSidebarOpen(false)}
+        />
+      )}
+      
       <div className="flex">
-        <DashboardSidebar />
-        <div className="flex-1 ml-64">
-          <DashboardHeader user={session.user} />
-          <main className="p-6">
+        <DashboardSidebar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <div className="flex-1 lg:ml-64">
+          <DashboardHeader 
+            user={session.user} 
+            onMenuClick={() => setSidebarOpen(true)}
+          />
+          <main className="p-4 sm:p-6">
             {children}
           </main>
         </div>

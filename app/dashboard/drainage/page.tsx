@@ -6,8 +6,8 @@ export default function DrainagePage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Drainage Management</h1>
-        <p className="text-slate-600">Monitor and maintain your drainage systems across all properties</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Drainage Management</h1>
+        <p className="text-sm sm:text-base text-slate-600">Monitor and maintain your drainage systems across all properties</p>
       </div>
 
       <RealDrainageOverview />

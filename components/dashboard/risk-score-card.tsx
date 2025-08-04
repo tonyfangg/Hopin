@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, memo, useCallback, useMemo } from 'react'
+import { cachedFetch, memoize } from '@/lib/performance'
 
 interface RiskData {
   properties: number
@@ -12,26 +13,19 @@ interface RiskData {
   high_risk_items: number
 }
 
-export function RiskScoreCard() {
+function RiskScoreCardComponent() {
   const [riskData, setRiskData] = useState<RiskData | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const fetchRiskData = async () => {
-      try {
-        // Fetch data from multiple endpoints to calculate risk
-        const [statsResponse, electricalResponse, drainageResponse] = await Promise.all([
-          fetch('/api/dashboard/stats'),
-          fetch('/api/electrical-reports'),
-          fetch('/api/drainage-reports')
-        ])
-
-        const [statsData, electricalData, drainageData] = await Promise.all([
-          statsResponse.json(),
-          electricalResponse.json(),
-          drainageResponse.json()
-        ])
+  const fetchRiskData = useCallback(async () => {
+    try {
+      // Use cached fetch with 5-minute cache
+      const [statsData, electricalData, drainageData] = await Promise.all([
+        cachedFetch('/api/dashboard/stats', {}, 300000),
+        cachedFetch('/api/electrical-reports', {}, 300000),
+        cachedFetch('/api/drainage-reports', {}, 300000)
+      ])
 
         // Calculate risk factors
         const electricalReports = electricalData.reports || []
@@ -66,16 +60,17 @@ export function RiskScoreCard() {
       } catch (err) {
         setError('Failed to calculate risk score')
         console.error('Risk calculation error:', err)
-      } finally {
-        setLoading(false)
-      }
+    } finally {
+      setLoading(false)
     }
-
-    fetchRiskData()
   }, [])
 
-  // Calculate management score based on real data
-  const calculateManagementScore = (data: RiskData): number => {
+  useEffect(() => {
+    fetchRiskData()
+  }, [fetchRiskData])
+
+  // Memoized calculation functions
+  const calculateManagementScore = useMemo(() => memoize((data: RiskData): number => {
     if (data.properties === 0) return 500 // Base score for no properties
 
     let score = 600 // Base score
@@ -105,9 +100,9 @@ export function RiskScoreCard() {
 
     // Cap between 300-850 (like credit scores)
     return Math.max(300, Math.min(850, Math.round(score)))
-  }
+  }), [])
 
-  const getScoreGrade = (score: number): { grade: string; color: string; description: string } => {
+  const getScoreGrade = useMemo(() => memoize((score: number): { grade: string; color: string; description: string } => {
     if (score >= 750) return { 
       grade: 'Excellent', 
       color: 'text-green-600', 
@@ -133,7 +128,7 @@ export function RiskScoreCard() {
       color: 'text-red-600', 
       description: 'Immediate attention required' 
     }
-  }
+  }), [])
 
   if (loading) {
     return (
@@ -190,20 +185,20 @@ export function RiskScoreCard() {
   const insuranceImpact = Math.round(baselineRisk - riskReduction)
 
   return (
-    <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-2xl p-4 text-white">
-      <div className="flex items-center gap-2 mb-3">
-        <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center">
-          <span className="text-base">🛡️</span>
+    <div className="bg-gradient-to-br from-blue-500 via-blue-600 to-blue-700 rounded-2xl p-4 sm:p-6 text-white">
+      <div className="flex items-center gap-2 sm:gap-4 mb-3 sm:mb-4">
+        <div className="w-8 h-8 sm:w-10 sm:h-10 bg-white/20 rounded-lg flex items-center justify-center">
+          <span className="text-sm sm:text-base">🛡️</span>
         </div>
         <div>
-          <h3 className="text-base font-semibold">Risk Management Score</h3>
+          <h3 className="text-sm sm:text-base font-semibold">Risk Management Score</h3>
           <p className="text-blue-100 text-xs">{scoreGrade.description}</p>
         </div>
       </div>
       
-      <div className="mb-3">
-        <div className="flex items-baseline gap-2 mb-1">
-          <span className="text-2xl font-bold">{managementScore}</span>
+      <div className="mb-3 sm:mb-4">
+        <div className="flex items-baseline gap-2 mb-1 sm:mb-2">
+          <span className="text-2xl sm:text-3xl font-bold">{managementScore}</span>
           <span className={`text-xs font-semibold px-2 py-1 rounded-full bg-white/20 ${scoreGrade.color}`}>
             {scoreGrade.grade}
           </span>
@@ -213,7 +208,7 @@ export function RiskScoreCard() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
         <div>
           <h4 className="text-blue-100 text-xs mb-1">Active Properties</h4>
           <div className="text-lg font-bold">{riskData.properties}</div>
@@ -264,4 +259,7 @@ export function RiskScoreCard() {
       </div>
     </div>
   )
-} 
+}
+
+// Export memoized component
+export const RiskScoreCard = memo(RiskScoreCardComponent) 

@@ -47,23 +47,23 @@ export default function InsurancePage() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="text-3xl font-bold text-slate-900 mb-2">Insurance Management</h1>
-        <p className="text-slate-600">Manage your business insurance policies and requirements</p>
+        <h1 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-2">Insurance Management</h1>
+        <p className="text-sm sm:text-base text-slate-600">Manage your business insurance policies and requirements</p>
       </div>
 
       {/* Current Insurance Status */}
       <div className="bg-white rounded-2xl p-6 border border-slate-100">
         <div className="flex items-center justify-between mb-6">
-          <h2 className="text-xl font-semibold text-slate-900">Current Insurance Policy</h2>
+          <h2 className="text-lg sm:text-xl font-semibold text-slate-900">Current Insurance Policy</h2>
           <button
             onClick={() => setShowUpdateForm(!showUpdateForm)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            className="bg-blue-600 text-white px-3 py-2 sm:px-4 text-sm sm:text-base rounded-lg hover:bg-blue-700 transition-colors min-h-[44px] touch-manipulation"
           >
             Update Details
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
           <div className="bg-slate-50 rounded-lg p-4">
             <div className="flex items-center gap-3 mb-3">
               <span className="text-2xl">🏢</span>
@@ -115,9 +115,9 @@ export default function InsurancePage() {
 
       {/* Business Profile (from signup) */}
       <div className="bg-white rounded-2xl p-6 border border-slate-100">
-        <h2 className="text-xl font-semibold text-slate-900 mb-6">Business Profile</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4 sm:mb-6">Business Profile</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           <div>
             <h3 className="font-medium text-slate-900 mb-4">Business Operations</h3>
             <div className="space-y-3">
@@ -161,9 +161,9 @@ export default function InsurancePage() {
 
       {/* Insurance Requirements */}
       <div className="bg-white rounded-2xl p-6 border border-slate-100">
-        <h2 className="text-xl font-semibold text-slate-900 mb-6">Insurance Requirements</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4 sm:mb-6">Insurance Requirements</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
           <div className="space-y-4">
             <h3 className="font-medium text-slate-900">Required Coverage</h3>
             
@@ -233,39 +233,39 @@ export default function InsurancePage() {
 
       {/* Quick Actions */}
       <div className="bg-white rounded-2xl p-6 border border-slate-100">
-        <h2 className="text-xl font-semibold text-slate-900 mb-6">Quick Actions</h2>
+        <h2 className="text-lg sm:text-xl font-semibold text-slate-900 mb-4 sm:mb-6">Quick Actions</h2>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
-              <span className="text-lg">📋</span>
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <button className="p-3 sm:p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+              <span className="text-base sm:text-lg">📋</span>
             </div>
-            <h4 className="font-medium text-slate-900 mb-1">Policy Review</h4>
-            <p className="text-sm text-slate-500">Check coverage adequacy</p>
+            <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">Policy Review</h4>
+            <p className="text-xs sm:text-sm text-slate-500">Check coverage adequacy</p>
           </button>
           
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-            <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3">
-              <span className="text-lg">💷</span>
+          <button className="p-3 sm:p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+              <span className="text-base sm:text-lg">💷</span>
             </div>
-            <h4 className="font-medium text-slate-900 mb-1">Get Quotes</h4>
-            <p className="text-sm text-slate-500">Compare insurance rates</p>
+            <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">Get Quotes</h4>
+            <p className="text-xs sm:text-sm text-slate-500">Compare insurance rates</p>
           </button>
           
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-            <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
-              <span className="text-lg">📞</span>
+          <button className="p-3 sm:p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+              <span className="text-base sm:text-lg">📞</span>
             </div>
-            <h4 className="font-medium text-slate-900 mb-1">Contact Provider</h4>
-            <p className="text-sm text-slate-500">Speak with {insuranceData.insuranceProvider}</p>
+            <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">Contact Provider</h4>
+            <p className="text-xs sm:text-sm text-slate-500">Speak with {insuranceData.insuranceProvider}</p>
           </button>
           
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
-            <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mb-3">
-              <span className="text-lg">📊</span>
+          <button className="p-3 sm:p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-amber-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
+              <span className="text-base sm:text-lg">📊</span>
             </div>
-            <h4 className="font-medium text-slate-900 mb-1">Risk Report</h4>
-            <p className="text-sm text-slate-500">Generate for insurer</p>
+            <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">Risk Report</h4>
+            <p className="text-xs sm:text-sm text-slate-500">Generate for insurer</p>
           </button>
         </div>
       </div>
@@ -275,7 +275,7 @@ export default function InsurancePage() {
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto p-6">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-xl font-semibold text-slate-900">Update Insurance Details</h3>
+              <h3 className="text-lg sm:text-xl font-semibold text-slate-900">Update Insurance Details</h3>
               <button
                 onClick={() => setShowUpdateForm(false)}
                 className="text-slate-400 hover:text-slate-600"
@@ -297,7 +297,7 @@ export default function InsurancePage() {
                 />
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 mb-2">
                     Annual Premium (£)
