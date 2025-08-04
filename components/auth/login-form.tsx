@@ -71,6 +71,15 @@ export function LoginForm() {
     try {
       console.log('🔐 Attempting login with email:', email)
       
+      // First, test if Supabase client is working
+      const testConnection = await supabase.from('profiles').select('count').limit(1)
+      if (testConnection.error && testConnection.error.message.includes('Failed to fetch')) {
+        console.error('🌐 Network/CORS issue detected:', testConnection.error)
+        setError('Connection failed. Please check your internet connection and try again. If the problem persists, contact support.')
+        setLoading(false)
+        return
+      }
+      
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
         password,
@@ -80,26 +89,44 @@ export function LoginForm() {
 
       if (error) {
         console.error('❌ Login error:', error.message)
-        setError(error.message)
+        // Provide more specific error messages
+        if (error.message.includes('Invalid login credentials')) {
+          setError('Invalid email or password. Please check your credentials and try again.')
+        } else if (error.message.includes('Failed to fetch')) {
+          setError('Network connection failed. Please check your internet connection and try again.')
+        } else if (error.message.includes('Email not confirmed')) {
+          setError('Please check your email and click the confirmation link before signing in.')
+        } else {
+          setError(error.message)
+        }
         setLoading(false)
         return
       }
 
-      console.log('✅ Login successful, waiting for auth state change')
+      console.log('✅ Login successful, ensuring session persistence')
       setRedirecting(true)
       
-      // The auth state change listener will handle the redirect
-      // But also set a fallback timeout
-      setTimeout(() => {
-        if (redirecting) {
-          console.log('🚀 Fallback redirect to dashboard...')
-          window.location.href = '/dashboard'
-        }
-      }, 1500)
+      // Ensure the session is properly stored before redirecting
+      // Force a session refresh to ensure it's persisted
+      await supabase.auth.getSession()
       
-    } catch (err) {
+      // Wait a bit longer for the session to be properly set
+      setTimeout(() => {
+        console.log('🚀 Redirecting to dashboard with established session...')
+        window.location.href = '/dashboard'
+      }, 2000)
+      
+    } catch (err: any) {
       console.error('💥 Login exception:', err)
-      setError('An unexpected error occurred')
+      
+      // Handle different types of network errors
+      if (err.name === 'TypeError' && err.message.includes('Failed to fetch')) {
+        setError('Network connection failed. Please check your internet connection and try again.')
+      } else if (err.message?.includes('CORS')) {
+        setError('Connection blocked. Please try refreshing the page or contact support.')
+      } else {
+        setError('An unexpected error occurred. Please try again.')
+      }
       setLoading(false)
     }
   }

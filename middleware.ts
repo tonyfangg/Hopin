@@ -1,11 +1,44 @@
 import { NextResponse, type NextRequest } from 'next/server'
+import { createServerClient } from '@supabase/ssr'
 
 export async function middleware(request: NextRequest) {
   console.log('🔍 Middleware: Request to', request.nextUrl.pathname)
   
-  // For now, just pass through all requests
-  // The session refresh will be handled by the server components
-  return NextResponse.next()
+  // Create a response to potentially modify
+  let response = NextResponse.next({
+    request: {
+      headers: request.headers,
+    },
+  })
+
+  const supabase = createServerClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
+    {
+      cookies: {
+        getAll() {
+          return request.cookies.getAll()
+        },
+        setAll(cookiesToSet) {
+          cookiesToSet.forEach(({ name, value, options }) => {
+            request.cookies.set(name, value)
+          })
+          response = NextResponse.next({
+            request,
+          })
+          cookiesToSet.forEach(({ name, value, options }) => {
+            response.cookies.set(name, value, options)
+          })
+        },
+      },
+    }
+  )
+
+  // Refresh session to ensure cookies are up to date
+  const { data: { session } } = await supabase.auth.getSession()
+  console.log('🔍 Middleware: Session status', !!session)
+
+  return response
 }
 
 export const config = {
