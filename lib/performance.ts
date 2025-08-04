@@ -120,11 +120,16 @@ export function withLazyLoading<T>(
 ) {
   const LazyComponent = React.lazy(importFn)
   
-  return (props: any) => (
-    <React.Suspense fallback={fallback ? React.createElement(fallback) : <div>Loading...</div>}>
-      <LazyComponent {...props} />
-    </React.Suspense>
-  )
+  return (props: any) => 
+    React.createElement(
+      React.Suspense,
+      { 
+        fallback: fallback 
+          ? React.createElement(fallback) 
+          : React.createElement('div', null, 'Loading...')
+      },
+      React.createElement(LazyComponent, props)
+    )
 }
 
 /**

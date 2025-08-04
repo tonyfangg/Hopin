@@ -11,8 +11,7 @@ const nextConfig = {
     serverActions: {
       allowedOrigins: ['localhost:3000', 'hoops-store-operations.vercel.app'],
     },
-    // Enable optimizations
-    optimizeCss: true,
+    // Enable package import optimizations
     optimizePackageImports: ['@heroicons/react', 'lucide-react', 'react-icons'],
   },
   // Performance optimizations
@@ -62,7 +61,7 @@ const nextConfig = {
         ],
       },
       {
-        source: '/(.*\\.(js|css|woff|woff2|ico|png|jpg|jpeg|gif|svg))',
+        source: '/_next/static/:path*',
         headers: [
           {
             key: 'Cache-Control',
