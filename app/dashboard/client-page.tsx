@@ -158,16 +158,72 @@ export default function ClientDashboardPage() {
                 </div>
               </div>
 
-              <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg">
-                ✅ Login successful! You are now authenticated and can access the dashboard.
+              {/* Recent Activity */}
+              <div className="bg-white rounded-2xl p-6 border border-slate-100">
+                <h3 className="text-xl font-semibold text-slate-900 mb-4">Recent Activity</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                    <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                      <span className="text-sm">📊</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-slate-900">Risk assessment updated</p>
+                      <p className="text-xs text-slate-500">2 hours ago</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                    <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                      <span className="text-sm">✅</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-slate-900">Electrical inspection completed</p>
+                      <p className="text-xs text-slate-500">1 day ago</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3 p-3 bg-slate-50 rounded-lg">
+                    <div className="w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                      <span className="text-sm">📋</span>
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-sm font-medium text-slate-900">New drainage report submitted</p>
+                      <p className="text-xs text-slate-500">3 days ago</p>
+                    </div>
+                  </div>
+                </div>
               </div>
 
-              <div className="bg-slate-50 p-4 rounded-lg">
-                <h3 className="font-semibold text-slate-900 mb-2">Session Info:</h3>
-                <div className="text-sm text-slate-600 space-y-1">
-                  <div>User ID: {session.user.id}</div>
-                  <div>Email: {session.user.email}</div>
-                  <div>Expires: {new Date(session.expires_at! * 1000).toLocaleString()}</div>
+              {/* Quick Actions */}
+              <div className="bg-white rounded-2xl p-6 border border-slate-100">
+                <h3 className="text-xl font-semibold text-slate-900 mb-4">Quick Actions</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+                      <span className="text-lg">🏢</span>
+                    </div>
+                    <h4 className="font-medium text-slate-900 mb-1">Add Property</h4>
+                    <p className="text-sm text-slate-500">Register a new location</p>
+                  </button>
+                  <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                    <div className="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center mb-3">
+                      <span className="text-lg">📊</span>
+                    </div>
+                    <h4 className="font-medium text-slate-900 mb-1">Risk Assessment</h4>
+                    <p className="text-sm text-slate-500">Run new evaluation</p>
+                  </button>
+                  <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                    <div className="w-10 h-10 bg-yellow-100 rounded-lg flex items-center justify-center mb-3">
+                      <span className="text-lg">📋</span>
+                    </div>
+                    <h4 className="font-medium text-slate-900 mb-1">New Report</h4>
+                    <p className="text-sm text-slate-500">Submit inspection</p>
+                  </button>
+                  <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                    <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-3">
+                      <span className="text-lg">📎</span>
+                    </div>
+                    <h4 className="font-medium text-slate-900 mb-1">Upload Document</h4>
+                    <p className="text-sm text-slate-500">Add compliance files</p>
+                  </button>
                 </div>
               </div>
             </div>

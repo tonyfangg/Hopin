@@ -223,31 +223,6 @@ export function LoginForm() {
           </p>
         </div>
 
-        {/* Debug section */}
-        <div className="mt-6 p-4 bg-slate-50 rounded-lg">
-          <p className="text-sm text-slate-600 mb-2">Debug Info:</p>
-          <div className="text-xs text-slate-500 space-y-1">
-            <div>Loading: {loading ? 'Yes' : 'No'}</div>
-            <div>Redirecting: {redirecting ? 'Yes' : 'No'}</div>
-            <div>Error: {error || 'None'}</div>
-          </div>
-          <button
-            type="button"
-            onClick={() => {
-              console.log('Manual redirect test')
-              window.location.href = '/dashboard'
-            }}
-            className="mt-2 text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded hover:bg-blue-200"
-          >
-            Test Manual Redirect
-          </button>
-          <a
-            href="/test-login"
-            className="mt-2 text-xs bg-green-100 text-green-700 px-2 py-1 rounded hover:bg-green-200 block text-center"
-          >
-            Test Login Page
-          </a>
-        </div>
       </div>
     </div>
   )
