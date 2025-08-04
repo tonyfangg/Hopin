@@ -2,9 +2,6 @@ import { createServerSupabaseClient } from '@/app/lib/supabase-server'
 import { redirect } from 'next/navigation'
 import { Suspense } from 'react'
 import { LoginForm } from '@/components/auth/login-form'
-import { TestRedirectButton } from '@/components/test-redirect-button'
-import { ManualDashboardLink } from '@/components/manual-dashboard-link'
-import { SessionChecker } from '@/components/session-checker'
 
 function LoadingSpinner() {
   return (
@@ -34,11 +31,6 @@ export default async function LoginPage() {
         <Suspense fallback={<LoadingSpinner />}>
           <LoginForm />
         </Suspense>
-        
-        {/* Debug Components */}
-        <TestRedirectButton />
-        <ManualDashboardLink />
-        <SessionChecker />
       </div>
     </div>
   )
