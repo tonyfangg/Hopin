@@ -231,7 +231,7 @@ export default function RevisedRiskDashboard() {
         {/* Overall Risk Score */}
         <div className="bg-white rounded-2xl p-8 border border-slate-100">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold text-slate-900">Your Risk Score</h2>
+            <h2 className="text-2xl font-bold text-slate-900">Risk Management Score</h2>
             <span className={`px-4 py-2 rounded-full text-sm font-medium ${riskLevel.bgColor} ${riskLevel.textColor}`}>
               {riskLevel.label}
             </span>
@@ -242,7 +242,7 @@ export default function RevisedRiskDashboard() {
               <div className="w-48 h-48 rounded-full bg-gradient-to-br from-slate-100 to-slate-50 flex items-center justify-center border-8 border-slate-200">
                 <div className="text-center">
                   <div className="text-5xl font-bold text-slate-900 mb-2">{overallRiskScore}</div>
-                  <div className="text-slate-600 font-medium">Risk Score</div>
+                  <div className="text-slate-600 font-medium">Management Score</div>
                   <div className={`text-sm font-medium mt-1 flex items-center justify-center gap-1 ${isImproving ? 'text-emerald-600' : 'text-red-600'}`}>
                     {isImproving ? <TrendingDown className="w-4 h-4" /> : <TrendingUp className="w-4 h-4" />}
                     {Math.abs(scoreTrend)} from last month
@@ -278,7 +278,7 @@ export default function RevisedRiskDashboard() {
         {/* Safety Score */}
         <div className="bg-white rounded-2xl p-8 border border-slate-100">
           <div className="flex items-center justify-between mb-8">
-            <h2 className="text-2xl font-bold text-slate-900">Safety Performance</h2>
+            <h2 className="text-2xl font-bold text-slate-900">Safety Performance Score</h2>
             <span className="bg-emerald-50 text-emerald-700 px-4 py-2 rounded-full text-sm font-medium">
               {overallSafetyScore}/100
             </span>
