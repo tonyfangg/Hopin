@@ -74,14 +74,21 @@ export function DashboardSidebar() {
           >
             <span className="text-lg">⚙️</span> Settings
           </Link>
+          <Link
+            href="/dashboard/insurance"
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
+              isActive('/dashboard/insurance')
+                ? 'bg-blue-50 text-blue-600'
+                : 'text-slate-600 hover:bg-slate-50'
+            }`}
+          >
+            <span className="text-lg">📄</span> Insurance
+          </Link>
         </nav>
         <div className="mt-8">
           <div className="text-xs text-slate-500 uppercase mb-2">Coming Soon</div>
           <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 cursor-not-allowed opacity-60">
             <span className="text-lg">👥</span> Staff
-          </div>
-          <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 cursor-not-allowed opacity-60">
-            <span className="text-lg">📄</span> Insurance
           </div>
           <div className="flex items-center gap-3 px-3 py-2 rounded-lg text-sm font-medium text-slate-400 cursor-not-allowed opacity-60">
             <span className="text-lg">🏢</span> Facility
