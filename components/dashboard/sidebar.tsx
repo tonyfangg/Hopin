@@ -48,13 +48,13 @@ export function DashboardSidebar() {
   const pathname = usePathname()
 
   return (
-    <div className="fixed left-0 top-0 h-full w-64 bg-white border-r border-slate-200">
+    <div className="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200">
       {/* Logo */}
-      <div className="flex items-center gap-3 p-6 border-b border-slate-200">
-        <div className="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
+      <div className="flex items-center gap-3 p-6 border-b border-gray-200">
+        <div className="w-10 h-10 bg-gray-900 rounded-xl flex items-center justify-center">
           <span className="text-white font-bold">⭐</span>
         </div>
-        <span className="text-xl font-bold text-slate-900">Hopin</span>
+        <span className="text-xl font-bold text-gray-900">Hopin</span>
       </div>
 
       {/* Navigation */}
@@ -71,11 +71,11 @@ export function DashboardSidebar() {
               className={cn(
                 'flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium transition-all',
                 isActive
-                  ? 'bg-blue-50 text-blue-600 border border-blue-100'
-                  : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
+                  ? 'bg-gray-100 text-gray-900 shadow-sm'
+                  : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50'
               )}
             >
-              <span className={cn("text-lg", isActive ? item.color : 'text-slate-400')}>
+              <span className={cn("text-lg", isActive ? 'text-gray-900' : 'text-gray-400')}>
                 {item.icon}
               </span>
               {item.name}
@@ -86,14 +86,14 @@ export function DashboardSidebar() {
         {/* Coming Soon Section */}
         <div className="pt-6">
           <div className="px-3 py-2">
-            <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider">
+            <span className="text-xs font-semibold text-gray-400 uppercase tracking-wider">
               COMING SOON
             </span>
           </div>
           {comingSoonItems.map((item) => (
             <div
               key={item.name}
-              className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-slate-400 cursor-not-allowed"
+              className="flex items-center gap-3 px-3 py-3 rounded-xl text-sm font-medium text-gray-400 cursor-not-allowed"
             >
               <span className="text-lg opacity-50">{item.icon}</span>
               {item.name}

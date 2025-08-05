@@ -215,24 +215,24 @@ export default function UpdatedMainDashboard() {
   return (
     <div className="space-y-8">
       {/* Welcome Section */}
-      <div className="bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-8 text-white">
+      <div className="bg-white rounded-xl p-6 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Welcome back to Hoops</h1>
-            <p className="text-blue-100">
-              Your risk management dashboard is ready. Current risk level: <span className="font-semibold">{riskLevel.label}</span>
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">Hoops Store Operations</h1>
+            <p className="text-gray-600">
+              Your risk management dashboard is ready. Current risk level: <span className="font-semibold text-gray-900">{riskLevel.label}</span>
             </p>
           </div>
           <div className="text-right">
-            <div className="text-2xl font-bold">{overallSafetyScore}%</div>
-            <div className="text-blue-100 text-sm">Safety Score</div>
+            <div className="text-2xl font-bold text-gray-900">{overallSafetyScore}%</div>
+            <div className="text-gray-500 text-sm">Safety Score</div>
           </div>
         </div>
       </div>
 
       {/* Main Stats Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-        <div className="bg-white rounded-2xl p-6 border border-slate-100">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div className="bg-white rounded-xl p-4 shadow-sm">
           <div className="flex items-center gap-4 mb-4">
             <div className="w-12 h-12 bg-blue-100 rounded-xl flex items-center justify-center">
               <Building2 className="w-6 h-6 text-blue-600" />
@@ -246,7 +246,7 @@ export default function UpdatedMainDashboard() {
           <p className="text-slate-500 text-sm">Managed locations</p>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-slate-100">
+        <div className="bg-white rounded-xl p-4 shadow-sm">
           <div className="flex items-center gap-4 mb-4">
             <div className="w-12 h-12 bg-emerald-100 rounded-xl flex items-center justify-center">
               <CheckCircle className="w-6 h-6 text-emerald-600" />
@@ -260,7 +260,7 @@ export default function UpdatedMainDashboard() {
           <p className="text-slate-500 text-sm">This quarter</p>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-slate-100">
+        <div className="bg-white rounded-xl p-4 shadow-sm">
           <div className="flex items-center gap-4 mb-4">
             <div className="w-12 h-12 bg-amber-100 rounded-xl flex items-center justify-center">
               <AlertTriangle className="w-6 h-6 text-amber-600" />
@@ -274,7 +274,7 @@ export default function UpdatedMainDashboard() {
           <p className="text-slate-500 text-sm">Require attention</p>
         </div>
 
-        <div className="bg-white rounded-2xl p-6 border border-slate-100">
+        <div className="bg-white rounded-xl p-4 shadow-sm">
           <div className="flex items-center gap-4 mb-4">
             <div className="w-12 h-12 bg-purple-100 rounded-xl flex items-center justify-center">
               <FileText className="w-6 h-6 text-purple-600" />
@@ -290,12 +290,12 @@ export default function UpdatedMainDashboard() {
       </div>
 
       {/* Main Content Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         
         {/* Risk Score Overview */}
-        <div className="bg-white rounded-2xl p-8 border border-slate-100">
+        <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-slate-900">Risk Overview</h2>
+            <h2 className="text-lg font-semibold text-gray-900">Risk Overview</h2>
             <span className={`px-3 py-1 rounded-full text-sm font-medium ${riskLevel.bgColor} ${riskLevel.textColor}`}>
               {riskLevel.label}
             </span>
@@ -342,9 +342,9 @@ export default function UpdatedMainDashboard() {
         </div>
 
         {/* Recent Activity */}
-        <div className="bg-white rounded-2xl p-8 border border-slate-100">
+        <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-slate-900">Recent Activity</h2>
+            <h2 className="text-lg font-semibold text-gray-900">Recent Activity</h2>
             <Calendar className="w-5 h-5 text-slate-400" />
           </div>
 
@@ -374,9 +374,9 @@ export default function UpdatedMainDashboard() {
         </div>
 
         {/* Urgent Actions */}
-        <div className="bg-white rounded-2xl p-8 border border-slate-100">
+        <div className="bg-white rounded-xl p-6 shadow-sm">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-slate-900">Action Items</h2>
+            <h2 className="text-lg font-semibold text-gray-900">Action Items</h2>
             <AlertTriangle className="w-5 h-5 text-amber-500" />
           </div>
 
@@ -415,8 +415,8 @@ export default function UpdatedMainDashboard() {
       </div>
 
       {/* Quick Actions */}
-      <div className="bg-white rounded-2xl p-8 border border-slate-100">
-        <h2 className="text-xl font-bold text-slate-900 mb-6">Quick Actions</h2>
+      <div className="bg-white rounded-xl p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-gray-900 mb-6">Quick Actions</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <button className="p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors text-left">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
