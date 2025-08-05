@@ -4,56 +4,18 @@
 // =====================================================
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createServerSupabaseClient } from '@/app/lib/supabase-server'
+import { createWorkingSupabaseClient } from '@/app/lib/supabase-server-working'
 
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createServerSupabaseClient()
+    const supabase = await createWorkingSupabaseClient()
     
     // Get current user
     const { data: { session } } = await supabase.auth.getSession()
     
-    // If no session, return mock data for now (temporary fix)
     if (!session) {
-      console.log('⚠️ No session found, returning mock electrical data')
-      const mockData = [
-        {
-          id: '1',
-          property_id: 'mock-property-1',
-          inspector_name: 'John Smith',
-          inspection_date: new Date().toISOString(),
-          inspection_type: 'PAT Testing',
-          compliance_status: 'compliant',
-          safety_score: 95,
-          risk_rating: 2,
-          issues_found: [],
-          recommendations: ['Maintain current safety standards'],
-          remedial_work_required: false,
-          next_inspection_date: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          property: { name: 'Main Store', address: '123 High Street' }
-        },
-        {
-          id: '2', 
-          property_id: 'mock-property-2',
-          inspector_name: 'Sarah Jones',
-          inspection_date: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-          inspection_type: 'Fixed Wire Testing',
-          compliance_status: 'pending',
-          safety_score: 88,
-          risk_rating: 3,
-          issues_found: ['Minor wiring concern in basement'],
-          recommendations: ['Schedule rewiring for basement area'],
-          remedial_work_required: true,
-          next_inspection_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-          created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
-          updated_at: new Date().toISOString(),
-          property: { name: 'Branch Store', address: '456 Main Road' }
-        }
-      ]
-      
-      return NextResponse.json({ success: true, data: mockData })
+      console.log('⚠️ No session found')
+      return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
     }
 
     const { searchParams } = new URL(request.url)
@@ -122,7 +84,7 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = await createServerSupabaseClient()
+    const supabase = await createWorkingSupabaseClient()
     
     // Get current user
     const { data: { session } } = await supabase.auth.getSession()
