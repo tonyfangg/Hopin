@@ -46,9 +46,9 @@ export default function UpdatedMainDashboard() {
 
         // Fetch data from multiple APIs
         const [electricalResponse, drainageResponse, propertiesResponse] = await Promise.all([
-          fetch('/api/electrical-reports').catch(() => ({ ok: false })),
-          fetch('/api/drainage-reports').catch(() => ({ ok: false })),
-          fetch('/api/properties').catch(() => ({ ok: false }))
+          fetch('/api/electrical-reports', { credentials: 'include' }).catch(() => ({ ok: false })),
+          fetch('/api/drainage-reports', { credentials: 'include' }).catch(() => ({ ok: false })),
+          fetch('/api/properties', { credentials: 'include' }).catch(() => ({ ok: false }))
         ]);
 
         let electricalData = [];
