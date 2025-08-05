@@ -93,7 +93,7 @@ export function ForgotPasswordForm() {
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
               <span className="text-white text-lg">★</span>
             </div>
-            <h1 className="text-2xl font-bold text-slate-900">Hoops Store</h1>
+            <h1 className="text-2xl font-bold text-slate-900">Hopin</h1>
           </div>
           <h2 className="text-xl font-semibold text-slate-700">Reset your password</h2>
           <p className="text-slate-600">Enter your email and we'll send you a reset link</p>

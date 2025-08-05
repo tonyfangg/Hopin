@@ -66,7 +66,7 @@ export function NotifyModal({ isOpen, onClose }: NotifyModalProps) {
           <>
             <h3 className="text-2xl font-bold text-slate-900 mb-2">Get Early Access</h3>
             <p className="text-slate-600 mb-6">
-              Be the first to know when Hoops Store Operations launches. Join our exclusive waitlist for early access and special pricing.
+              Be the first to know when Hopin Operations launches. Join our exclusive waitlist for early access and special pricing.
             </p>
 
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -106,7 +106,7 @@ export function NotifyModal({ isOpen, onClose }: NotifyModalProps) {
             </div>
             <h3 className="text-2xl font-bold text-slate-900 mb-2">You&apos;re on the list!</h3>
             <p className="text-slate-600 mb-6">
-              We&apos;ll notify you as soon as Hoops Store Operations is available.
+              We&apos;ll notify you as soon as Hopin Operations is available.
             </p>
             <Button onClick={resetModal} className="w-full">
               Close

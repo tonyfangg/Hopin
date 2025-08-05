@@ -5,7 +5,7 @@ const services = [
   {
     id: 1,
     service: 'Fire Safety System',
-    location: 'Store #3 - Downtown',
+    location: 'Shop #3 - City Centre',
     icon: Flame,
     status: 'Active',
     lastUpdate: '2 hours ago',
@@ -16,7 +16,7 @@ const services = [
   {
     id: 2,
     service: 'Security Cameras',
-    location: 'Store #1 - Mall',
+    location: 'Shop #1 - Shopping Centre',
     icon: Shield,
     status: 'Active',
     lastUpdate: '4 hours ago',
@@ -38,7 +38,7 @@ const services = [
   {
     id: 4,
     service: 'HVAC Maintenance',
-    location: 'Store #2 - Suburb',
+    location: 'Shop #2 - Suburbs',
     icon: Wrench,
     status: 'Scheduled',
     lastUpdate: '1 day ago',
@@ -49,7 +49,7 @@ const services = [
   {
     id: 5,
     service: 'Water System',
-    location: 'Store #4 - Airport',
+    location: 'Shop #4 - Airport',
     icon: Droplets,
     status: 'Warning',
     lastUpdate: '6 hours ago',

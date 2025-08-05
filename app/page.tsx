@@ -24,7 +24,7 @@ export default function Home() {
             <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden bg-transparent">
               <img src="/images/hoops-logo.png" alt="Hoops Logo" className="object-contain w-8 h-8" />
             </div>
-            Hoops Store Operations
+            Hopin Operations
           </div>
 
           {/* Navigation Links */}

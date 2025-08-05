@@ -7,8 +7,8 @@ import AppLayoutShell from './components/AppLayoutShell'
 declare module '@vercel/analytics/react';
 
 export const metadata = {
-  title: 'Hoops Store Operations',
-  description: 'Store operations management system',
+  title: 'Hopin Operations',
+  description: 'Property operations management system',
 }
 
 export default function RootLayout({

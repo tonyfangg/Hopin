@@ -52,7 +52,7 @@ export default function DrainageHistoryPage() {
           {
             id: '1',
             property_id: 'prop1',
-            property_name: 'Main Store London',
+            property_name: 'Main Shop London',
             inspection_date: '2024-01-15',
             drainage_condition: 'good',
             blockages_found: false,
@@ -69,7 +69,7 @@ export default function DrainageHistoryPage() {
           {
             id: '2',
             property_id: 'prop1',
-            property_name: 'Main Store London',
+            property_name: 'Main Shop London',
             inspection_date: '2023-07-10',
             drainage_condition: 'fair',
             blockages_found: true,
@@ -86,7 +86,7 @@ export default function DrainageHistoryPage() {
           {
             id: '3',
             property_id: 'prop2',
-            property_name: 'Branch Store Manchester',
+            property_name: 'Branch Shop Manchester',
             inspection_date: '2024-01-20',
             drainage_condition: 'excellent',
             blockages_found: false,

@@ -27,7 +27,7 @@ export function DashboardSidebar({ isOpen = false, onClose }: DashboardSidebarPr
           <div className="w-8 h-8 bg-gradient-to-br from-blue-600 to-blue-800 rounded-lg flex items-center justify-center">
             <span className="text-white">★</span>
           </div>
-          <span className="font-semibold text-slate-900">Hoops Store</span>
+          <span className="font-semibold text-slate-900">Hopin</span>
         </div>
 
         <nav className="space-y-1">

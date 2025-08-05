@@ -8,7 +8,7 @@ export function Footer() {
                 <div className="w-8 h-8 rounded-lg flex items-center justify-center overflow-hidden bg-transparent">
                   <img src="/images/hoops-logo.png" alt="Hoops Logo" className="object-contain w-8 h-8" />
                 </div>
-                Hoops Store Operations
+                Hopin Operations
               </div>
               <p className="text-slate-400">
                 Smart risk management for modern retailers
@@ -44,7 +44,7 @@ export function Footer() {
           </div>
           
           <div className="border-t border-slate-800 pt-8 text-center text-slate-400">
-            <p>&copy; 2025 Hoops Store Operations. All rights reserved. | 
+            <p>&copy; 2025 Hopin Operations. All rights reserved. | 
               <a href="#" className="hover:text-white ml-1">Privacy Policy</a> | 
               <a href="#" className="hover:text-white ml-1">Terms of Service</a>
             </p>

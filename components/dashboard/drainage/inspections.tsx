@@ -1,9 +1,9 @@
 export function DrainageInspections() {
   const inspections = [
-    { property: 'Store #1 - Downtown', date: '2024-06-01', status: 'Passed' },
-    { property: 'Store #2 - Mall', date: '2024-05-28', status: 'Passed' },
-    { property: 'Store #3 - Suburb', date: '2024-05-25', status: 'Attention' },
-    { property: 'Store #4 - Uptown', date: '2024-05-20', status: 'Scheduled' },
+    { property: 'Shop #1 - City Centre', date: '2024-06-01', status: 'Passed' },
+    { property: 'Shop #2 - Shopping Centre', date: '2024-05-28', status: 'Passed' },
+    { property: 'Shop #3 - Suburbs', date: '2024-05-25', status: 'Attention' },
+    { property: 'Shop #4 - High Street', date: '2024-05-20', status: 'Scheduled' },
   ];
 
   const statusColors: Record<'Passed' | 'Attention' | 'Scheduled', string> = {

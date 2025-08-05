@@ -15,8 +15,8 @@ export function PropertySettings() {
         <div className="p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="font-semibold text-slate-900">Store #1 - Downtown</h4>
-              <p className="text-sm text-slate-600">123 Main Street, Downtown</p>
+              <h4 className="font-semibold text-slate-900">Shop #1 - City Centre</h4>
+              <p className="text-sm text-slate-600">123 High Street, City Centre</p>
             </div>
             <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
               Edit
@@ -27,8 +27,8 @@ export function PropertySettings() {
         <div className="p-4 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors">
           <div className="flex items-center justify-between">
             <div>
-              <h4 className="font-semibold text-slate-900">Store #2 - Mall</h4>
-              <p className="text-sm text-slate-600">456 Shopping Center, Mall District</p>
+              <h4 className="font-semibold text-slate-900">Shop #2 - Shopping Centre</h4>
+              <p className="text-sm text-slate-600">456 Shopping Centre, Mall District</p>
             </div>
             <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
               Edit

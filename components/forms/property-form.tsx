@@ -197,7 +197,7 @@ export function PropertyForm({ onSuccess, onCancel, selectedOrganisationId }: Pr
                 value={formData.name}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="e.g., Hoops Store #1 - High Street"
+                placeholder="e.g., Hopin #1 - High Street"
               />
             </div>
 

@@ -97,9 +97,9 @@ const mockUsers: User[] = [
 ];
 
 const mockProperties: Property[] = [
-  { id: 'prop1', name: 'Store #1 - Downtown' },
-  { id: 'prop2', name: 'Store #2 - Trafford Centre' },
-  { id: 'prop3', name: 'Store #3 - City Centre' }
+  { id: 'prop1', name: 'Shop #1 - City Centre' },
+  { id: 'prop2', name: 'Shop #2 - Trafford Centre' },
+  { id: 'prop3', name: 'Shop #3 - City Centre' }
 ];
 
 const roleTemplates: Record<string, RoleTemplate> = {

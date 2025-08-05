@@ -60,7 +60,7 @@ export function Step1Account({ data, onUpdate, onNext }: Step1Props) {
           <div className="w-12 h-12 bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl flex items-center justify-center">
             <span className="text-white text-xl">🏪</span>
           </div>
-          <h1 className="text-2xl font-bold text-slate-900">Hoops Store Operations</h1>
+          <h1 className="text-2xl font-bold text-slate-900">Hopin Operations</h1>
         </div>
         <h2 className="text-xl font-semibold text-slate-700 mb-2">Welcome to your compliance journey</h2>
         <p className="text-slate-600">Let's start by setting up your account</p>

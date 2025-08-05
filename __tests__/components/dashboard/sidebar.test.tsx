@@ -18,10 +18,10 @@ describe('DashboardSidebar', () => {
     expect(screen.getByText('Insurance')).toBeInTheDocument()
   })
 
-  it('shows Hoops Store branding', () => {
+  it('shows Hopin branding', () => {
     render(<DashboardSidebar isOpen={true} />)
     
-    expect(screen.getByText('Hoops Store')).toBeInTheDocument()
+    expect(screen.getByText('Hopin')).toBeInTheDocument()
   })
 
   it('highlights active navigation item', () => {

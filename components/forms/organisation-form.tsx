@@ -117,7 +117,7 @@ export function OrganisationForm({ onSuccess, onCancel }: OrganisationFormProps)
                 value={formData.trading_name}
                 onChange={handleChange}
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="e.g., Hoops Stores"
+                placeholder="e.g., Hopins"
               />
             </div>
           </div>

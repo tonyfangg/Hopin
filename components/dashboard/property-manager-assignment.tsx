@@ -31,7 +31,7 @@ interface Property {
 const mockProperties: Property[] = [
   {
     id: '1',
-    name: 'Store #1 - Downtown',
+    name: 'Shop #1 - City Centre',
     address: '123 High Street, Manchester M1 1AA',
     currentManager: { 
       id: '101', 
@@ -50,7 +50,7 @@ const mockProperties: Property[] = [
   },
   {
     id: '2',
-    name: 'Store #2 - Trafford Centre',
+    name: 'Shop #2 - Trafford Centre',
     address: '456 Shopping Centre, Trafford M17 8AA',
     currentManager: null,
     riskScore: 72,
@@ -60,7 +60,7 @@ const mockProperties: Property[] = [
   },
   {
     id: '3',
-    name: 'Store #3 - City Centre',
+    name: 'Shop #3 - City Centre',
     address: '789 Market Street, Liverpool L1 2BB',
     currentManager: { 
       id: '102', 
@@ -79,7 +79,7 @@ const mockProperties: Property[] = [
   },
   {
     id: '4',
-    name: 'Store #4 - Shopping District',
+    name: 'Shop #4 - Shopping District',
     address: '321 Retail Park, Birmingham B1 1AA',
     currentManager: null,
     riskScore: 85,

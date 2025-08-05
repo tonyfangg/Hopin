@@ -57,7 +57,7 @@ const mockDocuments: Document[] = [
     created_at: '2025-06-28T10:30:00Z',
     expiry_date: '2026-06-28',
     is_confidential: false,
-    property_name: 'Store #1 - Downtown',
+    property_name: 'Shop #1 - City Centre',
     tags: ['safety', 'compliance', 'electrical']
   },
   {
@@ -200,7 +200,7 @@ export default function DocumentUploadManagement() {
               created_at: new Date().toISOString(),
               expiry_date: null,
               is_confidential: item.is_confidential,
-              property_name: 'Store #1 - Downtown',
+              property_name: 'Shop #1 - City Centre',
               tags: item.tags
             };
             setDocuments(prev => [newDoc, ...prev]);

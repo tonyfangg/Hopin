@@ -124,7 +124,7 @@ export default function NewPropertyPage() {
                 value={formData.name}
                 onChange={(e) => handleInputChange('name', e.target.value)}
                 className="w-full px-4 py-3 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="e.g., Main Store London, Branch Office Manchester"
+                placeholder="e.g., Main Shop London, Branch Office Manchester"
                 required
               />
             </div>
