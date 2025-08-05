@@ -28,7 +28,7 @@ export function PropertySettings() {
           <div className="flex items-center justify-between">
             <div>
               <h4 className="font-semibold text-slate-900">Shop #2 - Shopping Centre</h4>
-              <p className="text-sm text-slate-600">456 Shopping Centre, Mall District</p>
+              <p className="text-sm text-slate-600">456 Shopping Centre, Commercial District</p>
             </div>
             <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
               Edit

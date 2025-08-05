@@ -38,7 +38,7 @@ const services = [
   {
     id: 4,
     service: 'HVAC Maintenance',
-    location: 'Shop #2 - Suburbs',
+    location: 'Shop #2 - Residential Area',
     icon: Wrench,
     status: 'Scheduled',
     lastUpdate: '1 day ago',

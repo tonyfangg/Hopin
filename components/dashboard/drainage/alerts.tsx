@@ -1,8 +1,8 @@
 export function DrainageAlerts() {
   const alerts = [
-    { property: 'Store #3 - Suburb', type: 'Blocked Drain', severity: 'High' },
-    { property: 'Store #2 - Mall', type: 'Slow Drainage', severity: 'Medium' },
-    { property: 'Store #4 - Uptown', type: 'Routine Check', severity: 'Low' },
+    { property: 'Shop #3 - Residential Area', type: 'Blocked Drain', severity: 'High' },
+    { property: 'Shop #2 - Shopping Centre', type: 'Slow Drainage', severity: 'Medium' },
+    { property: 'Shop #4 - North End', type: 'Routine Check', severity: 'Low' },
   ];
 
   const severityColors: Record<'High' | 'Medium' | 'Low', string> = {

@@ -72,7 +72,7 @@ const mockDocuments: Document[] = [
     created_at: '2025-06-25T14:15:00Z',
     expiry_date: null,
     is_confidential: false,
-    property_name: 'Store #2 - Trafford Centre',
+    property_name: 'Shop #2 - Trafford Centre',
     tags: ['maintenance', 'drainage']
   },
   {

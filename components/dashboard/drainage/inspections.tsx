@@ -2,7 +2,7 @@ export function DrainageInspections() {
   const inspections = [
     { property: 'Shop #1 - City Centre', date: '2024-06-01', status: 'Passed' },
     { property: 'Shop #2 - Shopping Centre', date: '2024-05-28', status: 'Passed' },
-    { property: 'Shop #3 - Suburbs', date: '2024-05-25', status: 'Attention' },
+    { property: 'Shop #3 - Residential Area', date: '2024-05-25', status: 'Attention' },
     { property: 'Shop #4 - High Street', date: '2024-05-20', status: 'Scheduled' },
   ];
 
