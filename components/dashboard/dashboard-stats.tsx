@@ -21,7 +21,12 @@ export function DashboardStats() {
 
   const fetchStats = async () => {
     try {
-      const response = await fetch('/api/dashboard/stats')
+      const response = await fetch('/api/dashboard/stats', {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       const data = await response.json()
 
       if (response.ok) {

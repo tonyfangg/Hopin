@@ -34,7 +34,12 @@ export function ElectricalOverview() {
         setLoading(true)
         setError(null)
         
-        const response = await fetch('/api/electrical-reports?limit=50')
+        const response = await fetch('/api/electrical-reports?limit=50', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`)
@@ -193,7 +198,12 @@ export function ElectricalDebug() {
   useEffect(() => {
     const fetchDebugData = async () => {
       try {
-        const response = await fetch('/api/electrical-reports')
+        const response = await fetch('/api/electrical-reports', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         const data = await response.json()
         setApiData(data)
         console.log('🔍 Full API Response:', data)

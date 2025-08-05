@@ -27,7 +27,12 @@ export default function ElectricalSafety() {
         setLoading(true)
         setError(null)
 
-        const response = await fetch('/api/electrical-reports')
+        const response = await fetch('/api/electrical-reports', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         const result = await response.json()
 
         if (!result.success) {

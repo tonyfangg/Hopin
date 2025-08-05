@@ -23,7 +23,12 @@ export function DrainageOverview() {
   useEffect(() => {
     const fetchReports = async () => {
       try {
-        const response = await fetch('/api/drainage-reports')
+        const response = await fetch('/api/drainage-reports', {
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
         const data = await response.json()
 
         if (response.ok) {

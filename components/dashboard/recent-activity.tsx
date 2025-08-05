@@ -28,7 +28,12 @@ export function RecentActivity() {
         let propertiesData: any = { error: 'Failed to fetch' }
 
         try {
-          const electricalResponse = await fetch('/api/electrical-reports')
+          const electricalResponse = await fetch('/api/electrical-reports', {
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
           if (electricalResponse.ok) {
             electricalData = await electricalResponse.json()
           }
@@ -37,7 +42,12 @@ export function RecentActivity() {
         }
 
         try {
-          const drainageResponse = await fetch('/api/drainage-reports')
+          const drainageResponse = await fetch('/api/drainage-reports', {
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
           if (drainageResponse.ok) {
             drainageData = await drainageResponse.json()
           }
@@ -46,7 +56,12 @@ export function RecentActivity() {
         }
 
         try {
-          const propertiesResponse = await fetch('/api/properties')
+          const propertiesResponse = await fetch('/api/properties', {
+            credentials: 'include',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          })
           if (propertiesResponse.ok) {
             propertiesData = await propertiesResponse.json()
           }
