@@ -4,110 +4,176 @@
 // =====================================================
 
 import { NextRequest, NextResponse } from 'next/server'
+import { createServerSupabaseClient } from '@/app/lib/supabase-server'
 
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    // Dynamic import for build safety
-    const { createClient } = await import('@/app/lib/supabase-client')
-    const supabase = createClient()
-
-    const { data, error } = await supabase
-      .from('electrical_reports')
-      .select('*')
-      .order('created_at', { ascending: false })
-
-    if (error) {
-      console.error('Supabase error:', error)
-      return NextResponse.json(
-        { success: false, error: 'Failed to fetch electrical reports' },
-        { status: 500 }
-      )
+    const supabase = await createServerSupabaseClient()
+    
+    // Get current user
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
     }
 
-    // Transform data with safe fallbacks
-    const transformedData = (data || []).map((report: any) => ({
-      id: report.id || '',
-      property_id: report.property_id || '',
-      inspector_name: report.inspector_name || 'Unknown Inspector',
-      inspection_date: report.inspection_date || new Date().toISOString(),
-      safety_score: report.safety_score || 0,
-      compliance_status: report.compliance_status || 'Unknown',
-      issues_found: report.issues_found || [],
-      recommendations: report.recommendations || [],
-      next_inspection_date: report.next_inspection_date || null,
-      created_at: report.created_at || new Date().toISOString(),
-      updated_at: report.updated_at || new Date().toISOString()
-    }))
+    const { searchParams } = new URL(request.url)
+    const propertyId = searchParams.get('property_id')
+    const inspectionType = searchParams.get('inspection_type')
 
-    // Calculate stats
-    const total_reports = transformedData.length;
-    const average_safety_score = total_reports
-      ? Math.round(
-          transformedData.reduce((sum, r) => sum + (Number(r.safety_score) || 0), 0) / total_reports
-        )
-      : 0;
-    const pending_inspections = transformedData.filter(r => r.compliance_status === 'Pending').length;
-    const overdue_inspections = transformedData.filter(r => {
-      const next = r.next_inspection_date ? new Date(r.next_inspection_date) : null;
-      return next && next < new Date();
-    }).length;
-    const high_risk_items = transformedData.filter(r => (Number(r.safety_score) || 0) < 60).length;
+    // First get user's authorised organisations
+    const { data: userPermissions } = await supabase
+      .from('user_permissions')
+      .select('organisation_id')
+      .eq('user_id', session.user.id)
+      .eq('is_active', true)
 
-    const stats = {
-      total_reports,
-      average_safety_score,
-      pending_inspections,
-      overdue_inspections,
-      high_risk_items
-    };
+    const authorisedOrganisationIds = userPermissions?.map(p => p.organisation_id) || []
 
-    return NextResponse.json({
-      success: true,
-      data: transformedData,
-      stats
-    })
+    if (authorisedOrganisationIds.length === 0) {
+      return NextResponse.json({ success: true, data: [] })
+    }
 
+    // Get properties user has access to
+    const { data: userProperties } = await supabase
+      .from('properties')
+      .select('id')
+      .in('organisation_id', authorisedOrganisationIds)
+      .eq('is_active', true)
+
+    const userPropertyIds = userProperties?.map(p => p.id) || []
+
+    if (userPropertyIds.length === 0) {
+      return NextResponse.json({ success: true, data: [] })
+    }
+
+    // Build query
+    let query = supabase
+      .from('electrical_reports')
+      .select(`
+        *,
+        property:properties(name, address, organisation_id)
+      `)
+      .in('property_id', userPropertyIds)
+
+    // Filter by property if specified
+    if (propertyId) {
+      query = query.eq('property_id', propertyId)
+    }
+
+    // Filter by inspection type if specified
+    if (inspectionType) {
+      query = query.eq('inspection_type', inspectionType)
+    }
+
+    const { data: reports, error } = await query
+      .order('inspection_date', { ascending: false })
+
+    if (error) {
+      console.error('Error fetching electrical reports:', error)
+      return NextResponse.json({ error: 'Failed to fetch electrical reports' }, { status: 500 })
+    }
+
+    return NextResponse.json({ success: true, data: reports || [] })
   } catch (error) {
-    console.error('Unexpected error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    )
+    console.error('Electrical reports API error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json()
+    const supabase = await createServerSupabaseClient()
     
-    // Dynamic import for build safety
-    const { createClient } = await import('@/app/lib/supabase-client')
-    const supabase = createClient()
+    // Get current user
+    const { data: { session } } = await supabase.auth.getSession()
+    if (!session) {
+      return NextResponse.json({ error: 'Unauthorised' }, { status: 401 })
+    }
 
-    const { data, error } = await supabase
-      .from('electrical_reports')
-      .insert([body])
-      .select()
+    const body = await request.json()
+    const {
+      property_id,
+      inspection_type,
+      inspector_name,
+      inspection_date,
+      next_inspection_date,
+      compliance_status,
+      safety_score,
+      risk_rating,
+      issues_found,
+      recommendations,
+      remedial_work_required,
+      remedial_work_description,
+      remedial_work_priority
+    } = body
 
-    if (error) {
-      console.error('Supabase error:', error)
+    // Validate required fields
+    if (!property_id || !inspection_type || !inspector_name || !inspection_date) {
       return NextResponse.json(
-        { success: false, error: 'Failed to create electrical report' },
-        { status: 500 }
+        { error: 'Property, inspection type, inspector name, and inspection date are required' }, 
+        { status: 400 }
       )
     }
 
-    return NextResponse.json({
-      success: true,
-      data: data?.[0] || null,
-      message: 'Electrical report created successfully'
-    })
+    // Check user has permission to manage this property
+    const { data: property } = await supabase
+      .from('properties')
+      .select('organisation_id')
+      .eq('id', property_id)
+      .eq('is_active', true)
+      .single()
 
+    if (!property) {
+      return NextResponse.json({ error: 'Property not found' }, { status: 404 })
+    }
+
+    const { data: permission } = await supabase
+      .from('user_permissions')
+      .select('can_view_reports, can_upload_documents')
+      .eq('user_id', session.user.id)
+      .eq('organisation_id', property.organisation_id)
+      .eq('is_active', true)
+      .single()
+
+    if (!permission || (!permission.can_view_reports && !permission.can_upload_documents)) {
+      return NextResponse.json(
+        { error: 'Insufficient permissions to create electrical reports' }, 
+        { status: 403 }
+      )
+    }
+
+    // Create electrical report
+    const { data: report, error } = await supabase
+      .from('electrical_reports')
+      .insert([{
+        property_id,
+        inspection_type,
+        inspector_name,
+        inspection_date,
+        next_inspection_date,
+        compliance_status,
+        safety_score: safety_score || 0,
+        risk_rating,
+        issues_found: issues_found || [],
+        recommendations: recommendations || [],
+        remedial_work_required: remedial_work_required || false,
+        remedial_work_description,
+        remedial_work_priority
+      }])
+      .select(`
+        *,
+        property:properties(name, address)
+      `)
+      .single()
+
+    if (error) {
+      console.error('Error creating electrical report:', error)
+      return NextResponse.json({ error: 'Failed to create electrical report' }, { status: 500 })
+    }
+
+    return NextResponse.json({ report }, { status: 201 })
   } catch (error) {
-    console.error('Unexpected error:', error)
-    return NextResponse.json(
-      { success: false, error: 'Internal server error' },
-      { status: 500 }
-    )
+    console.error('Create electrical report API error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
-} 
+}
