@@ -2,6 +2,7 @@
 
 import { RiskScoreCard } from '@/components/dashboard/risk-score-card'
 import { usePerformanceMonitor } from '@/lib/performance'
+import Link from 'next/link'
 
 export default function ClientDashboardPage() {
   // Performance monitoring in development
@@ -99,34 +100,34 @@ export default function ClientDashboardPage() {
       <div className="bg-white rounded-2xl p-6 border border-slate-100">
         <h3 className="text-xl font-semibold text-slate-900 mb-4">Quick Actions</h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+          <Link href="/dashboard/properties/new" className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation block">
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
               <span className="text-base sm:text-lg">🏢</span>
             </div>
             <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">Add Property</h4>
             <p className="text-xs sm:text-sm text-slate-500">Register a new location</p>
-          </button>
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+          </Link>
+          <Link href="/dashboard/risk-score" className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation block">
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-green-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
               <span className="text-base sm:text-lg">📊</span>
             </div>
             <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">Risk Assessment</h4>
-            <p className="text-xs sm:text-sm text-slate-500">Run new evaluation</p>
-          </button>
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+            <p className="text-xs sm:text-sm text-slate-500">View detailed analysis</p>
+          </Link>
+          <Link href="/dashboard/electrical/new-report" className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation block">
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-yellow-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
               <span className="text-base sm:text-lg">📋</span>
             </div>
             <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">New Report</h4>
             <p className="text-xs sm:text-sm text-slate-500">Submit inspection</p>
-          </button>
-          <button className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation">
+          </Link>
+          <Link href="/dashboard/documents/upload" className="p-4 text-left border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors min-h-[100px] touch-manipulation block">
             <div className="w-8 h-8 sm:w-10 sm:h-10 bg-purple-100 rounded-lg flex items-center justify-center mb-2 sm:mb-3">
               <span className="text-base sm:text-lg">📎</span>
             </div>
             <h4 className="font-medium text-slate-900 mb-1 text-sm sm:text-base">Upload Document</h4>
             <p className="text-xs sm:text-sm text-slate-500">Add compliance files</p>
-          </button>
+          </Link>
         </div>
       </div>
     </div>

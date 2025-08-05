@@ -72,16 +72,6 @@ export function DashboardSidebar({ isOpen = false, onClose }: DashboardSidebarPr
             <span className="text-lg">⚡</span> Electrical
           </Link>
           <Link
-            href="/dashboard/settings"
-            className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
-              isActive('/dashboard/settings')
-                ? 'bg-blue-50 text-blue-600'
-                : 'text-slate-600 hover:bg-slate-50'
-            }`}
-          >
-            <span className="text-lg">⚙️</span> Settings
-          </Link>
-          <Link
             href="/dashboard/insurance"
             className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
               isActive('/dashboard/insurance')
@@ -90,6 +80,16 @@ export function DashboardSidebar({ isOpen = false, onClose }: DashboardSidebarPr
             }`}
           >
             <span className="text-lg">📄</span> Insurance
+          </Link>
+          <Link
+            href="/dashboard/settings"
+            className={`flex items-center gap-3 px-3 py-2 rounded-lg ${
+              isActive('/dashboard/settings')
+                ? 'bg-blue-50 text-blue-600'
+                : 'text-slate-600 hover:bg-slate-50'
+            }`}
+          >
+            <span className="text-lg">⚙️</span> Settings
           </Link>
         </nav>
         
