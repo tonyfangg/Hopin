@@ -27,7 +27,6 @@ export default function ElectricalSafety() {
         setLoading(true)
         setError(null)
 
-        console.log('🔍 Fetching safety data from electrical reports API')
         const response = await fetch('/api/electrical-reports', {
           credentials: 'include',
           headers: {
@@ -35,27 +34,11 @@ export default function ElectricalSafety() {
           },
         })
         
-        console.log('🔍 Response status:', response.status)
-        console.log('🔍 Response headers:', Object.fromEntries(response.headers.entries()))
-        
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`)
         }
         
-        const responseText = await response.text()
-        console.log('🔍 Raw response text:', responseText.substring(0, 200))
-        
-        if (!responseText.trim()) {
-          throw new Error('Empty response from server')
-        }
-        
-        let result
-        try {
-          result = JSON.parse(responseText)
-        } catch (parseError) {
-          console.error('🔍 JSON parse error:', parseError)
-          throw new Error('Invalid JSON response from server')
-        }
+        const result = await response.json()
 
         if (!result.success) {
           throw new Error(result.error || 'Failed to fetch safety data')
