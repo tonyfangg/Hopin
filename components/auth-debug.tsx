@@ -4,8 +4,16 @@ import { useState, useEffect } from 'react'
 export function AuthDebug() {
   const [debugInfo, setDebugInfo] = useState<any>(null)
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
+
+  // Fix hydration issues
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useEffect(() => {
+    if (!mounted) return
+
     const testAuth = async () => {
       try {
         // Test auth debug endpoint
@@ -25,7 +33,12 @@ export function AuthDebug() {
     }
 
     testAuth()
-  }, [])
+  }, [mounted])
+
+  // Don't render anything until mounted (prevents hydration issues)
+  if (!mounted) {
+    return <div className="bg-blue-50 p-4 rounded-lg">Loading auth debug...</div>
+  }
 
   if (loading) {
     return <div className="bg-blue-50 p-4 rounded-lg">Loading auth debug...</div>
@@ -34,7 +47,7 @@ export function AuthDebug() {
   return (
     <div className="bg-gray-50 p-4 rounded-lg border">
       <h3 className="font-semibold mb-2">🔍 Authentication Debug</h3>
-      <pre className="text-xs bg-white p-2 rounded overflow-auto">
+      <pre className="text-xs bg-white p-2 rounded overflow-auto max-h-64">
         {JSON.stringify(debugInfo, null, 2)}
       </pre>
     </div>
