@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import { RealElectricalOverview } from '@/components/dashboard/electrical/real-electrical-overview'
-import { ElectricalDebug } from '@/components/dashboard/electrical/overview'
 import { ElectricalInspections } from '@/components/dashboard/electrical/inspections'
 import ElectricalSafety from '@/components/dashboard/electrical/safety'
 import { ElectricalMaintenance } from '@/components/dashboard/electrical/maintenance'
@@ -49,9 +48,6 @@ export default function ElectricalPage() {
           </div>
         </div>
       )}
-
-      {/* Debug: Show full API response */}
-      <ElectricalDebug />
     </div>
   )
 } 

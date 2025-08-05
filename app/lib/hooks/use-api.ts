@@ -39,7 +39,12 @@ export function useApi<T = any>(
       setLoading(true)
       setError(null)
 
-      const response = await fetch(url)
+      const response = await fetch(url, {
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
       
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}: ${response.statusText}`)
